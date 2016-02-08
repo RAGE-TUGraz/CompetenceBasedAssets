@@ -1,0 +1,9 @@
+c:\users\mmaurer\documents\visual studio 2015\Projects\A_Competences\CompetenceAssessmentAsset\bin\Debug\CompetenceAssessmentAsset.dll
+c:\users\mmaurer\documents\visual studio 2015\Projects\A_Competences\CompetenceAssessmentAsset\bin\Debug\CompetenceAssessmentAsset.pdb
+c:\users\mmaurer\documents\visual studio 2015\Projects\A_Competences\CompetenceAssessmentAsset\bin\Debug\DomainModelAsset.dll
+c:\users\mmaurer\documents\visual studio 2015\Projects\A_Competences\CompetenceAssessmentAsset\bin\Debug\RageAssetManager.dll
+c:\users\mmaurer\documents\visual studio 2015\Projects\A_Competences\CompetenceAssessmentAsset\bin\Debug\DomainModelAsset.pdb
+c:\users\mmaurer\documents\visual studio 2015\Projects\A_Competences\CompetenceAssessmentAsset\bin\Debug\RageAssetManager.pdb
+c:\users\mmaurer\documents\visual studio 2015\Projects\A_Competences\CompetenceAssessmentAsset\obj\Debug\CompetenceAssessmentAsset.csprojResolveAssemblyReference.cache
+c:\users\mmaurer\documents\visual studio 2015\Projects\A_Competences\CompetenceAssessmentAsset\obj\Debug\CompetenceAssessmentAsset.dll
+c:\users\mmaurer\documents\visual studio 2015\Projects\A_Competences\CompetenceAssessmentAsset\obj\Debug\CompetenceAssessmentAsset.pdb

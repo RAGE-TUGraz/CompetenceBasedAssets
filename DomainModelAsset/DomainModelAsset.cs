@@ -4,13 +4,14 @@
 // <author>mmaurer</author>
 // <date>08.02.2016 09:42:23</date>
 // <summary>Implements the DomainModelAsset class</summary>
-namespace AssetPackage
+namespace DomainModelAssetNameSpace
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
 
     using AssetManagerPackage;
+    using AssetPackage;
 
     /// <summary>
     /// An asset.

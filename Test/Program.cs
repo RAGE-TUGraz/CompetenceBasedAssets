@@ -1,4 +1,7 @@
 ﻿using AssetPackage;
+using CompetenceAssessmentAssetNameSpace;
+using CompetenceRecommendationAssetNameSpace;
+using DomainModelAssetNameSpace;
 using System;
 using System.Collections.Generic;
 using System.Linq;

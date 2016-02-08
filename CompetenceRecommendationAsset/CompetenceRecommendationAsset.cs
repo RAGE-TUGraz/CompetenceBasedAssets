@@ -4,13 +4,14 @@
 // <author>mmaurer</author>
 // <date>08.02.2016 09:42:08</date>
 // <summary>Implements the CompetenceRecommendationAsset class</summary>
-namespace AssetPackage
+namespace CompetenceRecommendationAssetNameSpace
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
 
     using AssetManagerPackage;
+    using AssetPackage;
 
     /// <summary>
     /// An asset.

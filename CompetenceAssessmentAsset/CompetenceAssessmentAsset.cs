@@ -75,6 +75,45 @@ namespace CompetenceAssessmentAssetNameSpace
 
         // Your code goes here.
 
+        /*
+        public void test()
+        {
+            Console.WriteLine("CompetenceAssessment methode called!");
+            //CompetenceAssessmentHandler.Instance.performAllTests();
+        }
+        */
+
+        /// <summary>
+        /// Method for updating the competence state of a player.
+        /// </summary>
+        /// 
+        /// <param name="playerId"> Player Id for the update. </param>
+        /// <param name="evidence"> Id of a competence for which an evidence is observed. </param>
+        /// <param name="type"> If true the evidence indicates possession of the specified competence, otherwise a lack of this competence is indicated. </param>
+        public void updateCompetenceState(string playerId, List<string> evidences, List<Boolean> type)
+        {
+            if (CompetenceAssessmentHandler.Instance.getCompetenceState(playerId) == null)
+                CompetenceAssessmentHandler.Instance.registerNewPlayer(playerId, DomainModelHandler.Instance.getDomainModel(playerId));
+            CompetenceAssessmentHandler.Instance.updateCompetenceState(playerId, evidences, type);
+        }
+
+        /// <summary>
+        /// Method returning the current competence state of a player.
+        /// </summary>
+        /// 
+        /// <param name="playerId"> Player identification </param>
+        /// <returns></returns>
+        public Dictionary<string, double> getCompetenceState(string playerId)
+        {
+            if (CompetenceAssessmentHandler.Instance.getCompetenceState(playerId) == null)
+                CompetenceAssessmentHandler.Instance.registerNewPlayer(playerId, DomainModelHandler.Instance.getDomainModel(playerId));
+            Dictionary<Competence, double> cs = CompetenceAssessmentHandler.Instance.getCompetenceState(playerId).getCurrentValues();
+            Dictionary<string, double> csNew = new Dictionary<string, double>();
+            foreach (KeyValuePair<Competence, double> pair in cs)
+                csNew[pair.Key.id] = pair.Value;
+            return csNew;
+        }
+
         #endregion Methods
     }
 }

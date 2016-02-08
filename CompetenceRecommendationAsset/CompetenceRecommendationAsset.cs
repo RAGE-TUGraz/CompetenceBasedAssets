@@ -74,6 +74,58 @@ namespace CompetenceRecommendationAssetNameSpace
         #region Methods
 
         // Your code goes here.
+        /*
+public void test()
+{
+    Console.WriteLine("CompetenceRecommendation method called!");
+    CompetenceRecommendationHandler.Instance.performAllTests();
+}
+*/
+
+        /// <summary>
+        /// Method returning the next game situation id for the player.
+        /// </summary>
+        /// 
+        /// <param name="playerId"> Player identification. </param>
+        /// 
+        /// <returns> The game situation id for the player. </returns>
+        public string getNextGameSituationId(string playerId)
+        {
+            if (CompetenceRecommendationHandler.Instance.getCurrentGameSituationId(playerId) == null)
+            {
+                CompetenceRecommendationHandler.Instance.registerNewPlayer(playerId, DomainModelHandler.Instance.getDomainModel(playerId));
+                return CompetenceRecommendationHandler.Instance.getCurrentGameSituationId(playerId);
+            }
+            return CompetenceRecommendationHandler.Instance.getNextGameSituationId(playerId);
+        }
+
+        /// <summary>
+        /// Method returning the current game situation id for the player.
+        /// </summary>
+        /// 
+        /// <param name="playerId"> Player identification. </param>
+        /// 
+        /// <returns> The game situation id for the player. </returns>
+        public string getCurrentGameSituationId(string playerId)
+        {
+            if (CompetenceRecommendationHandler.Instance.getCurrentGameSituationId(playerId) == null)
+                CompetenceRecommendationHandler.Instance.registerNewPlayer(playerId, DomainModelHandler.Instance.getDomainModel(playerId));
+            return CompetenceRecommendationHandler.Instance.getCurrentGameSituationId(playerId);
+        }
+
+        /// <summary>
+        /// Method for updating the competence state of a player due to performance in a game situation.
+        /// </summary>
+        /// 
+        /// <param name="playerId"> Player identification. </param>
+        /// <param name="type"> If true, the player successfully played the curren game situation, otherwise not. </param>
+        public void setGameSituationUpdate(string playerId, Boolean type)
+        {
+            if (CompetenceRecommendationHandler.Instance.getCurrentGameSituationId(playerId) == null)
+                CompetenceRecommendationHandler.Instance.registerNewPlayer(playerId, DomainModelHandler.Instance.getDomainModel(playerId));
+
+            CompetenceRecommendationHandler.Instance.setGameSituationUpdate(playerId, type);
+        }
 
         #endregion Methods
     }

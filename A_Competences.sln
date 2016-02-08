@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CompetenceRecommendationAss
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DomainModelAsset", "DomainModelAsset\DomainModelAsset.csproj", "{58125DD6-A403-4698-810B-5BFAE5ACAFA9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", "{14C0BFE8-9DB8-4A5C-B09B-E47F109D6A72}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestCompetence", "Test\TestCompetence.csproj", "{14C0BFE8-9DB8-4A5C-B09B-E47F109D6A72}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DomainModelAsset_Portable", "DomainModelAsset_Portable\DomainModelAsset_Portable.csproj", "{A441FEE9-482A-418E-B046-795B2233B910}"
 EndProject

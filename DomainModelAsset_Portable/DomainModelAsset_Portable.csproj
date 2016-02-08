@@ -46,7 +46,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\..\..\..\..\Documents\Visual Studio 2015\Projects\A_Competences\DomainModelAsset\DomainModelAsset.VersionAndDependencies.xml">
+    <Content Include="..\..\..\..\..\Documents\Visual Studio 2015\Projects\A_Competences\DomainModelAsset\Resources\DomainModelAsset.VersionAndDependencies.xml">
       <Link>Resources\DomainModelAsset.VersionAndDependencies.xml</Link>
     </Content>
   </ItemGroup>

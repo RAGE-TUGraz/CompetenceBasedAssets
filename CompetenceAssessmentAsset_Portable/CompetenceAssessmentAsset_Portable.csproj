@@ -46,7 +46,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\..\..\..\..\Documents\Visual Studio 2015\Projects\A_Competences\CompetenceAssessmentAsset\CompetenceAssessmentAsset.VersionAndDependencies.xml">
+    <Content Include="..\..\..\..\..\Documents\Visual Studio 2015\Projects\A_Competences\CompetenceAssessmentAsset\Resources\CompetenceAssessmentAsset.VersionAndDependencies.xml">
       <Link>Resources\CompetenceAssessmentAsset.VersionAndDependencies.xml</Link>
     </Content>
   </ItemGroup>

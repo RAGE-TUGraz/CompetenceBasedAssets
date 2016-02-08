@@ -12,7 +12,7 @@ namespace CompetenceAssessmentAssetNameSpace
 
     using AssetManagerPackage;
     using AssetPackage;
-
+    using DomainModelAssetNameSpace;
     /// <summary>
     /// An asset.
     /// </summary>

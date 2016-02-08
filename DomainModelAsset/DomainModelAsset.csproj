@@ -39,6 +39,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DomainModelAsset.cs" />
+    <Compile Include="DomainModelAssetFunctionality.cs" />
     <Compile Include="DomainModelAssetSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

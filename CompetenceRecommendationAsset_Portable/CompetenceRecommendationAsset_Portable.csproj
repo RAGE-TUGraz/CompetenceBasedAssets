@@ -44,6 +44,9 @@
     <Compile Include="..\..\..\..\..\Documents\Visual Studio 2015\Projects\A_Competences\CompetenceRecommendationAsset\Properties\AssemblyInfo.cs">
       <Link>Properties\AssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="..\..\..\..\..\Documents\Visual Studio 2015\Projects\A_Competences\CompetenceRecommendationAsset\CompetenceRecommendationAssetFunctionality.cs">
+      <Link>CompetenceRecommendationAssetFunctionality.cs</Link>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="..\..\..\..\..\Documents\Visual Studio 2015\Projects\A_Competences\CompetenceRecommendationAsset\Resources\CompetenceRecommendationAsset.VersionAndDependencies.xml">

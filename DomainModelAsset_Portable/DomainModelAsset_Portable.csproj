@@ -44,6 +44,9 @@
     <Compile Include="..\..\..\..\..\Documents\Visual Studio 2015\Projects\A_Competences\DomainModelAsset\Properties\AssemblyInfo.cs">
       <Link>Properties\AssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="..\..\..\..\..\Documents\Visual Studio 2015\Projects\A_Competences\DomainModelAsset\DomainModelAssetFunctionality.cs">
+      <Link>DomainModelAssetFunctionality.cs</Link>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="..\..\..\..\..\Documents\Visual Studio 2015\Projects\A_Competences\DomainModelAsset\Resources\DomainModelAsset.VersionAndDependencies.xml">

@@ -39,6 +39,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CompetenceAssessmentAsset.cs" />
+    <Compile Include="CompetenceAssessmentAssetFunctionality.cs" />
     <Compile Include="CompetenceAssessmentAssetSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

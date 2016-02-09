@@ -1,4 +1,5 @@
 ﻿using AssetManagerPackage;
+using AssetPackage;
 using CompetenceAssessmentAssetNameSpace;
 using DomainModelAssetNameSpace;
 using System;
@@ -12,7 +13,7 @@ namespace CompetenceRecommendationAssetNameSpace
     /// <summary>
     /// Singelton Class for handling Competence Recommendation
     /// </summary>
-    public class CompetenceRecommendationHandler
+    internal class CompetenceRecommendationHandler
     {
         #region Fields
 
@@ -25,6 +26,11 @@ namespace CompetenceRecommendationAssetNameSpace
         /// Instance of the CompetenceAssessmentAsset
         /// </summary>
         private CompetenceAssessmentAsset competenceAssessmentAsset = null;
+
+        /// <summary>
+        /// Instance of the CompetenceRecommendationAsset
+        /// </summary>
+        private CompetenceRecommendationAsset competenceRecommendationAsset = null;
 
         /// <summary>
         /// Instance of the CompetenceRecommendationHandler - Singelton pattern
@@ -51,7 +57,7 @@ namespace CompetenceRecommendationAssetNameSpace
         /// <summary>
         /// If true logging is done, otherwise no logging is done.
         /// </summary>
-        private Boolean doLogging = false;
+        private Boolean doLogging = true;
 
         #endregion Fields
         #region Constructors
@@ -295,10 +301,15 @@ namespace CompetenceRecommendationAssetNameSpace
         /// </summary>
         /// 
         /// <param name="msg"> String to be logged.  </param>
-        internal void loggingPRA(String msg)
+        /// <param name="severity"> Severity of the logging-message, optional. </param>
+        internal void loggingPRA(String msg, Severity severity = Severity.Information)
         {
             if (DoLogging)
-                Console.WriteLine(msg);
+            {
+                if (competenceRecommendationAsset == null)
+                    competenceRecommendationAsset = (CompetenceRecommendationAsset)AssetManager.Instance.findAssetByClass("CompetenceRecommendationAsset");
+                competenceRecommendationAsset.Log(severity, "CompetenceRecommendationAsset: " + msg);
+            }
         }
 
         /// <summary>

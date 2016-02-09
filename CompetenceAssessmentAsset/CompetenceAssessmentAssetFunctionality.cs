@@ -266,7 +266,7 @@ namespace CompetenceAssessmentAssetNameSpace
             {
                 if(competenceAssessmentAsset==null)
                     competenceAssessmentAsset = (CompetenceAssessmentAsset)AssetManager.Instance.findAssetByClass("CompetenceAssessmentAsset");
-                competenceAssessmentAsset.Log(severity, "CompetenceAssessmentAsset: " + msg);
+                competenceAssessmentAsset.Log(severity, "[CAA]: " + msg);
             }
         }
 

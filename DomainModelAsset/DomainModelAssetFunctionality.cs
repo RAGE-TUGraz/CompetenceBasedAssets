@@ -17,17 +17,12 @@ namespace DomainModelAssetNameSpace
     /// </summary>
     internal class DomainModelHandler
     {
-        #region TestFields
-
-        string dmXmlFilePath = "";
+        #region Fields
 
         /// <summary>
         /// Instance of the DomainModelAsset
         /// </summary>
         private DomainModelAsset domainModelAsset = null;
-
-        #endregion TestFields
-        #region Fields
 
         /// <summary>
         /// Instance of the class DomainModelHandler - Singelton pattern
@@ -95,7 +90,7 @@ namespace DomainModelAssetNameSpace
         /// <param name="playerId"> Id of the player for which the domain model is requested. </param>
         /// 
         /// <returns> The domein model associated with the player-id. </returns>
-        public DomainModel getDomainModel(String playerId)
+        internal DomainModel getDomainModel(String playerId)
         {
             if (domainModels.ContainsKey(playerId))
                 return domainModels[playerId];
@@ -116,11 +111,17 @@ namespace DomainModelAssetNameSpace
         /// <returns></returns>
         internal DomainModel loadDefaultDomainModel()
         {
-            if (dmXmlFilePath.Equals(""))
-                return createExampleDomainModel();
+            IDataStorage ids = (IDataStorage) AssetManager.Instance.Bridge;
+            if (ids != null)
+            {
+                loggingDM("Loading DomainModel from File.");
+                return (this.getDMFromXmlString(ids.Load("dm.xml")));
+            }
             else
-                return getDMFromFile(dmXmlFilePath);
-            //return null;
+            {
+                loggingDM("Loading example DomainModel.");
+                return createExampleDomainModel();
+            }
         }
 
         /// <summary>
@@ -142,6 +143,7 @@ namespace DomainModelAssetNameSpace
             }
         }
 
+        /*
         /// <summary>
         /// Method for reading a file containing the XML-Domainmodel and returning the coressponding DomainModel.
         /// </summary>
@@ -170,7 +172,8 @@ namespace DomainModelAssetNameSpace
 
             return (null);
         }
-
+        */
+        /*
         /// <summary>
         /// Method for requesting a XML-Domainmodel from a website and returning the coressponding DomainModel.
         /// </summary>
@@ -191,7 +194,8 @@ namespace DomainModelAssetNameSpace
 
             return (getDMFromXmlString(dm));
         }
-
+        */
+        /*
         /// <summary>
         /// Method for storing a DomainModel as XML in a File.
         /// </summary>
@@ -207,6 +211,7 @@ namespace DomainModelAssetNameSpace
             }
 
         }
+        */
 
         #endregion InternalMethods
         #region TestMethods
@@ -223,7 +228,7 @@ namespace DomainModelAssetNameSpace
             {
                 if(domainModelAsset==null)
                     domainModelAsset = (DomainModelAsset) AssetManager.Instance.findAssetByClass("DomainModelAsset");
-                domainModelAsset.Log(severity, "DomainModelAsset: " +msg);
+                domainModelAsset.Log(severity, "[DMA]: " +msg);
             }
         }
 
@@ -350,17 +355,14 @@ namespace DomainModelAssetNameSpace
             return dm;
         }
 
+        /*
         //tmp solution
         public DomainModel loadDmFromFile()
         {
+            //string fileId = "dm.xml";
             return getDMFromFile(@"C:\Users\mmaurer\Desktop\dm.xml");
         }
-
-        //tmp: defines from which local file the dm should be loaded
-        public void setDmPath(string path)
-        {
-            dmXmlFilePath = path;
-        }
+        */
 
         #endregion TestMethods
 
@@ -407,10 +409,12 @@ namespace DomainModelAssetNameSpace
 
         #region Methods
 
+        /*
         public void writeToFile(String pathToFile)
         {
             DomainModelHandler.Instance.writeDMToFile(this, pathToFile);
         }
+        */
 
         public String toXmlString()
         {

@@ -18,8 +18,6 @@ namespace DomainModelAssetNameSpace
     /// </summary>
     public class DomainModelAsset : BaseAsset
     {
-        public string msg = "OK";
-
         #region Fields
 
         /// <summary>
@@ -28,7 +26,6 @@ namespace DomainModelAssetNameSpace
         private DomainModelAssetSettings settings = null;
 
         #endregion Fields
-
         #region Constructors
 
         /// <summary>
@@ -50,7 +47,6 @@ namespace DomainModelAssetNameSpace
         }
 
         #endregion Constructors
-
         #region Properties
 
         /// <summary>
@@ -79,7 +75,6 @@ namespace DomainModelAssetNameSpace
         }
 
         #endregion Properties
-
         #region Methods
 
         // Your code goes here.
@@ -98,6 +93,7 @@ namespace DomainModelAssetNameSpace
         }
         */
 
+        /*
         /// <summary>
         /// tmp. solution: sets the default loading location for a xml file. 
         /// </summary>
@@ -107,6 +103,7 @@ namespace DomainModelAssetNameSpace
         {
             DomainModelHandler.Instance.setDmPath(filepath);
         }
+        */
 
         /// <summary>
         /// Method returning domain model either from the run-tima asset storage if available or from specified (default) source(File/Web).

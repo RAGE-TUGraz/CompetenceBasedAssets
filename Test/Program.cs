@@ -5,6 +5,7 @@ using CompetenceRecommendationAssetNameSpace;
 using DomainModelAssetNameSpace;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 
@@ -21,30 +22,76 @@ namespace TestCompetence
             CompetenceAssessmentAsset caa = new CompetenceAssessmentAsset();
             CompetenceRecommendationAsset cra = new CompetenceRecommendationAsset();
 
+            /*
             try {
                 DomainModelAsset dma2 = new DomainModelAsset();
             }catch(Exception e)
             {
                 Console.WriteLine(e.Message);
             }
+            */
 
-            Console.WriteLine(dma.Id);
-            
-
-            Console.WriteLine("Searching domainModelAsset....");
-            Console.WriteLine(am.findAssetByClass("DomainModelAsset").Id);
-            
+            DomainModel dm = dma.getDomainModel("test");
+            //dm.print();
 
             Console.WriteLine("Press enter to exit....");
             Console.ReadLine();
         }
     }
 
-    class Bridge : IBridge, ILog
+    class Bridge : IBridge, ILog, IDataStorage
     {
+        #region IDataStorage
+
+        public bool Delete(string fileId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Exists(string fileId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string[] Files()
+        {
+            throw new NotImplementedException();
+        }
+
+        public string Load(string fileId)
+        {
+            string filePath = @"C:\Users\mmaurer\Desktop\"+fileId;
+            try
+            {   // Open the text file using a stream reader.
+                using (StreamReader sr = new StreamReader(filePath))
+                {
+                    // Read the stream to a string, and write the string to the console.
+                    String line = sr.ReadToEnd();
+                    return (line);
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Error by loading the DM!");
+            }
+
+            return (null);
+        }
+
+        public void Save(string fileId, string fileData)
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion IDataStorage
+
+        #region ILog
+
         public void Log(Severity severity, string msg)
         {
-            Console.WriteLine("BRIDGE:  "+msg);
+            Console.WriteLine("BRIDGE:  " + msg);
         }
+
+        #endregion ILog
     }
 }

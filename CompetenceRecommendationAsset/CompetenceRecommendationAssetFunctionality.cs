@@ -308,7 +308,7 @@ namespace CompetenceRecommendationAssetNameSpace
             {
                 if (competenceRecommendationAsset == null)
                     competenceRecommendationAsset = (CompetenceRecommendationAsset)AssetManager.Instance.findAssetByClass("CompetenceRecommendationAsset");
-                competenceRecommendationAsset.Log(severity, "CompetenceRecommendationAsset: " + msg);
+                competenceRecommendationAsset.Log(severity, "[CRA]: " + msg);
             }
         }
 

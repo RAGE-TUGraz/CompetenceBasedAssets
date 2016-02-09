@@ -92,7 +92,6 @@ namespace DomainModelAssetNameSpace
             return DomainModelHandler.Instance.getDMFromWeb(url).toXmlString();
         }
         */
-
         /*
         /// <summary>
         /// tmp. solution: sets the default loading location for a xml file. 
@@ -106,7 +105,7 @@ namespace DomainModelAssetNameSpace
         */
 
         /// <summary>
-        /// Method returning domain model either from the run-tima asset storage if available or from specified (default) source(File/Web).
+        /// Method returning domain model either from the run-time asset storage if available or from specified (default) source(File/Web).
         /// </summary>
         /// 
         /// <param name="playerId"> Id of the player for which the domain model is requested. </param>
@@ -115,6 +114,14 @@ namespace DomainModelAssetNameSpace
         public DomainModel getDomainModel(String playerId)
         {
             return DomainModelHandler.Instance.getDomainModel(playerId);
+        }
+
+        /// <summary>
+        /// Method for performing Assets-functionality tests.
+        /// </summary>
+        public void performTests()
+        {
+            DomainModelHandler.Instance.performAllTests();
         }
 
         #endregion Methods

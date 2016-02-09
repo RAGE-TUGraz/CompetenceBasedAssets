@@ -94,14 +94,12 @@ namespace DomainModelAssetNameSpace
         {
             if (domainModels.ContainsKey(playerId))
                 return domainModels[playerId];
-            DomainModel dm = loadDefaultDomainModel();
+            DomainModel dm = loadDefaultDomainModel("dm.xml");
             domainModels[playerId] = dm;
             return dm;
         }
 
         #endregion PublicMethods 
-        //TODO: storage of data via game-engine
-        //TODO: WEB-requests via AssetManager interfaces
         //TODO: default domain model loading behaviour
         #region InternalMethods
 
@@ -109,13 +107,13 @@ namespace DomainModelAssetNameSpace
         /// Method loading domain model - location specified by settings.
         /// </summary>
         /// <returns></returns>
-        internal DomainModel loadDefaultDomainModel()
+        internal DomainModel loadDefaultDomainModel(string fileId)
         {
             IDataStorage ids = (IDataStorage) AssetManager.Instance.Bridge;
             if (ids != null)
             {
                 loggingDM("Loading DomainModel from File.");
-                return (this.getDMFromXmlString(ids.Load("dm.xml")));
+                return (this.getDMFromXmlString(ids.Load(fileId)));
             }
             else
             {
@@ -145,36 +143,6 @@ namespace DomainModelAssetNameSpace
 
         /*
         /// <summary>
-        /// Method for reading a file containing the XML-Domainmodel and returning the coressponding DomainModel.
-        /// </summary>
-        /// 
-        /// <param name="filePath"> String containing the file path. </param>
-        ///
-        /// <returns>
-        /// DomainModel-type coressponding to the XML-String in the file.
-        /// </returns>
-        internal DomainModel getDMFromFile(String filePath)
-        {
-            try
-            {   // Open the text file using a stream reader.
-                using (StreamReader sr = new StreamReader(filePath))
-                {
-                    // Read the stream to a string, and write the string to the console.
-                    String line = sr.ReadToEnd();
-                    return (getDMFromXmlString(line));
-                }
-            }
-            catch (Exception e)
-            {
-                DomainModelHandler.Instance.loggingDM("The file containing the Domainmodel could not be read:");
-                DomainModelHandler.Instance.loggingDM(e.Message);
-            }
-
-            return (null);
-        }
-        */
-        /*
-        /// <summary>
         /// Method for requesting a XML-Domainmodel from a website and returning the coressponding DomainModel.
         /// </summary>
         /// 
@@ -195,23 +163,26 @@ namespace DomainModelAssetNameSpace
             return (getDMFromXmlString(dm));
         }
         */
-        /*
+
         /// <summary>
         /// Method for storing a DomainModel as XML in a File.
         /// </summary>
         /// 
         /// <param name="dm"> Domainmodel to store. </param>
-        /// <param name="pathToFile"> String containing the file path. </param>
-        internal void writeDMToFile(DomainModel dm, String pathToFile)
+        /// <param name="fileId"> String containing the file identification. </param>
+        internal void writeDMToFile(DomainModel dm, String fileId)
         {
-            String xml = dm.toXmlString();
-            using (StreamWriter file = new StreamWriter(pathToFile))
+            IDataStorage ids = (IDataStorage)AssetManager.Instance.Bridge;
+            if (ids != null)
             {
-                file.Write(xml);
+                loggingDM("Storing DomainModel to File.");
+                ids.Save(fileId, dm.toXmlString());
             }
+            else
+                loggingDM("No IDataStorage - Bridge implemented!",Severity.Error);
 
         }
-        */
+        
 
         #endregion InternalMethods
         #region TestMethods
@@ -240,19 +211,18 @@ namespace DomainModelAssetNameSpace
             loggingDM("Domain model asset tests called: ");
             performTest1();
             loggingDM("Domain model asset tests finished. ");
-            return;
         }
 
         /// <summary>
-        /// ...
+        /// Creates example DomainModel; stores, loads and outputs this DomainModel from File.
         /// </summary>
         private void performTest1()
         {
-            //DomainModel dm = createExampleDomainModel();
-            //writeDMToFile(dm, @"C:\Users\mmaurer\Desktop\dm");
-            throw new NotImplementedException();
-            //DomainModel dm = getDMFromFile(@"C:\Users\mmaurer\Desktop\dm.xml");
-            //dm.print();
+            DomainModel dm = createExampleDomainModel();
+            string fileId = "DomainModelTestId.xml";
+            writeDMToFile(dm, fileId);
+            DomainModel dm2 = loadDefaultDomainModel(fileId);
+            dm2.print();
         }
 
         /// <summary>
@@ -354,15 +324,6 @@ namespace DomainModelAssetNameSpace
 
             return dm;
         }
-
-        /*
-        //tmp solution
-        public DomainModel loadDmFromFile()
-        {
-            //string fileId = "dm.xml";
-            return getDMFromFile(@"C:\Users\mmaurer\Desktop\dm.xml");
-        }
-        */
 
         #endregion TestMethods
 
@@ -1019,16 +980,4 @@ namespace DomainModelAssetNameSpace
     }
 
     #endregion Serializing 
-
-    /*
-    #region Exceptions
-
-    public class MoreThanOneAssetException : Exception
-    {
-        public MoreThanOneAssetException() : base() { }
-        public MoreThanOneAssetException(string message) : base(message) { }
-    }
-
-    #endregion Exceptions
-    */
 }

@@ -31,8 +31,7 @@ namespace TestCompetence
             }
             */
 
-            DomainModel dm = dma.getDomainModel("test");
-            //dm.print();
+            dma.performTests();
 
             Console.WriteLine("Press enter to exit....");
             Console.ReadLine();
@@ -80,11 +79,14 @@ namespace TestCompetence
 
         public void Save(string fileId, string fileData)
         {
-            throw new NotImplementedException();
+            string filePath = @"C:\Users\mmaurer\Desktop\" + fileId;
+            using (StreamWriter file = new StreamWriter(filePath))
+            {
+                file.Write(fileData);
+            }
         }
 
         #endregion IDataStorage
-
         #region ILog
 
         public void Log(Severity severity, string msg)

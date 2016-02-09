@@ -1003,4 +1003,16 @@ namespace DomainModelAssetNameSpace
     }
 
     #endregion Serializing 
+
+    /*
+    #region Exceptions
+
+    public class MoreThanOneAssetException : Exception
+    {
+        public MoreThanOneAssetException() : base() { }
+        public MoreThanOneAssetException(string message) : base(message) { }
+    }
+
+    #endregion Exceptions
+    */
 }

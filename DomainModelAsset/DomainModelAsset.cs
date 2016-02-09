@@ -18,6 +18,8 @@ namespace DomainModelAssetNameSpace
     /// </summary>
     public class DomainModelAsset : BaseAsset
     {
+        public string msg = "OK";
+
         #region Fields
 
         /// <summary>
@@ -38,6 +40,10 @@ namespace DomainModelAssetNameSpace
             //! Create Settings and let it's BaseSettings class assign Defaultvalues where it can.
             // 
             settings = new DomainModelAssetSettings();
+
+            //preventing multiple asset creation
+            if (AssetManager.Instance.findAssetsByClass(this.Class).Count > 1)
+                throw new Exception("EXCEPTION: There is only one instance of the DomainModelAsset permitted!");
         }
 
         #endregion Constructors

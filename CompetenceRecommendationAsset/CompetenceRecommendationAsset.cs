@@ -38,6 +38,10 @@ namespace CompetenceRecommendationAssetNameSpace
             //! Create Settings and let it's BaseSettings class assign Defaultvalues where it can.
             // 
             settings = new CompetenceRecommendationAssetSettings();
+
+            //preventing multiple asset creation
+            if (AssetManager.Instance.findAssetsByClass(this.Class).Count > 1)
+                throw new Exception("EXCEPTION: There is only one instance of the CompetenceRecommendationAsset permitted!");
         }
 
         #endregion Constructors

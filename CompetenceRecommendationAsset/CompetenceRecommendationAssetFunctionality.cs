@@ -267,7 +267,10 @@ namespace CompetenceRecommendationAssetNameSpace
         {
             loggingPRA("Gamesituation completed - sending evidence to update competences.");
             GameSituation gs = getCurrentGameSituation(playerId);
-            CompetenceAssessmentHandler.Instance.updateCompetenceState(playerId, gs.Competences, success);
+            List<Boolean> successList = new List<bool>();
+            foreach (String com in gs.Competences)
+                successList.Add(success);
+            getCAA().updateCompetenceState(playerId, gs.Competences, successList);
         }
 
         /// <summary>
@@ -281,7 +284,7 @@ namespace CompetenceRecommendationAssetNameSpace
             GameSituationStructure gss = new GameSituationStructure(dm);
             setGameSituationStructure(playerId, gss);
             setCurrentGameSituation(playerId, gss.InitialGameSituation);
-            CompetenceAssessmentHandler.Instance.registerNewPlayer(playerId, dm);
+            getCAA().registerNewPlayer(playerId, dm);
         }
 
         #endregion PublicMethods
@@ -327,8 +330,11 @@ namespace CompetenceRecommendationAssetNameSpace
             registerNewPlayer(player, getDMA().getDomainModel(player));
             GameSituationStructure gss = getGameSituationStructure(player);
             String gs = getCurrentGameSituationId(player);
-            CompetenceState cs = CompetenceAssessmentHandler.Instance.getCompetenceState(player);
-            cs.print();
+            Dictionary<String,double> cs = getCAA().getCompetenceState(player);
+            String str = "";
+            foreach(KeyValuePair<String,double> pair in cs)
+                str += "(" + pair.Key + ":" + Math.Round(pair.Value, 2) + ")";
+            loggingPRA(str);
 
             string line = "";
             while (gs != null)
@@ -345,8 +351,11 @@ namespace CompetenceRecommendationAssetNameSpace
                         setGameSituationUpdate(player, true);
                     else if (line.Equals("f"))
                         setGameSituationUpdate(player, false);
-                    cs = CompetenceAssessmentHandler.Instance.getCompetenceState(player);
-                    cs.print();
+                    cs = getCAA().getCompetenceState(player);
+                    str = "";
+                    foreach (KeyValuePair<String, double> pair in cs)
+                        str += "(" + pair.Key + ":" + Math.Round(pair.Value, 2) + ")";
+                    loggingPRA(str);
                 }
                 else
                 {
@@ -708,6 +717,7 @@ namespace CompetenceRecommendationAssetNameSpace
             return null;
         }
 
+        //TODO: change tmp line
         /// <summary>
         /// Returns the next game situation for a player.
         /// </summary>
@@ -719,8 +729,19 @@ namespace CompetenceRecommendationAssetNameSpace
         {
             CompetenceRecommendationHandler.Instance.loggingPRA("determining next game situation for player " + playerId);
             GameSituation currentGS = CompetenceRecommendationHandler.Instance.getCurrentGameSituation(playerId);
-            CompetenceState cs = CompetenceAssessmentHandler.Instance.getCompetenceState(playerId);
-            List<String> mastered = cs.getMasteredCompetencesString();
+            ///tmp line
+            //OLD:
+            //CompetenceState cs = CompetenceAssessmentHandler.Instance.getCompetenceState(playerId);
+            //List<String> mastered = cs.getMasteredCompetencesString();
+            //NEW:
+            Dictionary<String, double> cs = CompetenceRecommendationHandler.Instance.getCAA().getCompetenceState(playerId);
+            List<String> mastered = new List<string>();
+            foreach(KeyValuePair<String,double> pair in cs)
+            {
+                if (pair.Value >= 0.75)
+                    mastered.Add(pair.Key);
+            }
+
 
             //each GS gets evaluated: int describes the number of competences not mastered and in the new game situation
             Dictionary<GameSituation, int> gameSituationEvaluation = new Dictionary<GameSituation, int>();

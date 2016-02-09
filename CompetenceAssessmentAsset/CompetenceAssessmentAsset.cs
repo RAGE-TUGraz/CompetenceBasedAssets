@@ -128,6 +128,17 @@ namespace CompetenceAssessmentAssetNameSpace
             return csNew;
         }
 
+        /// <summary>
+        /// Method for performing all neccessary operations to run update methods.
+        /// </summary>
+        /// 
+        /// <param name="playerId"> Player Id which is created. </param>
+        /// <param name="dm"> Specifies the domain model used for the following registration. </param>
+        public void registerNewPlayer(string playerId, DomainModel dm)
+        {
+            CompetenceAssessmentHandler.Instance.registerNewPlayer(playerId, dm);
+        }
+
         #endregion Methods
     }
 }

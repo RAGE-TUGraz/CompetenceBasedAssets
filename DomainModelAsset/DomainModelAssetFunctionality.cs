@@ -21,6 +21,11 @@ namespace DomainModelAssetNameSpace
 
         string dmXmlFilePath = "";
 
+        /// <summary>
+        /// Instance of the DomainModelAsset
+        /// </summary>
+        private DomainModelAsset domainModelAsset = null;
+
         #endregion TestFields
         #region Fields
 
@@ -216,8 +221,9 @@ namespace DomainModelAssetNameSpace
         {
             if (DoLogging)
             {
-                DomainModelAsset dma = (DomainModelAsset) AssetManager.Instance.findAssetByClass("DomainModelAsset");
-                dma.Log(severity, msg);
+                if(domainModelAsset==null)
+                    domainModelAsset = (DomainModelAsset) AssetManager.Instance.findAssetByClass("DomainModelAsset");
+                domainModelAsset.Log(severity, "DomainModelAsset: " +msg);
             }
         }
 

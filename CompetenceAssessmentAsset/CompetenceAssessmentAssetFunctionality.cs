@@ -1,4 +1,5 @@
 ﻿using AssetManagerPackage;
+using AssetPackage;
 using DomainModelAssetNameSpace;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ namespace CompetenceAssessmentAssetNameSpace
     /// <summary>
     /// Singelton Class for handling Competence Assessment
     /// </summary>
-    public class CompetenceAssessmentHandler
+    internal class CompetenceAssessmentHandler
     {
         #region AlgorithmParameters
 
@@ -45,6 +46,11 @@ namespace CompetenceAssessmentAssetNameSpace
         private DomainModelAsset domainModelAsset = null;
 
         /// <summary>
+        /// Instance of the CompetenceAssessmentAsset
+        /// </summary>
+        private CompetenceAssessmentAsset competenceAssessmentAsset = null;
+
+        /// <summary>
         /// Instance of the CompetenceAssessmentHandler - Singelton pattern
         /// </summary>
         private static CompetenceAssessmentHandler instance;
@@ -62,7 +68,7 @@ namespace CompetenceAssessmentAssetNameSpace
         /// <summary>
         /// If true logging is done, otherwise no logging is done.
         /// </summary>
-        private Boolean doLogging = false;
+        private Boolean doLogging = true;
 
         #endregion Fields
         #region Constructors 
@@ -254,10 +260,14 @@ namespace CompetenceAssessmentAssetNameSpace
         /// </summary>
         /// 
         /// <param name="msg"> Message to be logged. </param>
-        internal void loggingCA(String msg)
+        internal void loggingCA(String msg, Severity severity = Severity.Information)
         {
             if (DoLogging)
-                Console.WriteLine(msg);
+            {
+                if(competenceAssessmentAsset==null)
+                    competenceAssessmentAsset = (CompetenceAssessmentAsset)AssetManager.Instance.findAssetByClass("CompetenceAssessmentAsset");
+                competenceAssessmentAsset.Log(severity, "CompetenceAssessmentAsset: " + msg);
+            }
         }
 
         /// <summary>

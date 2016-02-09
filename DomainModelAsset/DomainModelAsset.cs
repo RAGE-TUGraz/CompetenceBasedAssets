@@ -43,7 +43,10 @@ namespace DomainModelAssetNameSpace
 
             //preventing multiple asset creation
             if (AssetManager.Instance.findAssetsByClass(this.Class).Count > 1)
+            {
+                this.Log(Severity.Error, "There is only one instance of the DomainModelAsset permitted!");
                 throw new Exception("EXCEPTION: There is only one instance of the DomainModelAsset permitted!");
+            }
         }
 
         #endregion Constructors

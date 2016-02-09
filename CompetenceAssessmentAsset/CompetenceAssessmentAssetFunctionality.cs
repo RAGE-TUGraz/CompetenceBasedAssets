@@ -1,4 +1,5 @@
-﻿using DomainModelAssetNameSpace;
+﻿using AssetManagerPackage;
+using DomainModelAssetNameSpace;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,6 +38,11 @@ namespace CompetenceAssessmentAssetNameSpace
 
         //TODO: store/load competence state somewhere else
         #region Fields
+
+        /// <summary>
+        /// Instance of the DomainModelAsset
+        /// </summary>
+        private DomainModelAsset domainModelAsset = null;
 
         /// <summary>
         /// Instance of the CompetenceAssessmentHandler - Singelton pattern
@@ -101,6 +107,17 @@ namespace CompetenceAssessmentAssetNameSpace
 
         #endregion Properties
         #region InternalMethods
+
+        /// <summary>
+        /// Method returning an instance of the DomainModelAsset.
+        /// </summary>
+        /// <returns> Instance of the DomainModelAsset </returns>
+        internal DomainModelAsset getDMA()
+        {
+            if (domainModelAsset == null)
+                domainModelAsset = (DomainModelAsset)AssetManager.Instance.findAssetByClass("DomainModelAsset");
+            return (domainModelAsset);
+        }
 
         /// <summary>
         /// Method for creating a competence-structure with an id (= playerId).
@@ -259,8 +276,8 @@ namespace CompetenceAssessmentAssetNameSpace
         /// </summary>
         private void performTest1()
         {
-            DomainModel dm = DomainModelHandler.Instance.createExampleDomainModel();
             String testUser = "testUser";
+            DomainModel dm = getDMA().getDomainModel(testUser);
             CompetenceStructure cst = createCompetenceStructure(testUser, dm);
             CompetenceState cs = createCompetenceState(testUser, cst);
             cs.print();
@@ -287,7 +304,7 @@ namespace CompetenceAssessmentAssetNameSpace
         /// </summary>
         private void performTest2()
         {
-            DomainModel dm = DomainModelHandler.Instance.createExampleDomainModel();
+            DomainModel dm = getDMA().getDomainModel("dummyUser");
             dm.print();
         }
 

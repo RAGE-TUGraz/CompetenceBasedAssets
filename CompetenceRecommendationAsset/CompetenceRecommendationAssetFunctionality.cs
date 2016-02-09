@@ -1,4 +1,5 @@
-﻿using CompetenceAssessmentAssetNameSpace;
+﻿using AssetManagerPackage;
+using CompetenceAssessmentAssetNameSpace;
 using DomainModelAssetNameSpace;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,16 @@ namespace CompetenceRecommendationAssetNameSpace
     public class CompetenceRecommendationHandler
     {
         #region Fields
+
+        /// <summary>
+        /// Instance of the DomainModelAsset
+        /// </summary>
+        private DomainModelAsset domainModelAsset = null;
+
+        /// <summary>
+        /// Instance of the CompetenceAssessmentAsset
+        /// </summary>
+        private CompetenceAssessmentAsset competenceAssessmentAsset = null;
 
         /// <summary>
         /// Instance of the CompetenceRecommendationHandler - Singelton pattern
@@ -85,6 +96,28 @@ namespace CompetenceRecommendationAssetNameSpace
 
         #endregion properties
         #region InternalMethods
+
+        /// <summary>
+        /// Method returning an instance of the DomainModelAsset.
+        /// </summary>
+        /// <returns> Instance of the DomainModelAsset </returns>
+        internal DomainModelAsset getDMA()
+        {
+            if (domainModelAsset == null)
+                domainModelAsset = (DomainModelAsset)AssetManager.Instance.findAssetByClass("DomainModelAsset");
+            return (domainModelAsset);
+        }
+
+        /// <summary>
+        /// Method returning an instance of the DomainModelAsset.
+        /// </summary>
+        /// <returns> Instance of the CompetenceAssessmentAsset </returns>
+        internal CompetenceAssessmentAsset getCAA()
+        {
+            if (competenceAssessmentAsset == null)
+                competenceAssessmentAsset = (CompetenceAssessmentAsset)AssetManager.Instance.findAssetByClass("CompetenceAssessmentAsset");
+            return (competenceAssessmentAsset);
+        }
 
         //TODO: GameSituation storage somewhere else?!
         /// <summary>
@@ -291,7 +324,7 @@ namespace CompetenceRecommendationAssetNameSpace
         private void performTest2()
         {
             String player = "p1";
-            registerNewPlayer(player, DomainModelHandler.Instance.createExampleDomainModel());
+            registerNewPlayer(player, getDMA().getDomainModel(player));
             GameSituationStructure gss = getGameSituationStructure(player);
             String gs = getCurrentGameSituationId(player);
             CompetenceState cs = CompetenceAssessmentHandler.Instance.getCompetenceState(player);

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using AssetManagerPackage;
+using AssetPackage;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -13,7 +15,7 @@ namespace DomainModelAssetNameSpace
     /// <summary>
     /// Singelton Class for handling (read DM from Web/File, store DM to File) the Domainmodel (DM)
     /// </summary>
-    public class DomainModelHandler
+    internal class DomainModelHandler
     {
         #region TestFields
 
@@ -30,7 +32,7 @@ namespace DomainModelAssetNameSpace
         /// <summary>
         /// If true logging is done, otherwise no logging is done.
         /// </summary>
-        private Boolean doLogging = false;
+        private Boolean doLogging = true;
 
         /// <summary>
         /// Run-time Asset storage of domain models.
@@ -209,10 +211,14 @@ namespace DomainModelAssetNameSpace
         /// </summary>
         /// 
         /// <param name="msg"> String to be logged.  </param>
-        internal void loggingDM(String msg)
+        /// <param name="severity"> Severity of the logging-message, optional. </param>
+        internal void loggingDM(String msg, Severity severity = Severity.Information)
         {
             if (DoLogging)
-                Console.WriteLine(msg);
+            {
+                DomainModelAsset dma = (DomainModelAsset) AssetManager.Instance.findAssetByClass("DomainModelAsset");
+                dma.Log(severity, msg);
+            }
         }
 
         /// <summary>

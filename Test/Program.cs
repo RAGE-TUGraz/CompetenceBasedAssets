@@ -14,6 +14,9 @@ namespace TestCompetence
     {
         static void Main(string[] args)
         {
+            AssetManager am = AssetManager.Instance;
+            am.Bridge = new Bridge();
+
             DomainModelAsset dma = new DomainModelAsset();
             CompetenceAssessmentAsset caa = new CompetenceAssessmentAsset();
             CompetenceRecommendationAsset cra = new CompetenceRecommendationAsset();
@@ -26,8 +29,7 @@ namespace TestCompetence
             }
 
             Console.WriteLine(dma.Id);
-
-            AssetManager am = AssetManager.Instance;
+            
 
             Console.WriteLine("Searching domainModelAsset....");
             Console.WriteLine(am.findAssetByClass("DomainModelAsset").Id);
@@ -35,6 +37,14 @@ namespace TestCompetence
 
             Console.WriteLine("Press enter to exit....");
             Console.ReadLine();
+        }
+    }
+
+    class Bridge : IBridge, ILog
+    {
+        public void Log(Severity severity, string msg)
+        {
+            Console.WriteLine("BRIDGE:  "+msg);
         }
     }
 }

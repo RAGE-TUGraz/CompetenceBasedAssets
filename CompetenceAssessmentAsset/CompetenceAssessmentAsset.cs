@@ -41,7 +41,17 @@ namespace CompetenceAssessmentAssetNameSpace
 
             //preventing multiple asset creation
             if (AssetManager.Instance.findAssetsByClass(this.Class).Count > 1)
+            {
+                this.Log(Severity.Error, "There is only one instance of the CompetenceAssessmentAsset permitted!");
                 throw new Exception("EXCEPTION: There is only one instance of the CompetenceAssessmentAsset permitted!");
+            }
+
+            //control if an instance of the DomainModelAsset exists
+            if (AssetManager.Instance.findAssetsByClass("DomainModelAsset").Count == 0)
+            {
+                this.Log(Severity.Error, "There needs to be an instance of the DomainModelAsset persistent before creating the CompetenceAssessmentAsset!");
+                throw new Exception("EXCEPTION: There needs to be an instance of the DomainModelAsset persistent before creating the CompetenceAssessmentAsset!");
+            }
         }
 
         #endregion Constructors
@@ -97,7 +107,7 @@ namespace CompetenceAssessmentAssetNameSpace
         public void updateCompetenceState(string playerId, List<string> evidences, List<Boolean> type)
         {
             if (CompetenceAssessmentHandler.Instance.getCompetenceState(playerId) == null)
-                CompetenceAssessmentHandler.Instance.registerNewPlayer(playerId, DomainModelHandler.Instance.getDomainModel(playerId));
+                CompetenceAssessmentHandler.Instance.registerNewPlayer(playerId, CompetenceAssessmentHandler.Instance.getDMA().getDomainModel(playerId));
             CompetenceAssessmentHandler.Instance.updateCompetenceState(playerId, evidences, type);
         }
 
@@ -110,7 +120,7 @@ namespace CompetenceAssessmentAssetNameSpace
         public Dictionary<string, double> getCompetenceState(string playerId)
         {
             if (CompetenceAssessmentHandler.Instance.getCompetenceState(playerId) == null)
-                CompetenceAssessmentHandler.Instance.registerNewPlayer(playerId, DomainModelHandler.Instance.getDomainModel(playerId));
+                CompetenceAssessmentHandler.Instance.registerNewPlayer(playerId, CompetenceAssessmentHandler.Instance.getDMA().getDomainModel(playerId));
             Dictionary<Competence, double> cs = CompetenceAssessmentHandler.Instance.getCompetenceState(playerId).getCurrentValues();
             Dictionary<string, double> csNew = new Dictionary<string, double>();
             foreach (KeyValuePair<Competence, double> pair in cs)

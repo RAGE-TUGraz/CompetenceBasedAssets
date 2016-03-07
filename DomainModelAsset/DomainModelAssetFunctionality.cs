@@ -111,7 +111,8 @@ namespace DomainModelAssetNameSpace
         }
 
         #endregion Properties
-        #region PublicMethods 
+        //TODO: default domain model loading behaviour
+        #region Methods 
 
         /// <summary>
         /// Method returning domain model either from the run-tima asset storage if available or from specified (default) source(File/Web).
@@ -128,10 +129,6 @@ namespace DomainModelAssetNameSpace
             domainModels[playerId] = dm;
             return dm;
         }
-
-        #endregion PublicMethods 
-        //TODO: default domain model loading behaviour
-        #region InternalMethods
 
         /// <summary>
         /// Method loading domain model - location specified by settings.
@@ -214,7 +211,7 @@ namespace DomainModelAssetNameSpace
         }
         
 
-        #endregion InternalMethods
+        #endregion Methods
         #region TestMethods
 
         /// <summary>

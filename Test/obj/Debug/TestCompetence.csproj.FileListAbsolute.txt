@@ -3,7 +3,6 @@ C:\Users\mmaurer\documents\visual studio 2015\Projects\A_Competences\Test\bin\De
 C:\Users\mmaurer\documents\visual studio 2015\Projects\A_Competences\Test\bin\Debug\CompetenceAssessmentAsset.dll
 C:\Users\mmaurer\documents\visual studio 2015\Projects\A_Competences\Test\bin\Debug\CompetenceRecommendationAsset.dll
 C:\Users\mmaurer\documents\visual studio 2015\Projects\A_Competences\Test\bin\Debug\DomainModelAsset.dll
-C:\Users\mmaurer\documents\visual studio 2015\Projects\A_Competences\Test\bin\Debug\RageAssetManager.dll
 C:\Users\mmaurer\documents\visual studio 2015\Projects\A_Competences\Test\bin\Debug\CompetenceAssessmentAsset.pdb
 C:\Users\mmaurer\documents\visual studio 2015\Projects\A_Competences\Test\bin\Debug\CompetenceRecommendationAsset.pdb
 C:\Users\mmaurer\documents\visual studio 2015\Projects\A_Competences\Test\bin\Debug\DomainModelAsset.pdb
@@ -11,3 +10,5 @@ C:\Users\mmaurer\documents\visual studio 2015\Projects\A_Competences\Test\bin\De
 C:\Users\mmaurer\documents\visual studio 2015\Projects\A_Competences\Test\obj\Debug\TestCompetence.csprojResolveAssemblyReference.cache
 C:\Users\mmaurer\documents\visual studio 2015\Projects\A_Competences\Test\obj\Debug\Test.exe
 C:\Users\mmaurer\documents\visual studio 2015\Projects\A_Competences\Test\obj\Debug\Test.pdb
+C:\Users\mmaurer\documents\visual studio 2015\Projects\A_Competences\Test\bin\Debug\RageAssetManager.dll
+C:\Users\mmaurer\documents\visual studio 2015\Projects\A_Competences\Test\bin\Debug\RageAssetManager.xml

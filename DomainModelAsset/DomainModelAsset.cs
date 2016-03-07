@@ -145,6 +145,7 @@ namespace DomainModelAssetNameSpace
         /// </summary>
         public void performTests()
         {
+            //Console.WriteLine(this.Version);
             DomainModelHandler.Instance.performAllTests();
         }
 

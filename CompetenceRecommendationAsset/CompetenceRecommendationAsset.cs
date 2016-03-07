@@ -120,12 +120,13 @@ namespace CompetenceRecommendationAssetNameSpace
 
         // Your code goes here.
         /*
-public void test()
-{
-    Console.WriteLine("CompetenceRecommendation method called!");
-    CompetenceRecommendationHandler.Instance.performAllTests();
-}
-*/
+        public void test()
+        {
+            Console.WriteLine("CompetenceRecommendation method called!");
+            CompetenceRecommendationHandler.Instance.performAllTests();
+        }
+        */
+
 
         /// <summary>
         /// Method returning the next game situation id for the player.

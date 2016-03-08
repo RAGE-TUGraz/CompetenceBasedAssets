@@ -62,6 +62,7 @@ namespace TestCompetence
             */
 
             dma.performTests();
+            caa.performTests();
          
 
             Console.WriteLine("Press enter to exit....");

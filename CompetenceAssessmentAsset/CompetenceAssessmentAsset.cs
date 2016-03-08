@@ -113,13 +113,15 @@ namespace CompetenceAssessmentAssetNameSpace
 
         // Your code goes here.
 
-        /*
-        public void test()
+        /// <summary>
+        /// Method for internal testing
+        /// </summary>
+        public void performTests()
         {
-            Console.WriteLine("CompetenceAssessment methode called!");
-            //CompetenceAssessmentHandler.Instance.performAllTests();
+            //Console.WriteLine("CompetenceAssessment methode called!");
+            CompetenceAssessmentHandler.Instance.performAllTests();
         }
-        */
+        
 
         /// <summary>
         /// Method for updating the competence state of a player.

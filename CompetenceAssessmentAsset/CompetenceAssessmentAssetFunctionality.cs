@@ -198,16 +198,13 @@ namespace CompetenceAssessmentAssetNameSpace
             return cs;
         }
 
-        #endregion InternalMethods
-        #region PublicMethods
-
         /// <summary>
         /// Method for performing all neccessary operations to run update methods.
         /// </summary>
         /// 
         /// <param name="playerId"> Player Id which is created. </param>
         /// <param name="dm"> Specifies the domain model used for the following registration. </param>
-        public void registerNewPlayer(String playerId, DomainModel dm)
+        internal void registerNewPlayer(String playerId, DomainModel dm)
         {
             CompetenceStructure cstr = createCompetenceStructure(playerId, dm);
             createCompetenceState(playerId, cstr);
@@ -221,8 +218,19 @@ namespace CompetenceAssessmentAssetNameSpace
         /// <param name="compList"> List of Strings - each String describes a competence.  </param>
         /// <param name="evidenceList"> Specifies if the evidences are speaking for or against the competence. </param>
         /// 
-        public void updateCompetenceState(String playerId, List<String> compList, List<Boolean> evidenceList)
+        internal void updateCompetenceState(String playerId, List<String> compList, List<Boolean> evidenceList)
         {
+            //later on -> evidenceList get from bool[up/down] to costum type[up1/up2/up3/down1/down2/down3]
+            List<double> xi0List = new List<double>();
+            List<double> xi1List = new List<double>();
+            for (int i = 0; i < compList.Count; i++)
+            {
+                //later on -> mapping up1-3/down1-3 to xi0/xi1
+                //mapping stored as own Dictonary? 
+                xi0List.Add(xi0);
+                xi1List.Add(xi1);
+            }
+
             for (int i = 0; i < compList.Count; i++)
             {
                 string evi = evidenceList[i] ? "up" : "down";
@@ -241,10 +249,12 @@ namespace CompetenceAssessmentAssetNameSpace
                 return;
             }
 
+
+
             CompetenceState csta = competenceStates[playerId];
             CompetenceStructure cstr = competenceStructureDictionary[playerId];
 
-            cstr.updateCompetenceState(csta, compList, evidenceList);
+            cstr.updateCompetenceState(csta, compList, evidenceList, xi0List, xi1List);
 
         }
 
@@ -256,7 +266,7 @@ namespace CompetenceAssessmentAssetNameSpace
         /// <param name="compList"> List of Strings - each String describes a competence.  </param>
         /// <param name="evidence"> Specifies if the evidences are speaking for or against the competence. </param>
         /// 
-        public void updateCompetenceState(String playerId, List<String> compList, Boolean evidence)
+        internal void updateCompetenceState(String playerId, List<String> compList, Boolean evidence)
         {
             List<Boolean> evidenceList = new List<Boolean>();
             foreach (String str in compList)
@@ -271,7 +281,7 @@ namespace CompetenceAssessmentAssetNameSpace
         /// <param name="playerId"> Player identification. </param>
         /// 
         /// <returns> Competence state of the specified player. </returns>
-        public CompetenceState getCompetenceState(String playerId)
+        internal CompetenceState getCompetenceState(String playerId)
         {
             if (!competenceStates.ContainsKey(playerId))
             {
@@ -282,7 +292,7 @@ namespace CompetenceAssessmentAssetNameSpace
             return competenceStates[playerId];
         }
 
-        #endregion PublicMethods
+        #endregion InternalMethods
         #region TestMethods
 
         /// <summary>
@@ -449,7 +459,9 @@ namespace CompetenceAssessmentAssetNameSpace
         /// <param name="cs"> Specifies competence state to update. </param>
         /// <param name="compList"> Speciefies for which Competences evidences are observed. </param>
         /// <param name="evidenceList"> Specifies if evidences are observed for (true) or against (false) possessing a competence. </param>
-        internal void updateCompetenceState(CompetenceState cs, List<Competence> compList, List<Boolean> evidenceList)
+        /// <param name="xi0List"> Algorithm parameter for updating competence probabilities. </param>
+        /// <param name="xi1List"> Algorithm parameter for updating competence probabilities. </param>
+        internal void updateCompetenceState(CompetenceState cs, List<Competence> compList, List<Boolean> evidenceList, List<double> xi0List, List<double> xi1List)
         {
             Dictionary<string, double> sum = new Dictionary<string, double>();
 
@@ -462,7 +474,7 @@ namespace CompetenceAssessmentAssetNameSpace
             Dictionary<string, double> tmp;
             for (int i = 0; i < compList.Count; i++)
             {
-                tmp = updateCompetenceStateWithOneEvidence(cs, compList[i], evidenceList[i]);
+                tmp = updateCompetenceStateWithOneEvidence(cs, compList[i], evidenceList[i], xi0List[i], xi1List[i]);
 
                 foreach (Competence comp in cs.getCurrentValues().Keys.ToList())
                 {
@@ -484,9 +496,11 @@ namespace CompetenceAssessmentAssetNameSpace
         /// <param name="cs"> Specifies competence state to update. </param>
         /// <param name="comp"> Speciefies for which Competence evidence is observed. </param>
         /// <param name="evidence"> Specifies if evidence is observed for (true) or against (false) possessing a competence. </param>
-        internal void updateCompetenceState(CompetenceState cs, String comp, Boolean evidence)
+        /// <param name="xi0List"> Algorithm parameter for updating competence probabilities. </param>
+        /// <param name="xi1List"> Algorithm parameter for updating competence probabilities. </param>
+        internal void updateCompetenceState(CompetenceState cs, String comp, Boolean evidence, List<double> xi0List, List<double> xi1List)
         {
-            updateCompetenceState(cs, this.getCompetenceById(comp), evidence);
+            updateCompetenceState(cs, this.getCompetenceById(comp), evidence, xi0List, xi1List);
         }
 
         /// <summary>
@@ -496,7 +510,9 @@ namespace CompetenceAssessmentAssetNameSpace
         /// <param name="cs"> Specifies competence state to update. </param>
         /// <param name="compList"> Speciefies for which Competences (by id) evidences are observed. </param>
         /// <param name="evidenceList"> Specifies if evidences are observed for (true) or against (false) possessing a competence. </param>
-        internal void updateCompetenceState(CompetenceState cs, List<String> compList, List<Boolean> evidenceList)
+        /// <param name="xi0List"> Algorithm parameter for updating competence probabilities. </param>
+        /// <param name="xi1List"> Algorithm parameter for updating competence probabilities. </param>
+        internal void updateCompetenceState(CompetenceState cs, List<String> compList, List<Boolean> evidenceList, List<double> xi0List, List<double> xi1List)
         {
             List<Competence> cList = new List<Competence>();
             foreach (String str in compList)
@@ -504,7 +520,7 @@ namespace CompetenceAssessmentAssetNameSpace
                 cList.Add(getCompetenceById(str));
             }
 
-            updateCompetenceState(cs, cList, evidenceList);
+            updateCompetenceState(cs, cList, evidenceList, xi0List, xi1List);
         }
 
         /// <summary>
@@ -514,13 +530,15 @@ namespace CompetenceAssessmentAssetNameSpace
         /// <param name="cs"> Specifies competence state to update. </param>
         /// <param name="comp"> Speciefies for which Competence evidence is observed. </param>
         /// <param name="evidence"> Specifies if evidence is observed for (true) or against (false) possessing a competence. </param>
-        internal void updateCompetenceState(CompetenceState cs, Competence comp, Boolean evidence)
+        /// <param name="xi0List"> Algorithm parameter for updating competence probabilities. </param>
+        /// <param name="xi1List"> Algorithm parameter for updating competence probabilities. </param>
+        internal void updateCompetenceState(CompetenceState cs, Competence comp, Boolean evidence, List<double> xi0List, List<double> xi1List)
         {
             List<Competence> compList = new List<Competence>();
             compList.Add(comp);
             List<Boolean> evidenceList = new List<Boolean>();
             evidenceList.Add(evidence);
-            updateCompetenceState(cs, compList, evidenceList);
+            updateCompetenceState(cs, compList, evidenceList, xi0List, xi1List);
         }
 
         /// <summary>
@@ -534,7 +552,7 @@ namespace CompetenceAssessmentAssetNameSpace
         /// <returns>
         /// Dictionary with key/value pairs of competence-id and updated probability of pessesing the competence. 
         /// </returns>
-        internal Dictionary<string, double> updateCompetenceStateWithOneEvidence(CompetenceState cs, Competence com, Boolean evidence)
+        internal Dictionary<string, double> updateCompetenceStateWithOneEvidence(CompetenceState cs, Competence com, Boolean evidence, double newXi0, double newXi1)
         {
             Dictionary<string, double> pairs = new Dictionary<string, double>();
             Double denominator;
@@ -545,25 +563,25 @@ namespace CompetenceAssessmentAssetNameSpace
             }
 
             if (evidence)
-                denominator = xi0 * cs.getValue(com.id) + (1 - cs.getValue(com.id));
+                denominator = newXi0 * cs.getValue(com.id) + (1 - cs.getValue(com.id));
             else
-                denominator = cs.getValue(com.id) + xi1 * (1 - cs.getValue(com.id));
+                denominator = cs.getValue(com.id) + newXi1 * (1 - cs.getValue(com.id));
 
             foreach (Competence competence in this.competences)
             {
                 if (com.isIndirectPrerequesiteOf(competence) && com.id != competence.id)
                 {
                     if (evidence)
-                        pairs[competence.id] = (xi0 * cs.getValue(competence.id)) / denominator;
+                        pairs[competence.id] = (newXi0 * cs.getValue(competence.id)) / denominator;
                     else
                         pairs[competence.id] = cs.getValue(competence.id) / denominator;
                 }
                 else if (competence.isIndirectPrerequesiteOf(com))
                 {
                     if (evidence)
-                        pairs[competence.id] = (xi0 * cs.getValue(com.id) + (cs.getValue(competence.id) - cs.getValue(com.id))) / denominator;
+                        pairs[competence.id] = (newXi0 * cs.getValue(com.id) + (cs.getValue(competence.id) - cs.getValue(com.id))) / denominator;
                     else
-                        pairs[competence.id] = (cs.getValue(com.id) + xi1 * (cs.getValue(competence.id) - cs.getValue(com.id))) / denominator;
+                        pairs[competence.id] = (cs.getValue(com.id) + newXi1 * (cs.getValue(competence.id) - cs.getValue(com.id))) / denominator;
                 }
                 else
                 {

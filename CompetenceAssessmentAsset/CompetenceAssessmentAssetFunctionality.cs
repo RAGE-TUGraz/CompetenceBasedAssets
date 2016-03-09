@@ -220,16 +220,21 @@ namespace CompetenceAssessmentAssetNameSpace
         /// 
         internal void updateCompetenceState(String playerId, List<String> compList, List<Boolean> evidenceList)
         {
-            //later on -> evidenceList get from bool[up/down] to costum type[up1/up2/up3/down1/down2/down3]
+            //later on -> change evidenceList from bool[up/down] to costum type[up1/up2/up3/down1/down2/down3]
             List<double> xi0List = new List<double>();
             List<double> xi1List = new List<double>();
+            //data structure for storing xi-limits (downgrading->lose a competence for sure?/upgrading->gaine a competence for sure? AND is it possible to gaine more than one competence?)
+            //later on -> bool is not enough
+            List<bool> additionalInformationList = new List<bool>();
             for (int i = 0; i < compList.Count; i++)
             {
                 //later on -> mapping up1-3/down1-3 to xi0/xi1
                 //mapping stored as own Dictonary? 
                 xi0List.Add(xi0);
                 xi1List.Add(xi1);
+                additionalInformationList.Add(false);
             }
+            
 
             for (int i = 0; i < compList.Count; i++)
             {
@@ -254,7 +259,7 @@ namespace CompetenceAssessmentAssetNameSpace
             CompetenceState csta = competenceStates[playerId];
             CompetenceStructure cstr = competenceStructureDictionary[playerId];
 
-            cstr.updateCompetenceState(csta, compList, evidenceList, xi0List, xi1List);
+            cstr.updateCompetenceState(csta, compList, evidenceList, xi0List, xi1List, additionalInformationList);
 
         }
 
@@ -461,7 +466,8 @@ namespace CompetenceAssessmentAssetNameSpace
         /// <param name="evidenceList"> Specifies if evidences are observed for (true) or against (false) possessing a competence. </param>
         /// <param name="xi0List"> Algorithm parameter for updating competence probabilities. </param>
         /// <param name="xi1List"> Algorithm parameter for updating competence probabilities. </param>
-        internal void updateCompetenceState(CompetenceState cs, List<Competence> compList, List<Boolean> evidenceList, List<double> xi0List, List<double> xi1List)
+        /// <param name="additionalInformation"> Specifies if updating a competence is able to get a successor-competence in the competence state or for sure removes a prerequisite competence from the competence state by modifying xi0 or xi1.</param>
+        internal void updateCompetenceState(CompetenceState cs, List<Competence> compList, List<Boolean> evidenceList, List<double> xi0List, List<double> xi1List, List<bool> additionalInformationList)
         {
             Dictionary<string, double> sum = new Dictionary<string, double>();
 
@@ -474,7 +480,7 @@ namespace CompetenceAssessmentAssetNameSpace
             Dictionary<string, double> tmp;
             for (int i = 0; i < compList.Count; i++)
             {
-                tmp = updateCompetenceStateWithOneEvidence(cs, compList[i], evidenceList[i], xi0List[i], xi1List[i]);
+                tmp = updateCompetenceStateWithOneEvidence(cs, compList[i], evidenceList[i], xi0List[i], xi1List[i], additionalInformationList[i]);
 
                 foreach (Competence comp in cs.getCurrentValues().Keys.ToList())
                 {
@@ -489,6 +495,7 @@ namespace CompetenceAssessmentAssetNameSpace
 
         }
 
+        /*
         /// <summary>
         /// Method for updating a competence state with one evidences.
         /// </summary>
@@ -502,6 +509,7 @@ namespace CompetenceAssessmentAssetNameSpace
         {
             updateCompetenceState(cs, this.getCompetenceById(comp), evidence, xi0List, xi1List);
         }
+        */
 
         /// <summary>
         /// Method for updating a competence state with a set of evidences.
@@ -512,7 +520,8 @@ namespace CompetenceAssessmentAssetNameSpace
         /// <param name="evidenceList"> Specifies if evidences are observed for (true) or against (false) possessing a competence. </param>
         /// <param name="xi0List"> Algorithm parameter for updating competence probabilities. </param>
         /// <param name="xi1List"> Algorithm parameter for updating competence probabilities. </param>
-        internal void updateCompetenceState(CompetenceState cs, List<String> compList, List<Boolean> evidenceList, List<double> xi0List, List<double> xi1List)
+        /// <param name="additionalInformation"> Specifies if updating a competence is able to get a successor-competence in the competence state or for sure removes a prerequisite competence from the competence state by modifying xi0 or xi1.</param>
+        internal void updateCompetenceState(CompetenceState cs, List<String> compList, List<Boolean> evidenceList, List<double> xi0List, List<double> xi1List, List<bool> additionalInformation)
         {
             List<Competence> cList = new List<Competence>();
             foreach (String str in compList)
@@ -520,9 +529,10 @@ namespace CompetenceAssessmentAssetNameSpace
                 cList.Add(getCompetenceById(str));
             }
 
-            updateCompetenceState(cs, cList, evidenceList, xi0List, xi1List);
+            updateCompetenceState(cs, cList, evidenceList, xi0List, xi1List, additionalInformation);
         }
 
+        /*
         /// <summary>
         /// Method for updating a competence state with one evidence.
         /// </summary>
@@ -540,6 +550,7 @@ namespace CompetenceAssessmentAssetNameSpace
             evidenceList.Add(evidence);
             updateCompetenceState(cs, compList, evidenceList, xi0List, xi1List);
         }
+        */
 
         /// <summary>
         /// Method for updating a competence state with one evidence.
@@ -548,14 +559,44 @@ namespace CompetenceAssessmentAssetNameSpace
         /// <param name="cs"> Specifies competence state to update. </param>
         /// <param name="com"> Specifies for which competence an evidence is available. </param>
         /// <param name="evidence"> Specifies if the evidence indicates possesion (true) of the competence or not (false). </param>
+        /// <param name="newXi0"> Algorithm parameter for updating the competence-probabilities. </param>
+        /// <param name="newXi1"> Algorithm parameter for updating the competence-probabilities. </param>
+        /// <param name="additionalInformation"> Specifies if updating a competence is able to get a successor-competence in the competence state or for sure removes a prerequisite competence from the competence state by modifying xi0 or xi1.</param>
         ///
         /// <returns>
         /// Dictionary with key/value pairs of competence-id and updated probability of pessesing the competence. 
         /// </returns>
-        internal Dictionary<string, double> updateCompetenceStateWithOneEvidence(CompetenceState cs, Competence com, Boolean evidence, double newXi0, double newXi1)
+        internal Dictionary<string, double> updateCompetenceStateWithOneEvidence(CompetenceState cs, Competence com, Boolean evidence, double newXi0, double newXi1, bool additionalInformation)
         {
             Dictionary<string, double> pairs = new Dictionary<string, double>();
             Double denominator;
+
+            if (additionalInformation)
+            {
+                //possession shown, if evidence == true
+                if (evidence && com.successors.Count > 0)
+                {
+                    //newXi0=...
+                    //get most likely successor
+                    Competence mostLikelySuccesor = com.successors[0];
+                    foreach (Competence compe in com.successors)
+                    {
+                        if (cs.getValue(compe.id) > cs.getValue(mostLikelySuccesor.id))
+                            mostLikelySuccesor = compe;
+                    }
+                }
+                else if(com.prerequisites.Count > 0)
+                {
+                    //newXi1=...
+                    //get least likely prerequisite
+                    Competence leastLikelyPrerequisite = com.prerequisites[0];
+                    foreach (Competence compe in com.prerequisites)
+                    {
+                        if (cs.getValue(compe.id) < cs.getValue(leastLikelyPrerequisite.id))
+                            leastLikelyPrerequisite = compe;
+                    }
+                }
+            }
 
             foreach (Competence comp in cs.getCurrentValues().Keys.ToList())
             {

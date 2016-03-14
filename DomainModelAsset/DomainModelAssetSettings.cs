@@ -42,6 +42,23 @@ namespace DomainModelAssetNameSpace
     /// </summary>
     public class DomainModelAssetSettings : BaseSettings
     {
+        #region Fields
+        /// <summary>
+        /// If true the domain model is loaded from a local xml file.
+        /// </summary>
+        bool localSource = true;
+
+        /// <summary>
+        /// If true the domain model is loaded via a web request.
+        /// </summary>
+        bool webSource = false;
+
+        /// <summary>
+        /// Defines where to load the domain model from. Either a fileId when using a local xml file or a url, when loading from a website.
+        /// </summary>
+        string source = "dm.xml";
+        #endregion Fields
+
         #region Constructors
 
         /// <summary>
@@ -50,10 +67,6 @@ namespace DomainModelAssetNameSpace
         public DomainModelAssetSettings()
             : base()
         {
-            // Set Default values here.
-            TestProperty = "Hello Default World";
-            TestList = new String[] { "Red", "Green", "Blue" };
-            TestPrivate = true;
         }
 
         #endregion Constructors
@@ -61,62 +74,35 @@ namespace DomainModelAssetNameSpace
         #region Properties
 
         /// <summary>
-        /// Gets or sets the test property.
+        /// If true the domain model is loaded from a local xml file. Exactly one field from LocalSource/WebSource need to be true.
         /// </summary>
-        ///
-        /// <value>
-        /// The test property.
-        /// </value>
         [XmlElement()]
-        public String TestProperty
+        public bool LocalSource
         {
-            get;
-            set;
+            get { return (localSource); }
+            set { localSource = value; webSource = !value; }
         }
 
         /// <summary>
-        /// Gets the string[].
+        /// If true the domain model is loaded via a web request. Exactly one field from LocalSource/WebSource need to be true.
         /// </summary>
-        ///
-        /// <value>
-        /// .
-        /// </value>
-        [XmlArray()]
-        [XmlArrayItem("ListItem")]
-        public String[] TestList
+        [XmlElement()]
+        public bool WebSource
         {
-            get;
-            set;
+            get { return (webSource); }
+            set { localSource = !value; webSource = value; }
         }
 
         /// <summary>
-        /// Gets a value indicating whether the test read only.
+        /// Defines where to load the domain model from. Either a fileId when using a local xml file or a url, when loading from a website.
         /// </summary>
-        ///
-        /// <value>
-        /// true if test read only, false if not.
-        /// </value>
-        public Boolean TestReadOnly
+        [XmlElement()]
+        public String Source
         {
-            get
-            {
-                return true;
-            }
+            get { return source; }
+            set { source = value; }
         }
-
-        /// <summary>
-        /// Gets a value indicating whether the test private.
-        /// </summary>
-        ///
-        /// <value>
-        /// true if test private only, false if not.
-        /// </value>
-        public Boolean TestPrivate
-        {
-            get;
-            private set;
-        }
-
+        
         #endregion Properties
     }
 }

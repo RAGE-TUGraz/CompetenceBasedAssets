@@ -37,6 +37,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 
 namespace TestCompetence
@@ -61,8 +62,10 @@ namespace TestCompetence
             }
             */
 
-            dma.performTests();
-            caa.performTests();
+            //dma.performTests();
+            //caa.performTests();
+            DomainModel dm = dma.getDomainModel("sdgfgj");
+            dm.print();
          
 
             Console.WriteLine("Press enter to exit....");
@@ -70,7 +73,7 @@ namespace TestCompetence
         }
     }
 
-    class Bridge : IBridge, ILog, IDataStorage
+    class Bridge : IBridge, ILog, IDataStorage, IWebServiceRequest
     {
         #region IDataStorage
 
@@ -81,7 +84,8 @@ namespace TestCompetence
 
         public bool Exists(string fileId)
         {
-            throw new NotImplementedException();
+            string filePath = @"C:\Users\mmaurer\Desktop\" + fileId;
+            return(File.Exists(filePath));
         }
 
         public string[] Files()
@@ -127,5 +131,27 @@ namespace TestCompetence
         }
 
         #endregion ILog
+        #region IWebServiceRequest
+
+        public void WebServiceRequest(string method, Uri uri, Dictionary<string, string> headers, string body, IWebServiceResponse response)
+        {
+            String url = body;
+            try {
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+                HttpWebResponse webResponse = (HttpWebResponse)request.GetResponse();
+                Stream resStream = webResponse.GetResponseStream();
+
+                StreamReader reader = new StreamReader(resStream);
+                string dm = reader.ReadToEnd();
+
+                response.Success(url, 2, headers, dm);
+            }
+            catch(Exception e)
+            {
+                response.Error(url, e.Message);
+            }
+        }
+
+        #endregion IWebServiceRequest
     }
 }

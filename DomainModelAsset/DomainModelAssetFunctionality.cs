@@ -36,6 +36,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Threading;
 using System.Xml;
 using System.Xml.Serialization;
 
@@ -125,27 +126,64 @@ namespace DomainModelAssetNameSpace
         {
             if (domainModels.ContainsKey(playerId))
                 return domainModels[playerId];
-            DomainModel dm = loadDefaultDomainModel("dm.xml");
+            DomainModel dm = loadDefaultDomainModel("dm.xml",playerId);
             domainModels[playerId] = dm;
             return dm;
         }
 
         /// <summary>
+        /// Method for storing a domain model.
+        /// </summary>
+        /// <param name="dm"> Domain model to store. </param>
+        /// <param name="user"> User for which the Domain model gets stored. </param>
+        internal void storeDomainModel(DomainModel dm, string user)
+        {
+            domainModels.Add(user, dm);
+        }
+
+        /// <summary>
         /// Method loading domain model - location specified by settings.
         /// </summary>
-        /// <returns></returns>
-        internal DomainModel loadDefaultDomainModel(string fileId)
+        /// <returns>Domain Model for the player.</returns>
+        /// <param name="fileId"> File for loading the doamin model. </param>
+        /// <param name="playerId"> Player-Id for which the Domain model gets loaded. </param>
+        internal DomainModel loadDefaultDomainModel(string fileId, string playerId)
         {
+            loggingDM("Loading default Domain model.");
             IDataStorage ids = (IDataStorage) AssetManager.Instance.Bridge;
-            if (ids != null)
+            if (ids != null && ids.Exists(fileId))
             {
                 loggingDM("Loading DomainModel from File.");
                 return (this.getDMFromXmlString(ids.Load(fileId)));
             }
             else
             {
-                loggingDM("Loading example DomainModel.");
-                return createExampleDomainModel();
+                //loggingDM("Loading example DomainModel.");
+                //return createExampleDomainModel();
+                IWebServiceRequest iwr = (IWebServiceRequest)AssetManager.Instance.Bridge;
+                if (iwr != null)
+                {
+                    loggingDM("Loading web DomainModel.");
+                    Uri uri = null;
+                    Dictionary<string, string> headers = new Dictionary<string, string>();
+                    headers.Add("user",playerId);
+                    string body = @"http://css-kmi.tugraz.at:8080/compod/rest/getdomainmodel?id=isr2013";
+                    WebServiceResponse wsr = new WebServiceResponse();
+                    iwr.WebServiceRequest("method", uri, headers, body, wsr);
+                    /*
+                    while (!domainModels.ContainsKey(playerId))
+                    {
+                        loggingDM("Thread going to sleep while waiting for Web-Response.");
+                        Thread.Sleep(50);
+                    }
+                    */
+                    return (domainModels[playerId]);
+                }
+                else
+                {
+                    loggingDM("Loading web DomainModel - no bridge for this purpose found!");
+                    return (null);
+                }
             }
         }
 
@@ -237,6 +275,7 @@ namespace DomainModelAssetNameSpace
         {
             loggingDM("Domain model asset tests called: ");
             performTest1();
+            performTest2();
             loggingDM("Domain model asset tests finished. ");
         }
 
@@ -248,8 +287,16 @@ namespace DomainModelAssetNameSpace
             DomainModel dm = createExampleDomainModel();
             string fileId = "DomainModelTestId.xml";
             writeDMToFile(dm, fileId);
-            DomainModel dm2 = loadDefaultDomainModel(fileId);
+            DomainModel dm2 = loadDefaultDomainModel(fileId,"");
             dm2.print();
+        }
+
+        /// <summary>
+        /// Loads web-domain model.
+        /// </summary>
+        private void performTest2()
+        {
+
         }
 
         /// <summary>
@@ -354,6 +401,23 @@ namespace DomainModelAssetNameSpace
 
         #endregion TestMethods
 
+    }
+
+
+    public class WebServiceResponse : IWebServiceResponse
+    {
+        public void Error(string url, string msg)
+        {
+            Console.WriteLine("Error by performing a web request occured!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        }
+
+        public void Success(string url, int code, Dictionary<string, string> headers, string body)
+        {
+            Console.WriteLine("WebClient request successful!");
+            //Console.WriteLine(body);
+            Console.WriteLine("done");
+            DomainModelHandler.Instance.storeDomainModel(DomainModelHandler.Instance.getDMFromXmlString(body), headers["user"]);
+        }
     }
 
     /// <summary>

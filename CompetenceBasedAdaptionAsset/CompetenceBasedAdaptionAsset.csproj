@@ -45,7 +45,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\CompetenceRecommendationAsset.VersionAndDependencies.xml">
+    <EmbeddedResource Include="Resources\CompetenceBasedAdaptionAsset.VersionAndDependencies.xml">
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>

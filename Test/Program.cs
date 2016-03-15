@@ -62,11 +62,25 @@ namespace TestCompetence
             }
             */
 
-            //dma.performTests();
+            dma.performTests();
             //caa.performTests();
-            DomainModel dm = dma.getDomainModel("sdgfgj");
-            dm.print();
-         
+            
+            /*
+            DomainModelAssetSettings dmas = new DomainModelAssetSettings();
+            dmas.WebSource = true;
+            dmas.Source = @"http://css-kmi.tugraz.at:8080/compod/rest/getdomainmodel?id=isr2013";
+            dma.Settings = dmas;
+
+            try
+            {
+                DomainModel dm = dma.getDomainModel("sdgfgj");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            */
+
 
             Console.WriteLine("Press enter to exit....");
             Console.ReadLine();
@@ -135,20 +149,33 @@ namespace TestCompetence
 
         public void WebServiceRequest(string method, Uri uri, Dictionary<string, string> headers, string body, IWebServiceResponse response)
         {
-            String url = body;
-            try {
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
-                HttpWebResponse webResponse = (HttpWebResponse)request.GetResponse();
-                Stream resStream = webResponse.GetResponseStream();
+            string url = uri.AbsoluteUri;
 
-                StreamReader reader = new StreamReader(resStream);
-                string dm = reader.ReadToEnd();
-
-                response.Success(url, 2, headers, dm);
-            }
-            catch(Exception e)
+            if (string.Equals(method, "get", StringComparison.CurrentCultureIgnoreCase))
             {
-                response.Error(url, e.Message);
+                try
+                {
+                    HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri);
+                    HttpWebResponse webResponse = (HttpWebResponse)request.GetResponse();
+                    Stream resStream = webResponse.GetResponseStream();
+
+                    Dictionary<string, string> responseHeader = new Dictionary<string, string>();
+                    foreach(string key in webResponse.Headers.AllKeys)
+                        responseHeader.Add(key, webResponse.Headers[key]);
+
+                    StreamReader reader = new StreamReader(resStream);
+                    string dm = reader.ReadToEnd();
+
+                    response.Success(url, (int) webResponse.StatusCode, responseHeader, dm);
+                }
+                catch (Exception e)
+                {
+                    response.Error(url, e.Message);
+                }
+            }
+            else
+            {
+                response.Error(url, "Requested method "+method+" not implemented!");
             }
         }
 

@@ -70,6 +70,11 @@ namespace DomainModelAssetNameSpace
         /// </summary>
         private Dictionary<String, DomainModel> domainModels = new Dictionary<string, DomainModel>();
 
+        /// <summary>
+        /// Storage of current user id while performing a web request.
+        /// </summary>
+        internal string currentPlayerId = null;
+
         #endregion Fields
         #region Constructors
 
@@ -116,6 +121,17 @@ namespace DomainModelAssetNameSpace
         #region Methods 
 
         /// <summary>
+        /// Method returning an instance of the DomainModelAsset.
+        /// </summary>
+        /// <returns> Instance of the DomainModelAsset </returns>
+        internal DomainModelAsset getDMA()
+        {
+            if (domainModelAsset == null)
+                domainModelAsset = (DomainModelAsset)AssetManager.Instance.findAssetByClass("DomainModelAsset");
+            return (domainModelAsset);
+        }
+
+        /// <summary>
         /// Method returning domain model either from the run-tima asset storage if available or from specified (default) source(File/Web).
         /// </summary>
         /// 
@@ -126,7 +142,7 @@ namespace DomainModelAssetNameSpace
         {
             if (domainModels.ContainsKey(playerId))
                 return domainModels[playerId];
-            DomainModel dm = loadDefaultDomainModel("dm.xml",playerId);
+            DomainModel dm = loadDefaultDomainModel(playerId);
             domainModels[playerId] = dm;
             return dm;
         }
@@ -147,44 +163,55 @@ namespace DomainModelAssetNameSpace
         /// <returns>Domain Model for the player.</returns>
         /// <param name="fileId"> File for loading the doamin model. </param>
         /// <param name="playerId"> Player-Id for which the Domain model gets loaded. </param>
-        internal DomainModel loadDefaultDomainModel(string fileId, string playerId)
+        internal DomainModel loadDefaultDomainModel(string playerId)
         {
             loggingDM("Loading default Domain model.");
-            IDataStorage ids = (IDataStorage) AssetManager.Instance.Bridge;
-            if (ids != null && ids.Exists(fileId))
+            DomainModelAssetSettings dmas = getDMA().getSettings();
+
+            if (dmas.LocalSource)
             {
-                loggingDM("Loading DomainModel from File.");
-                return (this.getDMFromXmlString(ids.Load(fileId)));
+                IDataStorage ids = (IDataStorage)AssetManager.Instance.Bridge;
+                if (ids != null )
+                {
+                    if (!ids.Exists(dmas.Source))
+                    {
+                        loggingDM("File "+ dmas.Source + " not found for loading Domain model.", Severity.Error);
+                        throw new Exception("EXCEPTION: File "+ dmas.Source + " not found for loading Domain model.") ;
+                    }
+
+                    loggingDM("Loading DomainModel from File.");
+                    return (this.getDMFromXmlString(ids.Load(dmas.Source)));
+                }
+                else
+                {
+                    loggingDM("IDataStorage bridge absent for requested local loading method of the Domain model.", Severity.Error);
+                    throw new Exception("EXCEPTION: IDataStorage bridge absent for requested local loading method of the Domain model.");
+                }
             }
             else
             {
-                //loggingDM("Loading example DomainModel.");
-                //return createExampleDomainModel();
                 IWebServiceRequest iwr = (IWebServiceRequest)AssetManager.Instance.Bridge;
                 if (iwr != null)
                 {
                     loggingDM("Loading web DomainModel.");
-                    Uri uri = null;
+                    Uri uri = new Uri(dmas.Source);
                     Dictionary<string, string> headers = new Dictionary<string, string>();
-                    headers.Add("user",playerId);
-                    string body = @"http://css-kmi.tugraz.at:8080/compod/rest/getdomainmodel?id=isr2013";
+                    headers.Add("user", playerId);
+                    string body = dmas.Source;
                     WebServiceResponse wsr = new WebServiceResponse();
-                    iwr.WebServiceRequest("method", uri, headers, body, wsr);
-                    /*
-                    while (!domainModels.ContainsKey(playerId))
-                    {
-                        loggingDM("Thread going to sleep while waiting for Web-Response.");
-                        Thread.Sleep(50);
-                    }
-                    */
+                    currentPlayerId = playerId;
+                    iwr.WebServiceRequest("get", uri, headers, body, wsr);
+                    currentPlayerId = null;
+
                     return (domainModels[playerId]);
                 }
                 else
                 {
-                    loggingDM("Loading web DomainModel - no bridge for this purpose found!");
-                    return (null);
+                    loggingDM("IWebServiceRequest bridge absent for requested web loading method of the Domain model.", Severity.Error);
+                    throw new Exception("EXCEPTION: IWebServiceRequest bridge absent for requested web loading method of the Domain model.");
                 }
             }
+
         }
 
         /// <summary>
@@ -205,29 +232,6 @@ namespace DomainModelAssetNameSpace
                 return (result);
             }
         }
-
-        /*
-        /// <summary>
-        /// Method for requesting a XML-Domainmodel from a website and returning the coressponding DomainModel.
-        /// </summary>
-        /// 
-        /// <param name="url"> Website URL containing the DomainModel. </param>
-        ///
-        /// <returns>
-        /// DomainModel-type coressponding to the XML-Domainmodel on the spezified website.
-        /// </returns>
-        internal DomainModel getDMFromWeb(String url)
-        {
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
-            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-            Stream resStream = response.GetResponseStream();
-
-            StreamReader reader = new StreamReader(resStream);
-            string dm = reader.ReadToEnd();
-
-            return (getDMFromXmlString(dm));
-        }
-        */
 
         /// <summary>
         /// Method for storing a DomainModel as XML in a File.
@@ -287,8 +291,27 @@ namespace DomainModelAssetNameSpace
             DomainModel dm = createExampleDomainModel();
             string fileId = "DomainModelTestId.xml";
             writeDMToFile(dm, fileId);
-            DomainModel dm2 = loadDefaultDomainModel(fileId,"");
-            dm2.print();
+
+            DomainModelAssetSettings oldDMAS = getDMA().getSettings();
+            DomainModelAssetSettings newDMAS = new DomainModelAssetSettings();
+            newDMAS.LocalSource = true;
+            newDMAS.Source = fileId;
+
+            getDMA().Settings = newDMAS;
+
+            DomainModel dm2 = loadDefaultDomainModel("testDomainModelIdentification");
+
+            if (!dm.toXmlString().Equals(dm2.toXmlString()))
+            {
+                loggingDM("DomainModelAsset - Test1 failed!", Severity.Error);
+                throw new Exception("EXCEPTION: DomainModelAsset - Test1 failed!");
+            }
+            else
+            {
+                loggingDM("DomainModelAsset - Test1 passed.");
+            }
+
+            getDMA().Settings = oldDMAS;
         }
 
         /// <summary>
@@ -296,7 +319,23 @@ namespace DomainModelAssetNameSpace
         /// </summary>
         private void performTest2()
         {
+            DomainModelAssetSettings oldDMAS = getDMA().getSettings();
+            DomainModelAssetSettings dmas = new DomainModelAssetSettings();
+            dmas.WebSource = true;
+            dmas.Source = @"http://css-kmi.tugraz.at:8080/compod/rest/getdomainmodel?id=isr2013";
+            getDMA().Settings = dmas;
 
+            try
+            {
+                DomainModel dm = getDMA().getDomainModel("testDomainModelForTesting-Test2");
+            }
+            catch(Exception e)
+            {
+                loggingDM(e.Message);
+                loggingDM("Maybe the uri ("+dmas.Source+") is not valid any more.");
+            }
+
+            getDMA().Settings = oldDMAS;
         }
 
         /// <summary>
@@ -403,20 +442,33 @@ namespace DomainModelAssetNameSpace
 
     }
 
-
+    /// <summary>
+    /// Implementation of the WebServiceResponse-Interface for handling web requests.
+    /// </summary>
     public class WebServiceResponse : IWebServiceResponse
     {
+        /// <summary>
+        /// Describes behaviour in case the web request failed.
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="msg"></param>
         public void Error(string url, string msg)
         {
-            Console.WriteLine("Error by performing a web request occured!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+            DomainModelHandler.Instance.loggingDM("Web Request for retriving Domain model from "+url+" failed! " + msg, Severity.Error);
+            throw new Exception("EXCEPTION: Web Request for retriving Domain model from " + url + " failed! " + msg);
         }
 
+        /// <summary>
+        /// Describes behaviour in case the web requests succeeds
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="code"></param>
+        /// <param name="headers"></param>
+        /// <param name="body"></param>
         public void Success(string url, int code, Dictionary<string, string> headers, string body)
         {
-            Console.WriteLine("WebClient request successful!");
-            //Console.WriteLine(body);
-            Console.WriteLine("done");
-            DomainModelHandler.Instance.storeDomainModel(DomainModelHandler.Instance.getDMFromXmlString(body), headers["user"]);
+            DomainModelHandler.Instance.loggingDM("WebClient request successful!");
+            DomainModelHandler.Instance.storeDomainModel(DomainModelHandler.Instance.getDMFromXmlString(body), DomainModelHandler.Instance.currentPlayerId);
         }
     }
 

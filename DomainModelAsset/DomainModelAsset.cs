@@ -49,6 +49,7 @@ namespace DomainModelAssetNameSpace
         /// </summary>
         private DomainModelAssetSettings settings = null;
 
+
         #endregion Fields
         #region Constructors
 
@@ -99,7 +100,7 @@ namespace DomainModelAssetNameSpace
         }
 
         #endregion Properties
-        #region Methods
+        #region PublicMethods
 
         // Your code goes here.
         /*
@@ -145,10 +146,22 @@ namespace DomainModelAssetNameSpace
         /// </summary>
         public void performTests()
         {
-            //Console.WriteLine(this.Version);
             DomainModelHandler.Instance.performAllTests();
         }
 
-        #endregion Methods
+
+        #endregion PublicMethods
+        #region InternalMethods
+
+        /// <summary>
+        /// Method returning the DomainModelAssetSetting for internal use.
+        /// </summary>
+        /// <returns> Settings of this Asset. </returns>
+        internal DomainModelAssetSettings getSettings()
+        {
+            return (this.settings);
+        }
+
+        #endregion InternalMethods
     }
 }

@@ -1,0 +1,6 @@
+C:\Users\mmaurer\documents\visual studio 2015\Projects\A_Competences\CompetenceAssessmentAsset_Portable\bin\Debug\MyFirstAsset_Portable_Portable.dll
+C:\Users\mmaurer\documents\visual studio 2015\Projects\A_Competences\CompetenceAssessmentAsset_Portable\bin\Debug\MyFirstAsset_Portable_Portable.pdb
+C:\Users\mmaurer\documents\visual studio 2015\Projects\A_Competences\CompetenceAssessmentAsset_Portable\bin\Debug\RageAssetManager_Portable.dll
+C:\Users\mmaurer\documents\visual studio 2015\Projects\A_Competences\CompetenceAssessmentAsset_Portable\obj\Debug\CompetenceAssessmentAsset_Portable.csprojResolveAssemblyReference.cache
+C:\Users\mmaurer\documents\visual studio 2015\Projects\A_Competences\CompetenceAssessmentAsset_Portable\obj\Debug\MyFirstAsset_Portable_Portable.dll
+C:\Users\mmaurer\documents\visual studio 2015\Projects\A_Competences\CompetenceAssessmentAsset_Portable\obj\Debug\MyFirstAsset_Portable_Portable.pdb

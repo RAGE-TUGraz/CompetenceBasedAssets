@@ -31,7 +31,7 @@
 using AssetManagerPackage;
 using AssetPackage;
 using CompetenceAssessmentAssetNameSpace;
-using CompetenceRecommendationAssetNameSpace;
+using CompetenceBasedAdaptionAssetNameSpace;
 using DomainModelAssetNameSpace;
 using System;
 using System.Collections.Generic;
@@ -51,7 +51,7 @@ namespace TestCompetence
 
             DomainModelAsset dma = new DomainModelAsset();
             CompetenceAssessmentAsset caa = new CompetenceAssessmentAsset();
-            CompetenceRecommendationAsset cra = new CompetenceRecommendationAsset();
+            CompetenceBasedAdaptionAsset cra = new CompetenceBasedAdaptionAsset();
 
             /*
             try {
@@ -63,7 +63,7 @@ namespace TestCompetence
             */
 
             dma.performTests();
-            //caa.performTests();
+            caa.performTests();
             
             /*
             DomainModelAssetSettings dmas = new DomainModelAssetSettings();

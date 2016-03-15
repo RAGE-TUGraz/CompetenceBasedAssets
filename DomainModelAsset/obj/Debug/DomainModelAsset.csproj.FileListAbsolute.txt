@@ -1,7 +1,6 @@
 c:\users\mmaurer\documents\visual studio 2015\Projects\A_Competences\DomainModelAsset\bin\Debug\DomainModelAsset.dll
 c:\users\mmaurer\documents\visual studio 2015\Projects\A_Competences\DomainModelAsset\bin\Debug\DomainModelAsset.pdb
 c:\users\mmaurer\documents\visual studio 2015\Projects\A_Competences\DomainModelAsset\bin\Debug\RageAssetManager.pdb
-c:\users\mmaurer\documents\visual studio 2015\Projects\A_Competences\DomainModelAsset\obj\Debug\DomainModelAsset.csprojResolveAssemblyReference.cache
 c:\users\mmaurer\documents\visual studio 2015\Projects\A_Competences\DomainModelAsset\obj\Debug\DomainModelAsset.dll
 c:\users\mmaurer\documents\visual studio 2015\Projects\A_Competences\DomainModelAsset\obj\Debug\DomainModelAsset.pdb
 C:\Users\mmaurer\documents\visual studio 2015\Projects\A_Competences\DomainModelAsset\bin\Debug\RageAssetManager.dll

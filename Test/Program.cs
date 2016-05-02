@@ -98,7 +98,7 @@ namespace TestCompetence
 
         public bool Exists(string fileId)
         {
-            string filePath = @"C:\Users\mmaurer\Desktop\" + fileId;
+            string filePath = @"C:\Users\mmaurer\Desktop\rageCsFiles\" + fileId;
             return(File.Exists(filePath));
         }
 
@@ -109,7 +109,7 @@ namespace TestCompetence
 
         public string Load(string fileId)
         {
-            string filePath = @"C:\Users\mmaurer\Desktop\"+fileId;
+            string filePath = @"C:\Users\mmaurer\Desktop\rageCsFiles\" + fileId;
             try
             {   // Open the text file using a stream reader.
                 using (StreamReader sr = new StreamReader(filePath))

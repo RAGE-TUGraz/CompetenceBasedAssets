@@ -320,7 +320,7 @@ namespace CompetenceBasedAdaptionAssetNameSpace
             GameSituationStructure gss = new GameSituationStructure(dm);
             setGameSituationStructure(playerId, gss);
             setCurrentGameSituation(playerId, gss.InitialGameSituation);
-            getCAA().registerNewPlayer(playerId, dm);
+            //getCAA().registerNewPlayer(playerId, dm);
         }
 
         #endregion PublicMethods

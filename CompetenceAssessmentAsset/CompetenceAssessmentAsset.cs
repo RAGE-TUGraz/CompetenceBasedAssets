@@ -160,7 +160,7 @@ namespace CompetenceAssessmentAssetNameSpace
         /// 
         /// <param name="playerId"> Player Id which is created. </param>
         /// <param name="dm"> Specifies the domain model used for the following registration. </param>
-        public void registerNewPlayer(string playerId, DomainModel dm)
+        private void registerNewPlayer(string playerId, DomainModel dm)
         {
             CompetenceAssessmentHandler.Instance.registerNewPlayer(playerId, dm);
         }

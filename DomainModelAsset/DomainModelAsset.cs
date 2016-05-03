@@ -136,9 +136,9 @@ namespace DomainModelAssetNameSpace
         /// <param name="playerId"> Id of the player for which the domain model is requested. </param>
         /// 
         /// <returns> The domein model associated with the player-id. </returns>
-        public DomainModel getDomainModel(String playerId)
+        public DomainModel getDomainModel()
         {
-            return DomainModelHandler.Instance.getDomainModel(playerId);
+            return DomainModelHandler.Instance.getDomainModel();
         }
 
         /// <summary>

@@ -127,27 +127,25 @@ namespace CompetenceAssessmentAssetNameSpace
         /// Method for updating the competence state of a player.
         /// </summary>
         /// 
-        /// <param name="playerId"> Player Id for the update. </param>
         /// <param name="evidence"> Id of a competence for which an evidence is observed. </param>
         /// <param name="type"> If true the evidence indicates possession of the specified competence, otherwise a lack of this competence is indicated. </param>
-        public void updateCompetenceState(string playerId, List<string> evidences, List<Boolean> type)
+        public void updateCompetenceState(List<string> evidences, List<Boolean> type)
         {
-            if (CompetenceAssessmentHandler.Instance.getCompetenceState(playerId) == null)
-                CompetenceAssessmentHandler.Instance.registerNewPlayer(playerId, CompetenceAssessmentHandler.Instance.getDMA().getDomainModel(playerId));
-            CompetenceAssessmentHandler.Instance.updateCompetenceState(playerId, evidences, type);
+            if (CompetenceAssessmentHandler.Instance.getCompetenceState() == null)
+                CompetenceAssessmentHandler.Instance.registerNewPlayer( CompetenceAssessmentHandler.Instance.getDMA().getDomainModel());
+            CompetenceAssessmentHandler.Instance.updateCompetenceState( evidences, type);
         }
 
         /// <summary>
         /// Method returning the current competence state of a player.
         /// </summary>
         /// 
-        /// <param name="playerId"> Player identification </param>
-        /// <returns></returns>
-        public Dictionary<string, double> getCompetenceState(string playerId)
+        /// <returns> Competence state</returns>
+        public Dictionary<string, double> getCompetenceState()
         {
-            if (CompetenceAssessmentHandler.Instance.getCompetenceState(playerId) == null)
-                CompetenceAssessmentHandler.Instance.registerNewPlayer(playerId, CompetenceAssessmentHandler.Instance.getDMA().getDomainModel(playerId));
-            Dictionary<Competence, double> cs = CompetenceAssessmentHandler.Instance.getCompetenceState(playerId).getCurrentValues();
+            if (CompetenceAssessmentHandler.Instance.getCompetenceState() == null)
+                CompetenceAssessmentHandler.Instance.registerNewPlayer(CompetenceAssessmentHandler.Instance.getDMA().getDomainModel());
+            Dictionary<Competence, double> cs = CompetenceAssessmentHandler.Instance.getCompetenceState().getCurrentValues();
             Dictionary<string, double> csNew = new Dictionary<string, double>();
             foreach (KeyValuePair<Competence, double> pair in cs)
                 csNew[pair.Key.id] = pair.Value;
@@ -162,7 +160,7 @@ namespace CompetenceAssessmentAssetNameSpace
         /// <param name="dm"> Specifies the domain model used for the following registration. </param>
         private void registerNewPlayer(string playerId, DomainModel dm)
         {
-            CompetenceAssessmentHandler.Instance.registerNewPlayer(playerId, dm);
+            CompetenceAssessmentHandler.Instance.registerNewPlayer(dm);
         }
 
         #endregion Methods

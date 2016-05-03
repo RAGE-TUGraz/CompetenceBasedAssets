@@ -66,14 +66,9 @@ namespace DomainModelAssetNameSpace
         private Boolean doLogging = true;
 
         /// <summary>
-        /// Run-time Asset storage of domain models.
+        /// Run-time Asset storage of domain model.
         /// </summary>
-        private Dictionary<String, DomainModel> domainModels = new Dictionary<string, DomainModel>();
-
-        /// <summary>
-        /// Storage of current user id while performing a web request.
-        /// </summary>
-        internal string currentPlayerId = null;
+        private DomainModel domainModel = null;
 
         #endregion Fields
         #region Constructors
@@ -135,35 +130,32 @@ namespace DomainModelAssetNameSpace
         /// Method returning domain model either from the run-tima asset storage if available or from specified (default) source(File/Web).
         /// </summary>
         /// 
-        /// <param name="playerId"> Id of the player for which the domain model is requested. </param>
-        /// 
-        /// <returns> The domein model associated with the player-id. </returns>
-        internal DomainModel getDomainModel(String playerId)
+        /// <returns> The domein model. </returns>
+        internal DomainModel getDomainModel()
         {
-            if (domainModels.ContainsKey(playerId))
-                return domainModels[playerId];
-            DomainModel dm = loadDefaultDomainModel(playerId);
-            domainModels[playerId] = dm;
+            if (domainModel != null)
+                return domainModel;
+            DomainModel dm = loadDefaultDomainModel();
+            domainModel = dm;
             return dm;
         }
 
+        
         /// <summary>
         /// Method for storing a domain model.
         /// </summary>
         /// <param name="dm"> Domain model to store. </param>
-        /// <param name="user"> User for which the Domain model gets stored. </param>
-        internal void storeDomainModel(DomainModel dm, string user)
+        internal void storeDomainModel(DomainModel dm)
         {
-            domainModels.Add(user, dm);
+            domainModel = dm;
         }
+        
 
         /// <summary>
         /// Method loading domain model - location specified by settings.
         /// </summary>
         /// <returns>Domain Model for the player.</returns>
-        /// <param name="fileId"> File for loading the doamin model. </param>
-        /// <param name="playerId"> Player-Id for which the Domain model gets loaded. </param>
-        internal DomainModel loadDefaultDomainModel(string playerId)
+        internal DomainModel loadDefaultDomainModel()
         {
             loggingDM("Loading default Domain model.");
             DomainModelAssetSettings dmas = getDMA().getSettings();
@@ -196,14 +188,14 @@ namespace DomainModelAssetNameSpace
                     loggingDM("Loading web DomainModel.");
                     Uri uri = new Uri(dmas.Source);
                     Dictionary<string, string> headers = new Dictionary<string, string>();
-                    headers.Add("user", playerId);
+                    //headers.Add("user", playerId);
                     string body = dmas.Source;
                     WebServiceResponse wsr = new WebServiceResponse();
-                    currentPlayerId = playerId;
+                    //currentPlayerId = playerId;
                     iwr.WebServiceRequest("get", uri, headers, body, wsr);
-                    currentPlayerId = null;
+                    //currentPlayerId = null;
 
-                    return (domainModels[playerId]);
+                    return (domainModel);
                 }
                 else
                 {
@@ -299,7 +291,7 @@ namespace DomainModelAssetNameSpace
 
             getDMA().Settings = newDMAS;
 
-            DomainModel dm2 = loadDefaultDomainModel("testDomainModelIdentification");
+            DomainModel dm2 = loadDefaultDomainModel();
 
             if (!dm.toXmlString().Equals(dm2.toXmlString()))
             {
@@ -327,7 +319,7 @@ namespace DomainModelAssetNameSpace
 
             try
             {
-                DomainModel dm = getDMA().getDomainModel("testDomainModelForTesting-Test2");
+                DomainModel dm = getDMA().getDomainModel();
             }
             catch(Exception e)
             {
@@ -468,7 +460,7 @@ namespace DomainModelAssetNameSpace
         public void Success(string url, int code, Dictionary<string, string> headers, string body)
         {
             DomainModelHandler.Instance.loggingDM("WebClient request successful!");
-            DomainModelHandler.Instance.storeDomainModel(DomainModelHandler.Instance.getDMFromXmlString(body), DomainModelHandler.Instance.currentPlayerId);
+            DomainModelHandler.Instance.storeDomainModel(DomainModelHandler.Instance.getDMFromXmlString(body));
         }
     }
 

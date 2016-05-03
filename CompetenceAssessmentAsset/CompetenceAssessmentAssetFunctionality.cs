@@ -88,12 +88,12 @@ namespace CompetenceAssessmentAssetNameSpace
         /// <summary>
         /// Dictionary containing all key/value pairs of playerId and competence structure.
         /// </summary>
-        private Dictionary<String, CompetenceStructure> competenceStructureDictionary = new Dictionary<String, CompetenceStructure>();
+        private CompetenceStructure competenceStructure = null;
 
         /// <summary>
-        /// Dictinary containing all competence states.
+        /// Dictinary containing the current competence states.
         /// </summary>
-        private Dictionary<String, CompetenceState> competenceStates = new Dictionary<string, CompetenceState>();
+        private CompetenceState competenceState = null;
 
         /// <summary>
         /// If true logging is done, otherwise no logging is done.
@@ -159,21 +159,18 @@ namespace CompetenceAssessmentAssetNameSpace
         /// Method for creating a competence-structure with an id (= playerId).
         /// </summary>
         /// 
-        /// <param name="competenceStructureId"> String containing the competence-structure-id. Used to reference to this competence-structure. </param>
         /// <param name="dm"> Specifies Domainmodel used to create the competence-structure. </param>
         ///
         /// <returns>
         /// Competence-structure according to the specified domainmodel.
         /// </returns>
-        internal CompetenceStructure createCompetenceStructure(String playerId, DomainModel dm)
+        internal CompetenceStructure createCompetenceStructure(DomainModel dm)
         {
-            if (competenceStructureDictionary.ContainsKey(playerId))
-            {
-                loggingCA("CompetenceStructure already exists with this id(" + playerId + ")!");
-                return (null);
-            }
+            if (competenceStructure != null)
+                loggingCA("CompetenceStructure already exists - overwrite!");
+
             CompetenceStructure cst = new CompetenceStructure(dm);
-            competenceStructureDictionary[playerId] = cst;
+            competenceStructure = cst;
             return (cst);
         }
 
@@ -186,15 +183,13 @@ namespace CompetenceAssessmentAssetNameSpace
         /// <returns>
         /// Competence state according to the specified competence-structure.
         /// </returns>
-        internal CompetenceState createCompetenceState(String playerId, CompetenceStructure cst)
+        internal CompetenceState createCompetenceState(CompetenceStructure cst)
         {
-            if (competenceStates.ContainsKey(playerId))
-            {
-                loggingCA("ERROR: Competence state to this player-Id already exists!");
-                return null;
-            }
+            if (competenceState != null)
+                loggingCA("Competence state already exists! Create new one.");
+
             CompetenceState cs = new CompetenceState(cst);
-            competenceStates[playerId] = cs;
+            competenceState = cs;
             return cs;
         }
 
@@ -202,12 +197,11 @@ namespace CompetenceAssessmentAssetNameSpace
         /// Method for performing all neccessary operations to run update methods.
         /// </summary>
         /// 
-        /// <param name="playerId"> Player Id which is created. </param>
         /// <param name="dm"> Specifies the domain model used for the following registration. </param>
-        internal void registerNewPlayer(String playerId, DomainModel dm)
+        internal void registerNewPlayer(DomainModel dm)
         {
-            CompetenceStructure cstr = createCompetenceStructure(playerId, dm);
-            createCompetenceState(playerId, cstr);
+            CompetenceStructure cstr = createCompetenceStructure(dm);
+            createCompetenceState(cstr);
         }
 
         /// <summary>
@@ -218,7 +212,7 @@ namespace CompetenceAssessmentAssetNameSpace
         /// <param name="compList"> List of Strings - each String describes a competence.  </param>
         /// <param name="evidenceList"> Specifies if the evidences are speaking for or against the competence. </param>
         /// 
-        internal void updateCompetenceState(String playerId, List<String> compList, List<Boolean> evidenceList)
+        internal void updateCompetenceState(List<String> compList, List<Boolean> evidenceList)
         {
             //later on -> change evidenceList from bool[up/down] to costum type[up1/up2/up3/down1/down2/down3]
             List<double> xi0List = new List<double>();
@@ -245,23 +239,23 @@ namespace CompetenceAssessmentAssetNameSpace
                 loggingCA("updating " + compList[i] + ":" + evi);
             }
 
-            if (!competenceStates.ContainsKey(playerId))
+            if (competenceState == null)
             {
-                loggingCA("ERROR: There is no competence state with given playerId!");
+                loggingCA("ERROR: There is no competence state persistent!");
                 return;
             }
 
-            if (!competenceStructureDictionary.ContainsKey(playerId))
+            if (competenceStructure == null)
             {
-                loggingCA("ERROR: There is no competence structure for given playerId!");
+                loggingCA("ERROR: There is no competence structure persistent!");
                 return;
             }
 
 
 
-            CompetenceState csta = competenceStates[playerId];
-            CompetenceStructure cstr = competenceStructureDictionary[playerId];
-
+            CompetenceState csta = competenceState;
+            CompetenceStructure cstr = competenceStructure;
+            
             cstr.updateCompetenceState(csta, compList, evidenceList, xi0List, xi1List, additionalInformationList);
 
         }
@@ -274,30 +268,28 @@ namespace CompetenceAssessmentAssetNameSpace
         /// <param name="compList"> List of Strings - each String describes a competence.  </param>
         /// <param name="evidence"> Specifies if the evidences are speaking for or against the competence. </param>
         /// 
-        internal void updateCompetenceState(String playerId, List<String> compList, Boolean evidence)
+        internal void updateCompetenceState(List<String> compList, Boolean evidence)
         {
             List<Boolean> evidenceList = new List<Boolean>();
             foreach (String str in compList)
                 evidenceList.Add(evidence);
-            updateCompetenceState(playerId, compList, evidenceList);
+            updateCompetenceState( compList, evidenceList);
         }
 
         /// <summary>
-        /// Returns the competence state of a player.
+        /// Returns the competence state of the player.
         /// </summary>
         /// 
-        /// <param name="playerId"> Player identification. </param>
-        /// 
-        /// <returns> Competence state of the specified player. </returns>
-        internal CompetenceState getCompetenceState(String playerId)
+        /// <returns> Competence state of the player. </returns>
+        internal CompetenceState getCompetenceState()
         {
-            if (!competenceStates.ContainsKey(playerId))
+            if (competenceState== null)
             {
-                loggingCA("Player id not associated with a competence state.");
+                loggingCA("Player not associated with a competence state.");
                 return null;
             }
 
-            return competenceStates[playerId];
+            return competenceState;
         }
 
         #endregion InternalMethods
@@ -334,10 +326,9 @@ namespace CompetenceAssessmentAssetNameSpace
         /// </summary>
         private void performTest1()
         {
-            String testUser = "testUser";
-            DomainModel dm = getDMA().getDomainModel(testUser);
-            CompetenceStructure cst = createCompetenceStructure(testUser, dm);
-            CompetenceState cs = createCompetenceState(testUser, cst);
+            DomainModel dm = createExampleDomainModel();
+            CompetenceStructure cst = createCompetenceStructure( dm);
+            CompetenceState cs = createCompetenceState(cst);
             cs.print();
 
             //first update - upgrade
@@ -345,16 +336,16 @@ namespace CompetenceAssessmentAssetNameSpace
             List<Boolean> evidenceList = new List<Boolean>();
             compList.Add("C1");
             evidenceList.Add(true);
-            updateCompetenceState(testUser, compList, evidenceList);
-            getCompetenceState(testUser).print();
+            updateCompetenceState( compList, evidenceList);
+            getCompetenceState().print();
 
             //second update - downgrade
             List<String> compList2 = new List<string>();
             List<Boolean> evidenceList2 = new List<Boolean>();
             compList2.Add("C1");
             evidenceList2.Add(false);
-            updateCompetenceState(testUser, compList2, evidenceList2);
-            getCompetenceState(testUser).print();
+            updateCompetenceState( compList2, evidenceList2);
+            getCompetenceState().print();
         }
 
         /// <summary>
@@ -362,9 +353,110 @@ namespace CompetenceAssessmentAssetNameSpace
         /// </summary>
         private void performTest2()
         {
-            DomainModel dm = getDMA().getDomainModel("dummyUser");
+            DomainModel dm = getDMA().getDomainModel();
             dm.print();
         }
+
+        /// <summary>
+        /// Method creating an example domain model
+        /// </summary>
+        /// <returns></returns>
+        public DomainModel createExampleDomainModel()
+        {
+            DomainModel dm = new DomainModel();
+
+            Metadata metadata = new Metadata();
+            metadata.id = "exampleId";
+            metadata.title = "exampleTitle";
+
+            //Competences
+            Elements elements = new Elements();
+            CompetenceList cl = new CompetenceList();
+            CompetenceDesc cd1 = new CompetenceDesc("C1");
+            CompetenceDesc cd2 = new CompetenceDesc("C2");
+            CompetenceDesc cd3 = new CompetenceDesc("C3");
+            CompetenceDesc cd4 = new CompetenceDesc("C4");
+            CompetenceDesc cd5 = new CompetenceDesc("C5");
+            CompetenceDesc cd6 = new CompetenceDesc("C6");
+            CompetenceDesc cd7 = new CompetenceDesc("C7");
+            CompetenceDesc cd8 = new CompetenceDesc("C8");
+            CompetenceDesc cd9 = new CompetenceDesc("C9");
+            CompetenceDesc cd10 = new CompetenceDesc("C10");
+            CompetenceDesc[] cdArray = { cd1, cd2, cd3, cd4, cd5, cd6, cd7, cd8, cd9, cd10 };
+            List<CompetenceDesc> cdList = new List<CompetenceDesc>(cdArray);
+            cl.competenceList = cdList;
+            elements.competences = cl;
+
+            //Game situations
+            LearningobjectsList lol = new LearningobjectsList();
+            Learningobject lo1 = new Learningobject("gs1");
+            Learningobject lo2 = new Learningobject("gs2");
+            Learningobject lo3 = new Learningobject("gs3");
+            Learningobject lo4 = new Learningobject("gs4");
+            Learningobject lo5 = new Learningobject("gs5");
+            Learningobject lo6 = new Learningobject("gs6");
+            Learningobject lo7 = new Learningobject("gs7");
+            Learningobject lo8 = new Learningobject("gs8");
+            Learningobject lo9 = new Learningobject("gs9");
+            Learningobject lo10 = new Learningobject("gs10");
+            Learningobject[] loArray = { lo1, lo2, lo3, lo4, lo5, lo6, lo7, lo8, lo9, lo10 };
+            List<Learningobject> loList = new List<Learningobject>(loArray);
+            lol.learningobjectList = loList;
+            elements.learningobjects = lol;
+
+            //Competences prerequisites
+            Relations relations = new Relations();
+            CompetenceprerequisitesList cpl = new CompetenceprerequisitesList();
+            CompetenceP cp1 = new CompetenceP("C5", "C1");
+            CompetenceP cp2 = new CompetenceP("C5", "C2");
+            CompetenceP cp3 = new CompetenceP("C6", "C4");
+            CompetenceP cp4 = new CompetenceP("C7", "C4");
+            CompetenceP cp5 = new CompetenceP("C8", "C3");
+            CompetenceP cp6 = new CompetenceP("C8", "C6");
+            CompetenceP cp7 = new CompetenceP("C9", "C5");
+            CompetenceP cp10 = new CompetenceP("C9", "C8");
+            CompetenceP cp8 = new CompetenceP("C10", "C9");
+            CompetenceP cp9 = new CompetenceP("C10", "C7");
+            CompetenceP[] cpArray = { cp1, cp2, cp3, cp4, cp5, cp6, cp7, cp8, cp9, cp10 };
+            List<CompetenceP> cpList = new List<CompetenceP>(cpArray);
+            cpl.competences = cpList;
+            relations.competenceprerequisites = cpl;
+
+            //assignmend of competences to game situations (=learning objects)
+            LearningobjectsRelationList lorl = new LearningobjectsRelationList();
+            LearningobjectRelation lor1 = new LearningobjectRelation("gs1", "C1");
+            LearningobjectRelation lor2 = new LearningobjectRelation("gs2", "C2");
+            LearningobjectRelation lor3 = new LearningobjectRelation("gs3", "C3");
+            LearningobjectRelation lor4 = new LearningobjectRelation("gs4", "C4");
+            LearningobjectRelation lor5 = new LearningobjectRelation("gs5", "C5");
+            LearningobjectRelation lor6 = new LearningobjectRelation("gs5", "C1");
+            LearningobjectRelation lor7 = new LearningobjectRelation("gs5", "C2");
+            LearningobjectRelation lor8 = new LearningobjectRelation("gs6", "C6");
+            LearningobjectRelation lor9 = new LearningobjectRelation("gs6", "C4");
+            LearningobjectRelation lor10 = new LearningobjectRelation("gs7", "C4");
+            LearningobjectRelation lor11 = new LearningobjectRelation("gs7", "C7");
+            LearningobjectRelation lor12 = new LearningobjectRelation("gs8", "C8");
+            LearningobjectRelation lor13 = new LearningobjectRelation("gs8", "C6");
+            LearningobjectRelation lor14 = new LearningobjectRelation("gs8", "C3");
+            LearningobjectRelation lor15 = new LearningobjectRelation("gs9", "C9");
+            LearningobjectRelation lor16 = new LearningobjectRelation("gs9", "C5");
+            LearningobjectRelation lor17 = new LearningobjectRelation("gs9", "C8");
+            LearningobjectRelation lor18 = new LearningobjectRelation("gs10", "C10");
+            LearningobjectRelation lor19 = new LearningobjectRelation("gs10", "C9");
+            LearningobjectRelation lor20 = new LearningobjectRelation("gs10", "C7");
+            LearningobjectRelation[] lorArray = { lor1, lor2, lor3, lor4, lor5, lor6, lor7, lor8, lor9, lor10, lor11, lor12, lor13, lor14, lor15, lor16, lor17, lor18, lor19, lor20 };
+            List<LearningobjectRelation> lorList = new List<LearningobjectRelation>(lorArray);
+            lorl.learningobjects = lorList;
+            relations.learningobjects = lorl;
+
+            dm.version = "1.0";
+            dm.elements = elements;
+            dm.metadata = metadata;
+            dm.relations = relations;
+
+            return dm;
+        }
+
 
         #endregion TestMethods
 
@@ -529,7 +621,8 @@ namespace CompetenceAssessmentAssetNameSpace
             List<Competence> cList = new List<Competence>();
             foreach (String str in compList)
             {
-                cList.Add(getCompetenceById(str));
+                if (getCompetenceById(str) != null)
+                    cList.Add(getCompetenceById(str));
             }
 
             updateCompetenceState(cs, cList, evidenceList, xi0List, xi1List, additionalInformation);

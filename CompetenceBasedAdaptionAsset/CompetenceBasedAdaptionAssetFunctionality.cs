@@ -70,19 +70,19 @@ namespace CompetenceBasedAdaptionAssetNameSpace
         /// <summary>
         /// Dictionary storing all current game situation with player id as key.
         /// </summary>
-        private Dictionary<String, GameSituation> currentGameSituations = new Dictionary<string, GameSituation>();
+        private GameSituation currentGameSituation = null;
 
         //TODO: List of players -> game situation structure?
         //storage gss?
         /// <summary>
         /// Dictionary storing all game situation structures with player id as key.
         /// </summary>
-        private Dictionary<String, GameSituationStructure> gameSituationStructures = new Dictionary<string, GameSituationStructure>();
+        private GameSituationStructure gameSituationStructure = null;
 
         /// <summary>
         /// Storage of player id and game situation counter - how often has player played the game situations
         /// </summary>
-        private Dictionary<String, Dictionary<GameSituation, int>> gameSituationHistory = new Dictionary<string, Dictionary<GameSituation, int>>();
+        private Dictionary<GameSituation, int> gameSituationHistory = new Dictionary<GameSituation, int>();
 
         /// <summary>
         /// If true logging is done, otherwise no logging is done.
@@ -154,101 +154,77 @@ namespace CompetenceBasedAdaptionAssetNameSpace
                 competenceAssessmentAsset = (CompetenceAssessmentAsset)AssetManager.Instance.findAssetByClass("CompetenceAssessmentAsset");
             return (competenceAssessmentAsset);
         }
-
-        //TODO: GameSituation storage somewhere else?!
+        
         /// <summary>
         /// Method returning the current game situation of an player by playerId.
         /// </summary>
         /// 
-        /// <param name="playerId"> Identification of a player. </param>
-        /// 
         /// <returns> GameSituation the player is currently in. </returns>
-        internal GameSituation getCurrentGameSituation(String playerId)
+        internal GameSituation getCurrentGameSituation()
         {
-            if (!currentGameSituations.ContainsKey(playerId))
+            if (currentGameSituation == null)
             {
-                loggingPRA("Requested playerId is not associated with a current GameSituation!");
+                loggingPRA("Player is not associated with a current GameSituation!");
                 return null;
             }
 
-            return currentGameSituations[playerId];
+            return currentGameSituation;
         }
 
         /// <summary>
         /// Stores a game situation to a given player id as current game situation.
         /// </summary>
         /// 
-        /// <param name="playerId"> Player Identification. </param>
         /// <param name="gs"> Game situation which is set to be the current GS for the specified player. </param>
-        internal void setCurrentGameSituation(String playerId, GameSituation gs)
+        internal void setCurrentGameSituation(GameSituation gs)
         {
-            currentGameSituations[playerId] = gs;
+            currentGameSituation = gs;
         }
 
         /// <summary>
-        /// Method returning the game situation structure of a player associated with the id.
+        /// Method returning the game situation structure of the player.
         /// </summary>
         /// 
-        /// <param name="playerId"> Player identification. </param>
-        /// 
-        /// <returns>Game situation structure for the supplied player id. </returns>
-        internal GameSituationStructure getGameSituationStructure(String playerId)
+        /// <returns>Game situation structure for the player. </returns>
+        internal GameSituationStructure getGameSituationStructure()
         {
-            if (!gameSituationStructures.ContainsKey(playerId))
+            if (gameSituationStructure == null)
             {
-                loggingPRA("Requested playerId is not associated with a GameSituationStructure!");
+                loggingPRA("Player is not associated with a GameSituationStructure!");
                 return null;
             }
 
-            return gameSituationStructures[playerId];
+            return gameSituationStructure;
         }
 
         /// <summary>
         /// Sets a game situation structure to a player.
         /// </summary>
         /// 
-        /// <param name="playerId"> Player identification. </param>
         /// <param name="gss"> Game situation structure which gets linked to the player id. </param>
-        internal void setGameSituationStructure(String playerId, GameSituationStructure gss)
+        internal void setGameSituationStructure( GameSituationStructure gss)
         {
-            gameSituationStructures[playerId] = gss;
+            gameSituationStructure = gss;
         }
 
         /// <summary>
-        /// Returns the game situation history as a player.
+        /// Returns the game situation history of the player.
         /// </summary>
         /// 
-        /// <param name="playerId"> Player Identification. </param>
-        /// 
         /// <returns> A dictionary containing the game situations as keys and the number of times they where player by the player as values. </returns>
-        internal Dictionary<GameSituation, int> getGameSituationHistory(String playerId)
+        internal Dictionary<GameSituation, int> getGameSituationHistory()
         {
-            if (!gameSituationHistory.ContainsKey(playerId))
-            {
-                loggingPRA("No game situation history available for this player - creating a new one.");
-                GameSituationStructure gss = getGameSituationStructure(playerId);
-                Dictionary<GameSituation, int> dgh = new Dictionary<GameSituation, int>();
-                foreach (GameSituation gs in gss.GameSituations)
-                {
-                    dgh[gs] = 0;
-                }
-                gameSituationHistory[playerId] = dgh;
-                return dgh;
-            }
-            else
-                return gameSituationHistory[playerId];
+              return gameSituationHistory;
         }
 
         /// <summary>
         /// Increments the integer counting the number of times a player has player a game situation.
         /// </summary>
         /// 
-        /// <param name="playerId"> Player Identification. </param>
-        /// 
         /// <param name="gs"> Game situation played. </param>
-        internal void updateGameSituationHistory(String playerId, GameSituation gs)
+        internal void updateGameSituationHistory(GameSituation gs)
         {
-            gameSituationHistory[playerId][gs]++;
+            gameSituationHistory[gs]++;
         }
 
         #endregion InternalMethods
@@ -258,21 +234,20 @@ namespace CompetenceBasedAdaptionAssetNameSpace
         /// Returns the Id of the next game situation.
         /// </summary>
         /// 
-        /// <param name="playerId"> Player Identification. </param>
         /// 
         /// <returns> Identification of the next game situation proposed for the player. </returns>
-        public String getNextGameSituationId(String playerId)
+        public String getNextGameSituationId( )
         {
-            if (!gameSituationStructures.ContainsKey(playerId))
+            if (gameSituationStructure == null)
             {
-                loggingPRA("The game situation structure for the specified player does not exist.");
+                loggingPRA("The game situation structure for the player does not exist.");
                 return null;
             }
-            GameSituationStructure gss = gameSituationStructures[playerId];
-            GameSituation nextGS = gss.determineNextGameSituation(playerId);
+            GameSituationStructure gss = gameSituationStructure;
+            GameSituation nextGS = gss.determineNextGameSituation();
             if (nextGS != null)
             {
-                updateGameSituationHistory(playerId, nextGS);
+                updateGameSituationHistory(nextGS);
                 return nextGS.Id;
             }
             return null;
@@ -282,15 +257,13 @@ namespace CompetenceBasedAdaptionAssetNameSpace
         /// Method returning the id of the current game situation player by the player.
         /// </summary>
         /// 
-        /// <param name="playerId"> Player Identification. </param>
-        /// 
         /// <returns> String containing the game situation identification. </returns>
-        public String getCurrentGameSituationId(String playerId)
+        public String getCurrentGameSituationId()
         {
-            GameSituation gs = getCurrentGameSituation(playerId);
+            GameSituation gs = getCurrentGameSituation();
             if (gs == null)
                 return null;
-            return getCurrentGameSituation(playerId).Id;
+            return getCurrentGameSituation().Id;
         }
 
         /// <summary>
@@ -298,28 +271,26 @@ namespace CompetenceBasedAdaptionAssetNameSpace
         /// </summary>
         /// 
         /// <param name="success"> If this value is set to true the player has successfully completed the game situation, otherwise not. </param>
-        /// <param name="playerId"> Id of the player in the game situation. </param>
-        public void setGameSituationUpdate(String playerId, Boolean success)
+        public void setGameSituationUpdate( Boolean success)
         {
             loggingPRA("Gamesituation completed - sending evidence to update competences.");
-            GameSituation gs = getCurrentGameSituation(playerId);
+            GameSituation gs = getCurrentGameSituation();
             List<Boolean> successList = new List<bool>();
             foreach (String com in gs.Competences)
                 successList.Add(success);
-            getCAA().updateCompetenceState(playerId, gs.Competences, successList);
+            getCAA().updateCompetenceState(gs.Competences, successList);
         }
 
         /// <summary>
         /// Method for performing all neccessary operations to run update methods.
         /// </summary>
         /// 
-        /// <param name="playerId"> Player Id which is created. </param>
         /// <param name="dm"> Specifies the domain model used for the following registration. </param>
-        public void registerNewPlayer(String playerId, DomainModel dm)
+        public void registerNewPlayer( DomainModel dm)
         {
             GameSituationStructure gss = new GameSituationStructure(dm);
-            setGameSituationStructure(playerId, gss);
-            setCurrentGameSituation(playerId, gss.InitialGameSituation);
+            setGameSituationStructure( gss);
+            setCurrentGameSituation( gss.InitialGameSituation);
             //getCAA().registerNewPlayer(playerId, dm);
         }
 
@@ -367,11 +338,10 @@ namespace CompetenceBasedAdaptionAssetNameSpace
         /// </summary>
         private void performTest2()
         {
-            String player = "p1";
-            registerNewPlayer(player, getDMA().getDomainModel(player));
-            GameSituationStructure gss = getGameSituationStructure(player);
-            String gs = getCurrentGameSituationId(player);
-            Dictionary<String,double> cs = getCAA().getCompetenceState(player);
+            registerNewPlayer(getDMA().getDomainModel());
+            GameSituationStructure gss = getGameSituationStructure();
+            String gs = getCurrentGameSituationId();
+            Dictionary<String,double> cs = getCAA().getCompetenceState();
             String str = "";
             foreach(KeyValuePair<String,double> pair in cs)
                 str += "(" + pair.Key + ":" + Math.Round(pair.Value, 2) + ")";
@@ -387,12 +357,12 @@ namespace CompetenceBasedAdaptionAssetNameSpace
                 }
                 if (!line.Equals("e"))
                 {
-                    loggingPRA("current gs:" + getCurrentGameSituationId(player));
+                    loggingPRA("current gs:" + getCurrentGameSituationId());
                     if (line.Equals("s"))
-                        setGameSituationUpdate(player, true);
+                        setGameSituationUpdate(true);
                     else if (line.Equals("f"))
-                        setGameSituationUpdate(player, false);
-                    cs = getCAA().getCompetenceState(player);
+                        setGameSituationUpdate(false);
+                    cs = getCAA().getCompetenceState();
                     str = "";
                     foreach (KeyValuePair<String, double> pair in cs)
                         str += "(" + pair.Key + ":" + Math.Round(pair.Value, 2) + ")";
@@ -404,7 +374,7 @@ namespace CompetenceBasedAdaptionAssetNameSpace
                     return;
                 }
                 line = "";
-                gs = getNextGameSituationId(player);
+                gs = getNextGameSituationId();
             }
             loggingPRA("Games end reached!");
         }
@@ -763,19 +733,18 @@ namespace CompetenceBasedAdaptionAssetNameSpace
         /// Returns the next game situation for a player.
         /// </summary>
         /// 
-        /// <param name="playerId"> Player Identification. </param>
         /// 
         /// <returns> The next game situation for the specified player. </returns>
-        internal GameSituation determineNextGameSituation(String playerId)
+        internal GameSituation determineNextGameSituation( )
         {
-            CompetenceBasedAdaptionHandler.Instance.loggingPRA("determining next game situation for player " + playerId);
-            GameSituation currentGS = CompetenceBasedAdaptionHandler.Instance.getCurrentGameSituation(playerId);
+            CompetenceBasedAdaptionHandler.Instance.loggingPRA("determining next game situation for player " );
+            GameSituation currentGS = CompetenceBasedAdaptionHandler.Instance.getCurrentGameSituation();
             ///tmp line
             //OLD:
             //CompetenceState cs = CompetenceAssessmentHandler.Instance.getCompetenceState(playerId);
             //List<String> mastered = cs.getMasteredCompetencesString();
             //NEW:
-            Dictionary<String, double> cs = CompetenceBasedAdaptionHandler.Instance.getCAA().getCompetenceState(playerId);
+            Dictionary<String, double> cs = CompetenceBasedAdaptionHandler.Instance.getCAA().getCompetenceState();
             List<String> mastered = new List<string>();
             foreach(KeyValuePair<String,double> pair in cs)
             {
@@ -799,7 +768,7 @@ namespace CompetenceBasedAdaptionAssetNameSpace
             }
 
             //Determining the GS with the smallest distance which was played least often
-            Dictionary<GameSituation, int> gameSituationHistory = CompetenceBasedAdaptionHandler.Instance.getGameSituationHistory(playerId);
+            Dictionary<GameSituation, int> gameSituationHistory = CompetenceBasedAdaptionHandler.Instance.getGameSituationHistory();
             List<GameSituation> minDistanceGS = new List<GameSituation>();
             GameSituation minPlayedGS = null;
 
@@ -814,7 +783,7 @@ namespace CompetenceBasedAdaptionAssetNameSpace
                 }
             }
 
-            CompetenceBasedAdaptionHandler.Instance.setCurrentGameSituation(playerId, minPlayedGS);
+            CompetenceBasedAdaptionHandler.Instance.setCurrentGameSituation(minPlayedGS);
 
             return minPlayedGS;
         }

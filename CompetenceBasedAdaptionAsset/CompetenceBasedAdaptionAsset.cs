@@ -129,45 +129,40 @@ namespace CompetenceBasedAdaptionAssetNameSpace
         /// Method returning the next game situation id for the player.
         /// </summary>
         /// 
-        /// <param name="playerId"> Player identification. </param>
-        /// 
         /// <returns> The game situation id for the player. </returns>
-        public string getNextGameSituationId(string playerId)
+        public string getNextGameSituationId()
         {
-            if (CompetenceBasedAdaptionHandler.Instance.getCurrentGameSituationId(playerId) == null)
+            if (CompetenceBasedAdaptionHandler.Instance.getCurrentGameSituationId() == null)
             {
-                CompetenceBasedAdaptionHandler.Instance.registerNewPlayer(playerId, CompetenceBasedAdaptionHandler.Instance.getDMA().getDomainModel(playerId));
-                return CompetenceBasedAdaptionHandler.Instance.getCurrentGameSituationId(playerId);
+                CompetenceBasedAdaptionHandler.Instance.registerNewPlayer( CompetenceBasedAdaptionHandler.Instance.getDMA().getDomainModel());
+                return CompetenceBasedAdaptionHandler.Instance.getCurrentGameSituationId();
             }
-            return CompetenceBasedAdaptionHandler.Instance.getNextGameSituationId(playerId);
+            return CompetenceBasedAdaptionHandler.Instance.getNextGameSituationId();
         }
 
         /// <summary>
         /// Method returning the current game situation id for the player.
         /// </summary>
         /// 
-        /// <param name="playerId"> Player identification. </param>
-        /// 
         /// <returns> The game situation id for the player. </returns>
-        public string getCurrentGameSituationId(string playerId)
+        public string getCurrentGameSituationId()
         {
-            if (CompetenceBasedAdaptionHandler.Instance.getCurrentGameSituationId(playerId) == null)
-                CompetenceBasedAdaptionHandler.Instance.registerNewPlayer(playerId, CompetenceBasedAdaptionHandler.Instance.getDMA().getDomainModel(playerId));
-            return CompetenceBasedAdaptionHandler.Instance.getCurrentGameSituationId(playerId);
+            if (CompetenceBasedAdaptionHandler.Instance.getCurrentGameSituationId() == null)
+                CompetenceBasedAdaptionHandler.Instance.registerNewPlayer( CompetenceBasedAdaptionHandler.Instance.getDMA().getDomainModel());
+            return CompetenceBasedAdaptionHandler.Instance.getCurrentGameSituationId();
         }
 
         /// <summary>
         /// Method for updating the competence state of a player due to performance in a game situation.
         /// </summary>
         /// 
-        /// <param name="playerId"> Player identification. </param>
         /// <param name="type"> If true, the player successfully played the curren game situation, otherwise not. </param>
-        public void setGameSituationUpdate(string playerId, Boolean type)
+        public void setGameSituationUpdate( Boolean type)
         {
-            if (CompetenceBasedAdaptionHandler.Instance.getCurrentGameSituationId(playerId) == null)
-                CompetenceBasedAdaptionHandler.Instance.registerNewPlayer(playerId, CompetenceBasedAdaptionHandler.Instance.getDMA().getDomainModel(playerId));
+            if (CompetenceBasedAdaptionHandler.Instance.getCurrentGameSituationId() == null)
+                CompetenceBasedAdaptionHandler.Instance.registerNewPlayer( CompetenceBasedAdaptionHandler.Instance.getDMA().getDomainModel());
 
-            CompetenceBasedAdaptionHandler.Instance.setGameSituationUpdate(playerId, type);
+            CompetenceBasedAdaptionHandler.Instance.setGameSituationUpdate(type);
         }
 
         #endregion Methods

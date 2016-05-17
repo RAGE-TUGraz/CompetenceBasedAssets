@@ -153,16 +153,16 @@ namespace CompetenceBasedAdaptionAssetNameSpace
         }
 
         /// <summary>
-        /// Method for updating the competence state of a player due to performance in a game situation.
+        /// Method for updating the competence state of the player due to performance in a game situation.
         /// </summary>
         /// 
-        /// <param name="type"> If true, the player successfully played the curren game situation, otherwise not. </param>
-        public void setGameSituationUpdate( Boolean type)
+        /// <param name="evidence"> If true, the player successfully played the curren game situation, otherwise not. </param>
+        public void setGameSituationUpdate( Boolean evidence)
         {
             if (CompetenceBasedAdaptionHandler.Instance.getCurrentGameSituationId() == null)
                 CompetenceBasedAdaptionHandler.Instance.registerNewPlayer( CompetenceBasedAdaptionHandler.Instance.getDMA().getDomainModel());
 
-            CompetenceBasedAdaptionHandler.Instance.setGameSituationUpdate(type);
+            CompetenceBasedAdaptionHandler.Instance.setGameSituationUpdate(evidence);
         }
 
         #endregion Methods

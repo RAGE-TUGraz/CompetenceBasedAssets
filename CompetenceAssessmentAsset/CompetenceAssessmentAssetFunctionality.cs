@@ -321,6 +321,7 @@ namespace CompetenceAssessmentAssetNameSpace
             loggingCA("Competence assessment asset tests finished. ");
         }
 
+        
         /// <summary>
         /// Creates example domainmodel through the domainmodelhandler and performes some updates.
         /// </summary>
@@ -347,6 +348,7 @@ namespace CompetenceAssessmentAssetNameSpace
             updateCompetenceState( compList2, evidenceList2);
             getCompetenceState().print();
         }
+        
 
         /// <summary>
         /// Test method printing out an example domain model. 
@@ -357,6 +359,7 @@ namespace CompetenceAssessmentAssetNameSpace
             dm.print();
         }
 
+
         /// <summary>
         /// Method creating an example domain model
         /// </summary>
@@ -365,9 +368,6 @@ namespace CompetenceAssessmentAssetNameSpace
         {
             DomainModel dm = new DomainModel();
 
-            Metadata metadata = new Metadata();
-            metadata.id = "exampleId";
-            metadata.title = "exampleTitle";
 
             //Competences
             Elements elements = new Elements();
@@ -388,21 +388,21 @@ namespace CompetenceAssessmentAssetNameSpace
             elements.competences = cl;
 
             //Game situations
-            LearningobjectsList lol = new LearningobjectsList();
-            Learningobject lo1 = new Learningobject("gs1");
-            Learningobject lo2 = new Learningobject("gs2");
-            Learningobject lo3 = new Learningobject("gs3");
-            Learningobject lo4 = new Learningobject("gs4");
-            Learningobject lo5 = new Learningobject("gs5");
-            Learningobject lo6 = new Learningobject("gs6");
-            Learningobject lo7 = new Learningobject("gs7");
-            Learningobject lo8 = new Learningobject("gs8");
-            Learningobject lo9 = new Learningobject("gs9");
-            Learningobject lo10 = new Learningobject("gs10");
-            Learningobject[] loArray = { lo1, lo2, lo3, lo4, lo5, lo6, lo7, lo8, lo9, lo10 };
-            List<Learningobject> loList = new List<Learningobject>(loArray);
-            lol.learningobjectList = loList;
-            elements.learningobjects = lol;
+            SituationsList sl = new SituationsList();
+            Situation s1 = new Situation("gs1");
+            Situation s2 = new Situation("gs2");
+            Situation s3 = new Situation("gs3");
+            Situation s4 = new Situation("gs4");
+            Situation s5 = new Situation("gs5");
+            Situation s6 = new Situation("gs6");
+            Situation s7 = new Situation("gs7");
+            Situation s8 = new Situation("gs8");
+            Situation s9 = new Situation("gs9");
+            Situation s10 = new Situation("gs10");
+            Situation[] sArray = { s1, s2, s3, s4, s5, s6, s7, s8, s9, s10 };
+            List<Situation> loList = new List<Situation>(sArray);
+            sl.situationList = loList;
+            elements.situations = sl;
 
             //Competences prerequisites
             Relations relations = new Relations();
@@ -423,35 +423,33 @@ namespace CompetenceAssessmentAssetNameSpace
             relations.competenceprerequisites = cpl;
 
             //assignmend of competences to game situations (=learning objects)
-            LearningobjectsRelationList lorl = new LearningobjectsRelationList();
-            LearningobjectRelation lor1 = new LearningobjectRelation("gs1", "C1");
-            LearningobjectRelation lor2 = new LearningobjectRelation("gs2", "C2");
-            LearningobjectRelation lor3 = new LearningobjectRelation("gs3", "C3");
-            LearningobjectRelation lor4 = new LearningobjectRelation("gs4", "C4");
-            LearningobjectRelation lor5 = new LearningobjectRelation("gs5", "C5");
-            LearningobjectRelation lor6 = new LearningobjectRelation("gs5", "C1");
-            LearningobjectRelation lor7 = new LearningobjectRelation("gs5", "C2");
-            LearningobjectRelation lor8 = new LearningobjectRelation("gs6", "C6");
-            LearningobjectRelation lor9 = new LearningobjectRelation("gs6", "C4");
-            LearningobjectRelation lor10 = new LearningobjectRelation("gs7", "C4");
-            LearningobjectRelation lor11 = new LearningobjectRelation("gs7", "C7");
-            LearningobjectRelation lor12 = new LearningobjectRelation("gs8", "C8");
-            LearningobjectRelation lor13 = new LearningobjectRelation("gs8", "C6");
-            LearningobjectRelation lor14 = new LearningobjectRelation("gs8", "C3");
-            LearningobjectRelation lor15 = new LearningobjectRelation("gs9", "C9");
-            LearningobjectRelation lor16 = new LearningobjectRelation("gs9", "C5");
-            LearningobjectRelation lor17 = new LearningobjectRelation("gs9", "C8");
-            LearningobjectRelation lor18 = new LearningobjectRelation("gs10", "C10");
-            LearningobjectRelation lor19 = new LearningobjectRelation("gs10", "C9");
-            LearningobjectRelation lor20 = new LearningobjectRelation("gs10", "C7");
-            LearningobjectRelation[] lorArray = { lor1, lor2, lor3, lor4, lor5, lor6, lor7, lor8, lor9, lor10, lor11, lor12, lor13, lor14, lor15, lor16, lor17, lor18, lor19, lor20 };
-            List<LearningobjectRelation> lorList = new List<LearningobjectRelation>(lorArray);
-            lorl.learningobjects = lorList;
-            relations.learningobjects = lorl;
+            SituationRelationList lorl = new SituationRelationList();
+            SituationRelation lor1 = new SituationRelation("gs1", "C1");
+            SituationRelation lor2 = new SituationRelation("gs2", "C2");
+            SituationRelation lor3 = new SituationRelation("gs3", "C3");
+            SituationRelation lor4 = new SituationRelation("gs4", "C4");
+            SituationRelation lor5 = new SituationRelation("gs5", "C5");
+            SituationRelation lor6 = new SituationRelation("gs5", "C1");
+            SituationRelation lor7 = new SituationRelation("gs5", "C2");
+            SituationRelation lor8 = new SituationRelation("gs6", "C6");
+            SituationRelation lor9 = new SituationRelation("gs6", "C4");
+            SituationRelation lor10 = new SituationRelation("gs7", "C4");
+            SituationRelation lor11 = new SituationRelation("gs7", "C7");
+            SituationRelation lor12 = new SituationRelation("gs8", "C8");
+            SituationRelation lor13 = new SituationRelation("gs8", "C6");
+            SituationRelation lor14 = new SituationRelation("gs8", "C3");
+            SituationRelation lor15 = new SituationRelation("gs9", "C9");
+            SituationRelation lor16 = new SituationRelation("gs9", "C5");
+            SituationRelation lor17 = new SituationRelation("gs9", "C8");
+            SituationRelation lor18 = new SituationRelation("gs10", "C10");
+            SituationRelation lor19 = new SituationRelation("gs10", "C9");
+            SituationRelation lor20 = new SituationRelation("gs10", "C7");
+            SituationRelation[] lorArray = { lor1, lor2, lor3, lor4, lor5, lor6, lor7, lor8, lor9, lor10, lor11, lor12, lor13, lor14, lor15, lor16, lor17, lor18, lor19, lor20 };
+            List<SituationRelation> lorList = new List<SituationRelation>(lorArray);
+            lorl.situations = lorList;
+            relations.situations = lorl;
 
-            dm.version = "1.0";
             dm.elements = elements;
-            dm.metadata = metadata;
             dm.relations = relations;
 
             return dm;
@@ -496,7 +494,7 @@ namespace CompetenceAssessmentAssetNameSpace
         /// <param name="dm"> DomainModel which is used to create the CompetenceStructure. </param>
         internal CompetenceStructure(DomainModel dm)
         {
-            domainModelId = dm.metadata.id;
+            //domainModelId = dm.metadata.id;
 
             //adding competences
             foreach (CompetenceDesc comd in dm.elements.competences.competenceList)
@@ -507,8 +505,11 @@ namespace CompetenceAssessmentAssetNameSpace
             //adding prerequisites and successors
             foreach (CompetenceP comp in dm.relations.competenceprerequisites.competences)
             {
-                getCompetenceById(comp.id).addPrerequisite(getCompetenceById(comp.prereqcompetence.id));
-                getCompetenceById(comp.prereqcompetence.id).addSuccessor(getCompetenceById(comp.id));
+                foreach(Prereqcompetence pcom in comp.prereqcompetences)
+                {
+                    getCompetenceById(comp.id).addPrerequisite(getCompetenceById(pcom.id));
+                    getCompetenceById(pcom.id).addSuccessor(getCompetenceById(comp.id));
+                }
             }
 
 
@@ -1114,4 +1115,56 @@ namespace CompetenceAssessmentAssetNameSpace
         #endregion Methods
 
     }
+
+    /// <summary>
+    /// Enum defining the three information - levels of competence evidences 
+    /// </summary>
+    public enum EvidencePower
+    {
+        Low,
+        Medium,
+        High
+    }
+    
+
+    internal class UpdateLevelStorage
+    {
+        #region Fields
+
+        Dictionary<EvidencePower, ULevel> up = new Dictionary<EvidencePower, ULevel>();
+        Dictionary<EvidencePower, ULevel> down = new Dictionary<EvidencePower, ULevel>();
+
+        #endregion Fields
+        #region Constructors
+
+        internal UpdateLevelStorage(DomainModel dm)
+        {
+            foreach(UpdateLevel ul in dm.updateLevels.updateLevelList)
+            {
+                ULevel newLevel = new ULevel();
+                newLevel.maxonelevel = ul.maxonelevel.Equals("true") ? true : false;
+                newLevel.minonecompetence = ul.minonecompetence.Equals("true") ? true : false;
+                newLevel.xi = Double.Parse(ul.xi);
+                EvidencePower power = (ul.power.Equals("low")) ? EvidencePower.Low : (ul.power.Equals("medium")) ? EvidencePower.Medium : EvidencePower.High;
+                if (ul.direction.Equals("up"))
+                    up.Add(power, newLevel);
+                else if (ul.direction.Equals("down"))
+                    down.Add(power, newLevel);
+            }
+        }
+
+        #endregion Constructors
+        #region Methods
+        #endregion Methods
+    }
+
+    internal class ULevel
+    {
+        #region Fields
+        public double xi;
+        public Boolean minonecompetence;
+        public Boolean maxonelevel;
+        #endregion Fields
+    }
+
 }

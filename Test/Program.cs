@@ -65,6 +65,7 @@ namespace TestCompetence
             dma.performTests();
             caa.performTests();
             
+            
             /*
             DomainModelAssetSettings dmas = new DomainModelAssetSettings();
             dmas.WebSource = true;

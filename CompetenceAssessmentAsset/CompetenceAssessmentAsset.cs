@@ -111,8 +111,6 @@ namespace CompetenceAssessmentAssetNameSpace
 
         #region Methods
 
-        // Your code goes here.
-
         /// <summary>
         /// Method for internal testing
         /// </summary>
@@ -122,18 +120,17 @@ namespace CompetenceAssessmentAssetNameSpace
             CompetenceAssessmentHandler.Instance.performAllTests();
         }
         
-
         /// <summary>
         /// Method for updating the competence state of a player.
         /// </summary>
         /// 
-        /// <param name="evidence"> Id of a competence for which an evidence is observed. </param>
-        /// <param name="type"> If true the evidence indicates possession of the specified competence, otherwise a lack of this competence is indicated. </param>
-        public void updateCompetenceState(List<string> evidences, List<Boolean> type)
+        /// <param name="competences"> Id of a competence for which an evidence is observed. </param>
+        /// <param name="evidences"> If true the evidence indicates possession of the specified competence, otherwise a lack of this competence is indicated. </param>
+        public void updateCompetenceState(List<string> competences, List<Boolean> evidences)
         {
             if (CompetenceAssessmentHandler.Instance.getCompetenceState() == null)
                 CompetenceAssessmentHandler.Instance.registerNewPlayer( CompetenceAssessmentHandler.Instance.getDMA().getDomainModel());
-            CompetenceAssessmentHandler.Instance.updateCompetenceState( evidences, type);
+            CompetenceAssessmentHandler.Instance.updateCompetenceState(competences, evidences);
         }
 
         /// <summary>
@@ -152,17 +149,18 @@ namespace CompetenceAssessmentAssetNameSpace
             return csNew;
         }
 
+        #endregion Methods
+        #region InternalMethods
+
         /// <summary>
-        /// Method for performing all neccessary operations to run update methods.
+        /// Method returning the CompetenceAssessmentAssetSettings for internal use.
         /// </summary>
-        /// 
-        /// <param name="playerId"> Player Id which is created. </param>
-        /// <param name="dm"> Specifies the domain model used for the following registration. </param>
-        private void registerNewPlayer(string playerId, DomainModel dm)
+        /// <returns> Settings of this Asset. </returns>
+        internal CompetenceAssessmentAssetSettings getSettings()
         {
-            CompetenceAssessmentHandler.Instance.registerNewPlayer(dm);
+            return (this.settings);
         }
 
-        #endregion Methods
+        #endregion InternalMethods
     }
 }

@@ -271,10 +271,12 @@ namespace DomainModelAssetNameSpace
         {
             loggingDM("Domain model asset tests called: ");
             performTest1();
-            performTest2();
+            //performTest2();
+            performTest3();
             loggingDM("Domain model asset tests finished. ");
         }
 
+        
         /// <summary>
         /// Creates example DomainModel; stores, loads and outputs this DomainModel from File.
         /// </summary>
@@ -309,6 +311,7 @@ namespace DomainModelAssetNameSpace
         /// <summary>
         /// Loads web-domain model.
         /// </summary>
+        /*
         private void performTest2()
         {
             DomainModelAssetSettings oldDMAS = getDMA().getSettings();
@@ -329,6 +332,32 @@ namespace DomainModelAssetNameSpace
 
             getDMA().Settings = oldDMAS;
         }
+        */
+
+        /// <summary>
+        /// Loading and printing local domain model
+        /// </summary>
+        private void performTest3()
+        {
+            DomainModelAssetSettings oldDMAS = getDMA().getSettings();
+            DomainModelAssetSettings dmas = new DomainModelAssetSettings();
+            dmas.WebSource = false;
+            dmas.Source = "dmNew.xml";
+            getDMA().Settings = dmas;
+
+            try
+            {
+                DomainModel dm = getDMA().getDomainModel();
+                dm.print();
+            }
+            catch (Exception e)
+            {
+                loggingDM("Loading of domain model 'dmNew.xml' not possible.");
+                loggingDM(e.Message);
+            }
+
+            getDMA().Settings = oldDMAS;
+        }
 
         /// <summary>
         /// Method creating an example domain model
@@ -337,10 +366,7 @@ namespace DomainModelAssetNameSpace
         public DomainModel createExampleDomainModel()
         {
             DomainModel dm = new DomainModel();
-
-            Metadata metadata = new Metadata();
-            metadata.id = "exampleId";
-            metadata.title = "exampleTitle";
+            
 
             //Competences
             Elements elements = new Elements();
@@ -361,21 +387,21 @@ namespace DomainModelAssetNameSpace
             elements.competences = cl;
 
             //Game situations
-            LearningobjectsList lol = new LearningobjectsList();
-            Learningobject lo1 = new Learningobject("gs1");
-            Learningobject lo2 = new Learningobject("gs2");
-            Learningobject lo3 = new Learningobject("gs3");
-            Learningobject lo4 = new Learningobject("gs4");
-            Learningobject lo5 = new Learningobject("gs5");
-            Learningobject lo6 = new Learningobject("gs6");
-            Learningobject lo7 = new Learningobject("gs7");
-            Learningobject lo8 = new Learningobject("gs8");
-            Learningobject lo9 = new Learningobject("gs9");
-            Learningobject lo10 = new Learningobject("gs10");
-            Learningobject[] loArray = { lo1, lo2, lo3, lo4, lo5, lo6, lo7, lo8, lo9, lo10 };
-            List<Learningobject> loList = new List<Learningobject>(loArray);
-            lol.learningobjectList = loList;
-            elements.learningobjects = lol;
+            SituationsList sl = new SituationsList();
+            Situation s1 = new Situation("gs1");
+            Situation s2 = new Situation("gs2");
+            Situation s3 = new Situation("gs3");
+            Situation s4 = new Situation("gs4");
+            Situation s5 = new Situation("gs5");
+            Situation s6 = new Situation("gs6");
+            Situation s7 = new Situation("gs7");
+            Situation s8 = new Situation("gs8");
+            Situation s9 = new Situation("gs9");
+            Situation s10 = new Situation("gs10");
+            Situation[] sArray = { s1, s2, s3, s4, s5, s6, s7, s8, s9, s10 };
+            List<Situation> loList = new List<Situation>(sArray);
+            sl.situationList = loList;
+            elements.situations = sl;
 
             //Competences prerequisites
             Relations relations = new Relations();
@@ -396,39 +422,38 @@ namespace DomainModelAssetNameSpace
             relations.competenceprerequisites = cpl;
 
             //assignmend of competences to game situations (=learning objects)
-            LearningobjectsRelationList lorl = new LearningobjectsRelationList();
-            LearningobjectRelation lor1 = new LearningobjectRelation("gs1", "C1");
-            LearningobjectRelation lor2 = new LearningobjectRelation("gs2", "C2");
-            LearningobjectRelation lor3 = new LearningobjectRelation("gs3", "C3");
-            LearningobjectRelation lor4 = new LearningobjectRelation("gs4", "C4");
-            LearningobjectRelation lor5 = new LearningobjectRelation("gs5", "C5");
-            LearningobjectRelation lor6 = new LearningobjectRelation("gs5", "C1");
-            LearningobjectRelation lor7 = new LearningobjectRelation("gs5", "C2");
-            LearningobjectRelation lor8 = new LearningobjectRelation("gs6", "C6");
-            LearningobjectRelation lor9 = new LearningobjectRelation("gs6", "C4");
-            LearningobjectRelation lor10 = new LearningobjectRelation("gs7", "C4");
-            LearningobjectRelation lor11 = new LearningobjectRelation("gs7", "C7");
-            LearningobjectRelation lor12 = new LearningobjectRelation("gs8", "C8");
-            LearningobjectRelation lor13 = new LearningobjectRelation("gs8", "C6");
-            LearningobjectRelation lor14 = new LearningobjectRelation("gs8", "C3");
-            LearningobjectRelation lor15 = new LearningobjectRelation("gs9", "C9");
-            LearningobjectRelation lor16 = new LearningobjectRelation("gs9", "C5");
-            LearningobjectRelation lor17 = new LearningobjectRelation("gs9", "C8");
-            LearningobjectRelation lor18 = new LearningobjectRelation("gs10", "C10");
-            LearningobjectRelation lor19 = new LearningobjectRelation("gs10", "C9");
-            LearningobjectRelation lor20 = new LearningobjectRelation("gs10", "C7");
-            LearningobjectRelation[] lorArray = { lor1, lor2, lor3, lor4, lor5, lor6, lor7, lor8, lor9, lor10, lor11, lor12, lor13, lor14, lor15, lor16, lor17, lor18, lor19, lor20 };
-            List<LearningobjectRelation> lorList = new List<LearningobjectRelation>(lorArray);
-            lorl.learningobjects = lorList;
-            relations.learningobjects = lorl;
-
-            dm.version = "1.0";
+            SituationRelationList lorl = new SituationRelationList();
+            SituationRelation lor1 = new SituationRelation("gs1", "C1");
+            SituationRelation lor2 = new SituationRelation("gs2", "C2");
+            SituationRelation lor3 = new SituationRelation("gs3", "C3");
+            SituationRelation lor4 = new SituationRelation("gs4", "C4");
+            SituationRelation lor5 = new SituationRelation("gs5", "C5");
+            SituationRelation lor6 = new SituationRelation("gs5", "C1");
+            SituationRelation lor7 = new SituationRelation("gs5", "C2");
+            SituationRelation lor8 = new SituationRelation("gs6", "C6");
+            SituationRelation lor9 = new SituationRelation("gs6", "C4");
+            SituationRelation lor10 = new SituationRelation("gs7", "C4");
+            SituationRelation lor11 = new SituationRelation("gs7", "C7");
+            SituationRelation lor12 = new SituationRelation("gs8", "C8");
+            SituationRelation lor13 = new SituationRelation("gs8", "C6");
+            SituationRelation lor14 = new SituationRelation("gs8", "C3");
+            SituationRelation lor15 = new SituationRelation("gs9", "C9");
+            SituationRelation lor16 = new SituationRelation("gs9", "C5");
+            SituationRelation lor17 = new SituationRelation("gs9", "C8");
+            SituationRelation lor18 = new SituationRelation("gs10", "C10");
+            SituationRelation lor19 = new SituationRelation("gs10", "C9");
+            SituationRelation lor20 = new SituationRelation("gs10", "C7");
+            SituationRelation[] lorArray = { lor1, lor2, lor3, lor4, lor5, lor6, lor7, lor8, lor9, lor10, lor11, lor12, lor13, lor14, lor15, lor16, lor17, lor18, lor19, lor20 };
+            List<SituationRelation> lorList = new List<SituationRelation>(lorArray);
+            lorl.situations = lorList;
+            relations.situations = lorl;
+            
             dm.elements = elements;
-            dm.metadata = metadata;
             dm.relations = relations;
 
             return dm;
         }
+        
 
         #endregion TestMethods
 
@@ -467,6 +492,7 @@ namespace DomainModelAssetNameSpace
     /// <summary>
     /// Classes for Serializing/Deserializing Domainmodels (e.g. DM like http://css-kmi.tugraz.at:8080/compod/rest/getdomainmodel?id=isr2013)
     /// </summary>
+    /*
     #region Serializing 
 
     /// <summary>
@@ -504,14 +530,6 @@ namespace DomainModelAssetNameSpace
         }
 
         #region Methods
-
-        /*
-        public void writeToFile(String pathToFile)
-        {
-            DomainModelHandler.Instance.writeDMToFile(this, pathToFile);
-        }
-        */
-
         public String toXmlString()
         {
             try
@@ -1093,6 +1111,677 @@ namespace DomainModelAssetNameSpace
         {
             DomainModelHandler.Instance.loggingDM("---id: " + id);
             prereqcompetence.print();
+        }
+    }
+
+    public class Prereqcompetence
+    {
+        #region Properties
+
+        [XmlAttribute("id")]
+        public String id { get; set; }
+
+        #endregion Properties
+
+        /// <summary>
+        /// Diagnostic-method printing Domainmodel data
+        /// </summary>
+        public void print()
+        {
+            DomainModelHandler.Instance.loggingDM("---id prereq.:" + id);
+        }
+    }
+
+    #endregion Serializing 
+    */
+    #region Serializing 
+
+    /// <summary>
+    /// Class containing all Domainmodel data.
+    /// </summary>
+    [XmlRoot("domainmodel")]
+    public class DomainModel
+    {
+        #region Properties
+        
+        [XmlElement("elements")]
+        public Elements elements { get; set; }
+
+        [XmlElement("relations")]
+        public Relations relations { get; set; }
+        
+        [XmlElement("updatelevels")]
+        public UpdateLevels updateLevels { get; set; }
+
+
+        #endregion Properties
+
+        /// <summary>
+        /// Diagnostic-method printing Domainmodel data
+        /// </summary>
+        public void print()
+        {
+            DomainModelHandler.Instance.loggingDM("Printing out DM:");
+            elements.print();
+            relations.print();
+            updateLevels.print();
+        }
+
+        #region Methods
+
+    public String toXmlString()
+        {
+            try
+            {
+                var xmlserializer = new XmlSerializer(typeof(DomainModel));
+                var stringWriter = new StringWriter();
+                using (var writer = XmlWriter.Create(stringWriter))
+                {
+                    xmlserializer.Serialize(writer, this);
+                    String xml = stringWriter.ToString();
+
+                    return (xml);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("An error occurred", ex);
+            }
+        }
+
+        #endregion Methods
+    }
+
+    public class UpdateLevels
+    {
+        #region Fields
+
+        [XmlElement("level")]
+        public List<UpdateLevel> updateLevelList { get; set; }
+       
+        #endregion Fields
+        #region Methods
+
+        public void print()
+        {
+             DomainModelHandler.Instance.loggingDM("-Printing out updateLevels:");
+             foreach(UpdateLevel ul in updateLevelList)
+                ul.print();
+        }
+
+        #endregion Methods
+    }
+
+    public class UpdateLevel
+    {
+
+        #region Fields
+
+        [XmlAttribute("direction")]
+        public string direction { get; set; }
+
+        [XmlAttribute("power")]
+        public string power { get; set; }
+
+        [XmlAttribute("xi")]
+        public string xi { get; set; }
+
+        [XmlAttribute("minonecompetence")]
+        public string minonecompetence { get; set; }
+
+        [XmlAttribute("maxonelevel")]
+        public string maxonelevel { get; set; }
+
+        #endregion Fields
+
+
+        #region Methods
+
+        public void print()
+        {
+            DomainModelHandler.Instance.loggingDM("-----");
+            DomainModelHandler.Instance.loggingDM("--direction:" +direction);
+            DomainModelHandler.Instance.loggingDM("--power:" + power);
+            DomainModelHandler.Instance.loggingDM("--xi:" + xi);
+            DomainModelHandler.Instance.loggingDM("--minonecompetence:" + minonecompetence);
+            DomainModelHandler.Instance.loggingDM("--maxonelevel:" + maxonelevel);
+
+        }
+
+        #endregion Methods
+
+    }
+    
+    public class Elements
+    {
+        #region Properties
+        
+        [XmlElement("competences")]
+        public CompetenceList competences { get; set; }
+        [XmlElement("situations")]
+        public SituationsList situations { get; set; }
+        [XmlElement("activities")]
+        public ActivityList activities { get; set; }
+
+        #endregion Properties
+
+        /// <summary>
+        /// Diagnostic-method printing Domainmodel data
+        /// </summary>
+        public void print()
+        {
+            DomainModelHandler.Instance.loggingDM("-Printing out elements:");
+            if (competences != null)
+                competences.print();
+            if (situations != null)
+                situations.print();
+            if (activities != null)
+                activities.print();
+        }
+    }
+
+    public class ActivityList
+    {
+        #region Properties
+
+        [XmlElement("activity")]
+        public List<Activity> activityList { get; set; }
+        
+        #endregion Properties
+
+        /// <summary>
+        /// Diagnostic-method printing Domainmodel data
+        /// </summary>
+        public void print()
+        {
+            DomainModelHandler.Instance.loggingDM("--Printing out Activities:");
+            foreach (Activity ac in activityList)
+            {
+                ac.print();
+            }
+        }
+    }
+
+    public class Activity
+    {
+        #region Properties
+    
+        [XmlAttribute("id")]
+        public string id { get; set; }
+
+        #endregion Properties
+
+        /// <summary>
+        /// Diagnostic-method printing Domainmodel data
+        /// </summary>
+        public void print()
+        {
+            DomainModelHandler.Instance.loggingDM("---id:" + id);
+        }
+    }
+    
+    public class SituationsList
+    {
+        #region Properties
+
+        [XmlElement("situation")]
+        public List<Situation> situationList { get; set; }
+        
+        #endregion Properties
+
+        /// <summary>
+        /// Diagnostic-method printing Domainmodel data
+        /// </summary>
+        public void print()
+        {
+            DomainModelHandler.Instance.loggingDM("--Printing out Situations:");
+            foreach (Situation si in situationList)
+            {
+                si.print();
+            }
+        }
+    }
+
+    public class Situation
+    {
+        #region Properties
+
+        [XmlAttribute("id")]
+        public string id { get; set; }
+        [XmlAttribute("title")]
+        public string title { get; set; }
+        [XmlAttribute("uri")]
+        public string uri { get; set; }
+
+        #endregion Properties
+        #region Constructor
+
+        /// <summary>
+        /// default c-tor
+        /// </summary>
+        public Situation() { }
+
+        /// <summary>
+        /// c-tor with id
+        /// </summary>
+        /// <param name="id"> Situation identifier </param>
+        public Situation(String id)
+        {
+            this.id = id;
+        }
+
+        #endregion Constructor
+
+        /// <summary>
+        /// Diagnostic-method printing Domainmodel data
+        /// </summary>
+        public void print()
+        {
+            DomainModelHandler.Instance.loggingDM("---");
+            DomainModelHandler.Instance.loggingDM("---id:" + id);
+            DomainModelHandler.Instance.loggingDM("---title:" + title);
+            DomainModelHandler.Instance.loggingDM("---uri:" + uri);
+        }
+    }
+
+    public class CompetenceList
+    {
+        #region Properties
+
+        [XmlElement("competence")]
+        public List<CompetenceDesc> competenceList { get; set; }
+
+        #endregion Properties
+
+        /// <summary>
+        /// Diagnostic-method printing Domainmodel data
+        /// </summary>
+        public void print()
+        {
+            DomainModelHandler.Instance.loggingDM("--Printing out Competences:");
+            foreach (CompetenceDesc comp in competenceList)
+                comp.print();
+        }
+    }
+
+    public class CompetenceDesc
+    {
+
+        #region Properties
+
+        [XmlAttribute("description")]
+        public string description { get; set; }
+        [XmlAttribute("id")]
+        public string id { get; set; }
+        [XmlAttribute("title")]
+        public string title { get; set; }
+        [XmlAttribute("uri")]
+        public string uri { get; set; }
+
+        #endregion Properties
+
+        #region Constructor
+
+        /// <summary>
+        /// default c-tor
+        /// </summary>
+        public CompetenceDesc() { }
+
+        /// <summary>
+        /// c-tor with id
+        /// </summary>
+        /// <param name="id"> competence identifier </param>
+        public CompetenceDesc(String id)
+        {
+            this.id = id;
+        }
+
+        #endregion Constructor
+
+        /// <summary>
+        /// Diagnostic-method printing Domainmodel data
+        /// </summary>
+        public void print()
+        {
+            DomainModelHandler.Instance.loggingDM("---");
+            DomainModelHandler.Instance.loggingDM("---description:" + description);
+            DomainModelHandler.Instance.loggingDM("---id:" + id);
+            DomainModelHandler.Instance.loggingDM("---title:" + title);
+            DomainModelHandler.Instance.loggingDM("---uri:" + uri);
+        }
+    }
+
+    public class Relations
+    {
+        #region Properties
+    
+        [XmlElement("competenceprerequisites")]
+        public CompetenceprerequisitesList competenceprerequisites { get; set; }
+
+        [XmlElement("situations")]
+        public SituationRelationList situations { get; set; }
+        [XmlElement("activities")]
+        public ActivityRelationList activities { get; set; }
+
+        #endregion Properties
+
+        /// <summary>
+        /// Diagnostic-method printing Domainmodel data
+        /// </summary>
+        public void print()
+        {
+            DomainModelHandler.Instance.loggingDM("-Printing out relations:");
+            if (competenceprerequisites != null)
+                competenceprerequisites.print();
+            if (situations != null)
+                situations.print();
+            if (activities != null)
+                activities.print();
+        }
+    }
+
+    public class SituationRelationList
+    {
+        #region Properties
+
+        [XmlElement("situation")]
+        public List<SituationRelation> situations { get; set; }
+
+        #endregion Properties
+
+        /// <summary>
+        /// Diagnostic-method printing Domainmodel data
+        /// </summary>
+        public void print()
+        {
+            DomainModelHandler.Instance.loggingDM("--Printing out situation-Relation:");
+            foreach (SituationRelation sr in situations)
+            {
+                sr.print();
+            }
+        }
+
+        public void addSituationRelation(string situationId, string competenceId)
+        {
+            Boolean found = false;
+            foreach(SituationRelation sr in this.situations)
+            {
+                if (sr.id.Equals(situationId))
+                {
+                    CompetenceSituation competence = new CompetenceSituation();
+                    competence.id = competenceId;
+                    competence.up = "medium";
+                    competence.down = "medium";
+                    sr.competences.Add(competence);
+                    found = true;
+                    break;
+                }
+            }
+            if (!found)
+                situations.Add(new SituationRelation(situationId,competenceId));
+        }
+    }
+
+    public class SituationRelation
+    {
+        #region Properties
+
+        [XmlAttribute("id")]
+        public String id { get; set; }
+        [XmlElement("competence")]
+        public List<CompetenceSituation> competences { get; set; }
+
+        #endregion Properties
+        #region Constructors
+
+        public SituationRelation() { }
+
+        public SituationRelation(string situationId, string competenceId)
+        {
+            id = situationId;
+            CompetenceSituation competence = new CompetenceSituation();
+            competence.id = competenceId;
+            competence.up = "medium";
+            competence.down = "medium";
+            competences = new List<CompetenceSituation>();
+            competences.Add(competence);
+        }
+
+        #endregion Constructors
+        #region Methds
+        /// <summary>
+        /// Diagnostic-method printing Domainmodel data
+        /// </summary>
+        public void print()
+        {
+            DomainModelHandler.Instance.loggingDM("---------------");
+            DomainModelHandler.Instance.loggingDM("---id pr.:" + id);
+            foreach(CompetenceSituation cs in this.competences)
+                cs.print();
+        }
+
+        #endregion Methods
+    }
+
+    public class CompetenceSituation
+    {
+        #region Properties
+
+        [XmlAttribute("id")]
+        public String id { get; set; }
+        
+        [XmlAttribute("levelup")]
+        public String up { get; set; }
+        
+        [XmlAttribute("leveldown")]
+        public String down { get; set; }
+
+        #endregion Properties
+
+        /// <summary>
+        /// Diagnostic-method printing Domainmodel data
+        /// </summary>
+        public void print()
+        {
+            DomainModelHandler.Instance.loggingDM("---id comp.:" + id);
+            DomainModelHandler.Instance.loggingDM("---up comp.:" + up);
+            DomainModelHandler.Instance.loggingDM("---down comp.:" + down);
+        }
+    }
+
+    public class ActivityRelationList
+    {
+        #region Properties
+
+        [XmlElement("activity")]
+        public List<ActivitiesRelation> activities { get; set; }
+
+        #endregion Properties
+
+        /// <summary>
+        /// Diagnostic-method printing Domainmodel data
+        /// </summary>
+        public void print()
+        {
+            DomainModelHandler.Instance.loggingDM("--Printing out activities-Relation:");
+            foreach (ActivitiesRelation ar in activities)
+            {
+                ar.print();
+            }
+        }
+
+        public void addActivityRelation(String activitytId, String competenceId)
+        {
+            Boolean found = false;
+            foreach(ActivitiesRelation ar in this.activities)
+                if(ar.id == activitytId)
+                {
+                    CompetenceActivity clo = new CompetenceActivity();
+                    clo.id = competenceId;
+                    ar.competences.Add(clo);
+                    found = true;
+                    break;
+                }
+            if (!found)
+                this.activities.Add(new ActivitiesRelation(activitytId, competenceId));
+        }
+    }
+
+    public class ActivitiesRelation
+    {
+        #region Properties
+
+        [XmlAttribute("id")]
+        public String id { get; set; }
+        [XmlElement("competence")]
+        public List<CompetenceActivity> competences { get; set; }
+
+        #endregion Properties
+        #region Constructors
+
+        /// <summary>
+        /// default c-tor
+        /// </summary>
+        public ActivitiesRelation() { }
+
+        /// <summary>
+        /// c-tor with learningobject id and competence id for a competence which is part of the learning object
+        /// </summary>
+        /// 
+        /// <param name="activitytId">activity id</param>
+        /// <param name="competenceId">competence id for a competence which is part of the learning object</param>
+        public ActivitiesRelation(String activitytId, String competenceId)
+        {
+            this.id = activitytId;
+            CompetenceActivity clo = new CompetenceActivity();
+            clo.id = competenceId;
+            this.competences = new List<CompetenceActivity>();
+            this.competences.Add(clo);
+        }
+
+        #endregion Constructors
+
+        /// <summary>
+        /// Diagnostic-method printing Domainmodel data
+        /// </summary>
+        public void print()
+        {
+            DomainModelHandler.Instance.loggingDM("---id lo.:" + id);
+            foreach(CompetenceActivity ca in this.competences)
+                ca.print();
+        }
+    }
+
+    public class CompetenceActivity
+    {
+
+        #region Properties
+
+        [XmlAttribute("id")]
+        public String id { get; set; }
+
+        [XmlAttribute("power")]
+        public String power { get; set; }
+
+        [XmlAttribute("direction")]
+        public String direction { get; set; }
+
+        #endregion Properties
+
+        /// <summary>
+        /// Diagnostic-method printing Domainmodel data
+        /// </summary>
+        public void print()
+        {
+            DomainModelHandler.Instance.loggingDM("---id comp.:" + id);
+            DomainModelHandler.Instance.loggingDM("---power comp.:" + power);
+            DomainModelHandler.Instance.loggingDM("---direction comp.:" + direction);
+        }
+    }
+
+    public class CompetenceprerequisitesList
+    {
+        #region Properties
+
+        [XmlElement("competence")]
+        public List<CompetenceP> competences { get; set; }
+
+        #endregion Properties
+
+        /// <summary>
+        /// Diagnostic-method printing Domainmodel data
+        /// </summary>
+        public void print()
+        {
+            DomainModelHandler.Instance.loggingDM("--Printing out Competenceprerequisites");
+            foreach (CompetenceP cp in competences)
+            {
+                cp.print();
+            }
+        }
+
+        public void addPrerequisiteCompetence(String id, String prerequisiteID)
+        {
+            Boolean found = false;
+            foreach(CompetenceP cp in this.competences)
+            {
+                if (cp.id.Equals(id))
+                {
+                    Prereqcompetence precom = new Prereqcompetence();
+                    precom.id = prerequisiteID;
+                    cp.prereqcompetences.Add(precom);
+                    found = true;
+                    break;
+                }
+            }
+            if (!found)
+                competences.Add(new CompetenceP(id, prerequisiteID));
+        }
+    }
+
+    public class CompetenceP
+    {
+        #region Properties
+
+        [XmlAttribute("id")]
+        public String id { get; set; }
+        [XmlElement("prereqcompetence")]
+        public List<Prereqcompetence> prereqcompetences { get; set; }
+
+        #endregion Properties
+
+        #region Constructors
+
+        /// <summary>
+        /// default c-tor
+        /// </summary>
+        public CompetenceP() { }
+
+        /// <summary>
+        /// modified c-tor
+        /// </summary>
+        /// 
+        /// <param name="id"> id of the competence </param>
+        /// <param name="prerequisiteID"> id of the prerequisite competence </param>
+        public CompetenceP(String id, String prerequisiteID)
+        {
+            this.id = id;
+            Prereqcompetence precom = new Prereqcompetence();
+            precom.id = prerequisiteID;
+            prereqcompetences = new List<Prereqcompetence>();
+            prereqcompetences.Add(precom);
+        }
+
+        #endregion Constructors
+
+        /// <summary>
+        /// Diagnostic-method printing Domainmodel data
+        /// </summary>
+        public void print()
+        {
+            DomainModelHandler.Instance.loggingDM("---id: " + id);
+            foreach(Prereqcompetence pc in prereqcompetences)
+                pc.print();
         }
     }
 

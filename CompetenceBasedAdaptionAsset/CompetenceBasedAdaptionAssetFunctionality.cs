@@ -663,11 +663,12 @@ namespace CompetenceBasedAdaptionAssetNameSpace
         public GameSituationStructure(DomainModel dm)
         {
             //adding gs to the structure
-            foreach (Learningobject lo in dm.elements.learningobjects.learningobjectList)
-                gameSituations.Add(new GameSituation(lo.id));
+            foreach (Situation si in dm.elements.situations.situationList)
+                gameSituations.Add(new GameSituation(si.id));
             //adding competences to the gs in the structure
-            foreach (LearningobjectRelation lor in dm.relations.learningobjects.learningobjects)
-                getGameSituationById(lor.id).Competences.Add(lor.competence.id);
+            foreach (SituationRelation sir in dm.relations.situations.situations)
+                foreach(CompetenceSituation cs in sir.competences)
+                    getGameSituationById(sir.id).Competences.Add(cs.id);
             //adding successors of the gs - at the moment all gs are successors of all gs
             foreach (GameSituation gs1 in gameSituations)
                 foreach (GameSituation gs2 in gameSituations)

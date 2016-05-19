@@ -276,9 +276,13 @@ namespace CompetenceBasedAdaptionAssetNameSpace
             loggingPRA("Gamesituation completed - sending evidence to update competences.");
             GameSituation gs = getCurrentGameSituation();
             List<Boolean> successList = new List<bool>();
+            List<EvidencePower> evidencePower = new List<EvidencePower>();
             foreach (String com in gs.Competences)
+            {
                 successList.Add(success);
-            getCAA().updateCompetenceState(gs.Competences, successList);
+                evidencePower.Add(EvidencePower.Medium);
+            }
+            getCAA().updateCompetenceState(gs.Competences, successList, evidencePower);
         }
 
         /// <summary>

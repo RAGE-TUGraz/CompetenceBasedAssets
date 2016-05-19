@@ -75,6 +75,7 @@ namespace CompetenceAssessmentAssetNameSpace
         /// </summary>
         private DomainModelAsset domainModelAsset = null;
 
+
         /// <summary>
         /// Instance of the CompetenceAssessmentAsset
         /// </summary>
@@ -171,6 +172,17 @@ namespace CompetenceAssessmentAssetNameSpace
         }
 
         /// <summary>
+        /// Method returning an instance of the CompetenceAssessmentAsset.
+        /// </summary>
+        /// <returns> Instance of the CompetenceAssessmentAsset </returns>
+        internal CompetenceAssessmentAsset getCAA()
+        {
+            if (competenceAssessmentAsset == null)
+                competenceAssessmentAsset = (CompetenceAssessmentAsset)AssetManager.Instance.findAssetByClass("CompetenceAssessmentAsset");
+            return (competenceAssessmentAsset);
+        }
+
+        /// <summary>
         /// Method for creating a competence-structure with an id (= playerId).
         /// </summary>
         /// 
@@ -229,28 +241,12 @@ namespace CompetenceAssessmentAssetNameSpace
         /// <param name="playerId"> Player Id for the update - specifies for which player the competence state gets updated. </param>
         /// <param name="compList"> List of Strings - each String describes a competence.  </param>
         /// <param name="evidenceList"> Specifies if the evidences are speaking for or against the competence. </param>
-        /// 
-        internal void updateCompetenceState(List<String> compList, List<Boolean> evidenceList)
+        /// <param name="evidencePowers"> Contains the power of the evidence (Low,Medium,High) </param>
+        internal void updateCompetenceState(List<String> compList, List<Boolean> evidenceList, List<EvidencePower> evidencePowers)
         {
-            //later on -> change evidenceList from bool[up/down] to costum type[up1/up2/up3/down1/down2/down3]
-            List<double> xi0List = new List<double>();
-            List<double> xi1List = new List<double>();
             //data structure for storing xi-limits per competence to update (downgrading->lose a competence for sure?/upgrading->gaine a competence for sure? AND is it possible to gaine more than one competence?)
             //ATTENTION: when updating more than one competence -> take mean - xi-limits may not work! [maybe replace mean by max/min]
-            List<bool[]> additionalInformationList = new List<bool[]>();
-            for (int i = 0; i < compList.Count; i++)
-            {
-                //later on -> mapping up1-3/down1-3 to xi0/xi1
-                //mapping stored as own Dictonary? 
-                xi0List.Add(xi0);
-                xi1List.Add(xi1);
-                //information structure: {downgrading->lose a competence for sure?, upgrading->gaine a competence for sure?, upgrading-> is it possible to gaine more than one competence?}
-                bool[] information = { false, false, false };
-                additionalInformationList.Add(information);
-            }
             
-
-
             for (int i = 0; i < compList.Count; i++)
             {
                 string evi = evidenceList[i] ? "up" : "down";
@@ -274,10 +270,11 @@ namespace CompetenceAssessmentAssetNameSpace
             CompetenceState csta = competenceState;
             CompetenceStructure cstr = competenceStructure;
             
-            cstr.updateCompetenceState(csta, compList, evidenceList, xi0List, xi1List, additionalInformationList);
+            cstr.updateCompetenceState(csta, compList, evidenceList,  evidencePowers);
 
         }
 
+        /*
         /// <summary>
         /// Method for updating the competence state of a player.
         /// </summary>
@@ -293,6 +290,7 @@ namespace CompetenceAssessmentAssetNameSpace
                 evidenceList.Add(evidence);
             updateCompetenceState( compList, evidenceList);
         }
+        */
 
         /// <summary>
         /// Returns the competence state of the player.
@@ -345,6 +343,7 @@ namespace CompetenceAssessmentAssetNameSpace
         /// </summary>
         private void performTest1()
         {
+            loggingCA("Start Test 1");
             DomainModel dm = createExampleDomainModel();
             CompetenceStructure cst = createCompetenceStructure( dm);
             CompetenceState cs = createCompetenceState(cst);
@@ -353,18 +352,23 @@ namespace CompetenceAssessmentAssetNameSpace
             //first update - upgrade
             List<String> compList = new List<string>();
             List<Boolean> evidenceList = new List<Boolean>();
+            List<EvidencePower> evidencePowers = new List<EvidencePower>();
             compList.Add("C1");
             evidenceList.Add(true);
-            updateCompetenceState( compList, evidenceList);
+            evidencePowers.Add(EvidencePower.Medium);
+            getCAA().updateCompetenceState(compList, evidenceList, evidencePowers);
             getCompetenceState().print();
 
             //second update - downgrade
             List<String> compList2 = new List<string>();
             List<Boolean> evidenceList2 = new List<Boolean>();
+            List<EvidencePower> evidencePowers2 = new List<EvidencePower>();
             compList2.Add("C1");
             evidenceList2.Add(false);
-            updateCompetenceState( compList2, evidenceList2);
+            evidencePowers2.Add(EvidencePower.Medium);
+            getCAA().updateCompetenceState( compList2, evidenceList2, evidencePowers2);
             getCompetenceState().print();
+            loggingCA("End Test 1");
         }
         
 
@@ -373,8 +377,10 @@ namespace CompetenceAssessmentAssetNameSpace
         /// </summary>
         private void performTest2()
         {
+            loggingCA("Start Test 2");
             DomainModel dm = getDMA().getDomainModel();
             dm.print();
+            loggingCA("End Test 2");
         }
 
 
@@ -578,10 +584,8 @@ namespace CompetenceAssessmentAssetNameSpace
         /// <param name="cs"> Specifies competence state to update. </param>
         /// <param name="compList"> Speciefies for which Competences evidences are observed. </param>
         /// <param name="evidenceList"> Specifies if evidences are observed for (true) or against (false) possessing a competence. </param>
-        /// <param name="xi0List"> Algorithm parameter for updating competence probabilities. </param>
-        /// <param name="xi1List"> Algorithm parameter for updating competence probabilities. </param>
-        /// <param name="additionalInformation"> Specifies if updating a competence is able to get a successor-competence in the competence state or for sure removes a prerequisite competence from the competence state by modifying xi0 or xi1.</param>
-        internal void updateCompetenceState(CompetenceState cs, List<Competence> compList, List<Boolean> evidenceList, List<double> xi0List, List<double> xi1List, List<bool[]> additionalInformationList)
+        /// <param name="evidencePowers"> Algorithm parameter for updating competence probabilities -> defines xi values and update power </param>
+        internal void updateCompetenceState(CompetenceState cs, List<Competence> compList, List<Boolean> evidenceList, List<EvidencePower> evidencePowers)
         {
             Dictionary<string, double> sum = new Dictionary<string, double>();
 
@@ -594,7 +598,7 @@ namespace CompetenceAssessmentAssetNameSpace
             Dictionary<string, double> tmp;
             for (int i = 0; i < compList.Count; i++)
             {
-                tmp = updateCompetenceStateWithOneEvidence(cs, compList[i], evidenceList[i], xi0List[i], xi1List[i], additionalInformationList[i]);
+                tmp = updateCompetenceStateWithOneEvidence(cs, compList[i], evidenceList[i], evidencePowers[i]);
 
                 foreach (Competence comp in cs.getCurrentValues().Keys.ToList())
                 {
@@ -635,7 +639,7 @@ namespace CompetenceAssessmentAssetNameSpace
         /// <param name="xi0List"> Algorithm parameter for updating competence probabilities. </param>
         /// <param name="xi1List"> Algorithm parameter for updating competence probabilities. </param>
         /// <param name="additionalInformation"> Specifies if updating a competence is able to get a successor-competence in the competence state or for sure removes a prerequisite competence from the competence state by modifying xi0 or xi1.</param>
-        internal void updateCompetenceState(CompetenceState cs, List<String> compList, List<Boolean> evidenceList, List<double> xi0List, List<double> xi1List, List<bool[]> additionalInformation)
+        internal void updateCompetenceState(CompetenceState cs, List<String> compList, List<Boolean> evidenceList, List<EvidencePower> evidencePowers)
         {
             List<Competence> cList = new List<Competence>();
             foreach (String str in compList)
@@ -644,7 +648,7 @@ namespace CompetenceAssessmentAssetNameSpace
                     cList.Add(getCompetenceById(str));
             }
 
-            updateCompetenceState(cs, cList, evidenceList, xi0List, xi1List, additionalInformation);
+            updateCompetenceState(cs, cList, evidenceList, evidencePowers);
         }
 
         /*
@@ -681,21 +685,26 @@ namespace CompetenceAssessmentAssetNameSpace
         /// <returns>
         /// Dictionary with key/value pairs of competence-id and updated probability of pessesing the competence. 
         /// </returns>
-        internal Dictionary<string, double> updateCompetenceStateWithOneEvidence(CompetenceState cs, Competence com, Boolean evidence, double newXi0, double newXi1, bool[] additionalInformation)
+        internal Dictionary<string, double> updateCompetenceStateWithOneEvidence(CompetenceState cs, Competence com, Boolean evidence, EvidencePower evidencePower)
         {
+            CompetenceAssessmentHandler cah = CompetenceAssessmentHandler.Instance;
+            ULevel ulevel = evidence ? CompetenceAssessmentHandler.Instance.updateLevelStorage.up[evidencePower] : CompetenceAssessmentHandler.Instance.updateLevelStorage.down[evidencePower];
+            double newXi0 = ulevel.xi;
+            double newXi1 = ulevel.xi;
+
             Dictionary<string, double> pairs = new Dictionary<string, double>();
             Double denominator;
 
             //additionaInformation structure: {downgrading->lose a competence for sure?, upgrading->gaine a competence for sure?, upgrading-> is it possible to gaine more than one competence?}
 
             //upgrading->gaine a competence for sure?
-            if (additionalInformation[1] && evidence )
+            if (ulevel.minonecompetence && evidence )
             {
                 //newXi0=max()
             }
 
             //upgrading-> is it possible to gaine more than one competence?
-            if (additionalInformation[2] && evidence && com.successors.Count > 0)
+            if (ulevel.maxonelevel && evidence && com.successors.Count > 0)
             {
                 //newXi0=min()
                 //get most likely successor
@@ -708,7 +717,7 @@ namespace CompetenceAssessmentAssetNameSpace
             }
 
             //downgrading->lose a competence for sure?
-            if (additionalInformation[0] && !evidence && com.prerequisites.Count > 0)  
+            if (ulevel.minonecompetence && !evidence && com.prerequisites.Count > 0)  
             {
                 //newXi1=max()
                 //get least likely prerequisite
@@ -1151,8 +1160,8 @@ namespace CompetenceAssessmentAssetNameSpace
     {
         #region Fields
 
-        Dictionary<EvidencePower, ULevel> up = new Dictionary<EvidencePower, ULevel>();
-        Dictionary<EvidencePower, ULevel> down = new Dictionary<EvidencePower, ULevel>();
+        internal Dictionary<EvidencePower, ULevel> up = new Dictionary<EvidencePower, ULevel>();
+        internal Dictionary<EvidencePower, ULevel> down = new Dictionary<EvidencePower, ULevel>();
 
         #endregion Fields
         #region Constructors

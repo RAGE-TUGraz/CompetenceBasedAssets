@@ -126,11 +126,12 @@ namespace CompetenceAssessmentAssetNameSpace
         /// 
         /// <param name="competences"> Id of a competence for which an evidence is observed. </param>
         /// <param name="evidences"> If true the evidence indicates possession of the specified competence, otherwise a lack of this competence is indicated. </param>
-        public void updateCompetenceState(List<string> competences, List<Boolean> evidences)
+        /// <param name="evidencePowers"> Contains the power of the evidence (Low,Medium,High) </param>
+        public void updateCompetenceState(List<string> competences, List<Boolean> evidences, List<EvidencePower> evidencePowers)
         {
-            if (CompetenceAssessmentHandler.Instance.getCompetenceState() == null)
+            if (CompetenceAssessmentHandler.Instance.getCompetenceState() == null || CompetenceAssessmentHandler.Instance.updateLevelStorage == null)
                 CompetenceAssessmentHandler.Instance.registerNewPlayer( CompetenceAssessmentHandler.Instance.getDMA().getDomainModel());
-            CompetenceAssessmentHandler.Instance.updateCompetenceState(competences, evidences);
+            CompetenceAssessmentHandler.Instance.updateCompetenceState(competences, evidences, evidencePowers);
         }
 
         /// <summary>
@@ -139,7 +140,7 @@ namespace CompetenceAssessmentAssetNameSpace
         /// <param name="activity"> observed activity </param>
         public void updateCompetenceStateAccordingToActivity(String activity)
         {
-            if (CompetenceAssessmentHandler.Instance.getCompetenceState() == null)
+            if (CompetenceAssessmentHandler.Instance.getCompetenceState() == null || CompetenceAssessmentHandler.Instance.updateLevelStorage == null)
                 CompetenceAssessmentHandler.Instance.registerNewPlayer(CompetenceAssessmentHandler.Instance.getDMA().getDomainModel());
             CompetenceAssessmentHandler.Instance.activityMapping.updateCompetenceAccordingToActivity(activity);
         }
@@ -151,7 +152,7 @@ namespace CompetenceAssessmentAssetNameSpace
         /// <param name="success"> true, if the gamesituation was mastered, false otherwise</param>
         public void updateCompetenceStateAccordingToGamesituation(String gamesituationId, Boolean success)
         {
-            if (CompetenceAssessmentHandler.Instance.getCompetenceState() == null)
+            if (CompetenceAssessmentHandler.Instance.getCompetenceState() == null || CompetenceAssessmentHandler.Instance.updateLevelStorage == null)
                 CompetenceAssessmentHandler.Instance.registerNewPlayer(CompetenceAssessmentHandler.Instance.getDMA().getDomainModel());
             CompetenceAssessmentHandler.Instance.gameSituationMapping.updateCompetenceAccordingToGamesituation(gamesituationId,success);
         }

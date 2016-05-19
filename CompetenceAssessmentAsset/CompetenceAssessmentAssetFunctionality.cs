@@ -91,6 +91,21 @@ namespace CompetenceAssessmentAssetNameSpace
         private CompetenceStructure competenceStructure = null;
 
         /// <summary>
+        /// Structure containg the mapping between in-game activities and the related competence updates
+        /// </summary>
+        internal ActivityMapping activityMapping = null;
+
+        /// <summary>
+        /// Structure containg the mapping between game situations and the related competence updates for success/failure
+        /// </summary>
+        internal GameSituationMapping gameSituationMapping = null;
+
+        /// <summary>
+        /// Structure storing the possible update properties/powers within the asset
+        /// </summary>
+        internal UpdateLevelStorage updateLevelStorage = null;
+
+        /// <summary>
         /// Dictinary containing the current competence states.
         /// </summary>
         private CompetenceState competenceState = null;
@@ -202,6 +217,9 @@ namespace CompetenceAssessmentAssetNameSpace
         {
             CompetenceStructure cstr = createCompetenceStructure(dm);
             createCompetenceState(cstr);
+            this.updateLevelStorage = new UpdateLevelStorage(dm);
+            this.gameSituationMapping = new GameSituationMapping(dm);
+            this.activityMapping = new ActivityMapping(dm);
         }
 
         /// <summary>
@@ -1126,7 +1144,9 @@ namespace CompetenceAssessmentAssetNameSpace
         High
     }
     
-
+    /// <summary>
+    /// Class for storing the possible update properties/powers within the asset
+    /// </summary>
     internal class UpdateLevelStorage
     {
         #region Fields
@@ -1158,6 +1178,9 @@ namespace CompetenceAssessmentAssetNameSpace
         #endregion Methods
     }
 
+    /// <summary>
+    /// Class describing the properties/power of the evidence
+    /// </summary>
     internal class ULevel
     {
         #region Fields
@@ -1167,4 +1190,100 @@ namespace CompetenceAssessmentAssetNameSpace
         #endregion Fields
     }
 
+    /// <summary>
+    /// Stores the mapping between in-game activities and related update procedure
+    /// </summary>
+    internal class ActivityMapping
+    {
+        #region Fields
+
+        /// <summary>
+        /// Stores activities as keys and Dictionary (Competences + Array(ULevel+up/down)) as Values 
+        /// </summary>
+        internal Dictionary<String, Dictionary<String, String[]>> mapping = new Dictionary<string, Dictionary<String, String[]>>();
+
+        #endregion Fields
+        #region Constructors
+
+        internal ActivityMapping(DomainModel dm)
+        {
+            foreach(ActivitiesRelation ac in dm.relations.activities.activities)
+            {
+                Dictionary<String, String[]> newActivityMap = new Dictionary<string, string[]>();
+                foreach(CompetenceActivity cac in ac.competences)
+                    newActivityMap.Add(cac.id,new string[]{cac.power, cac.direction});
+                mapping.Add(ac.id,newActivityMap);
+            }
+        }
+
+        #endregion Constructors
+        #region Methods
+
+        /// <summary>
+        /// This Methods updates the competence based on an observed activity
+        /// </summary>
+        /// <param name="activity"> string representing the observed activity </param>
+        internal void updateCompetenceAccordingToActivity(String activity)
+        {
+            //searching for the activity in the mapping
+            Dictionary<String, String[]> competencesToUpdate;
+            if (!mapping.ContainsKey(activity))
+                return;
+
+            competencesToUpdate = mapping[activity];
+
+            //creating data for the update
+            throw new NotImplementedException();
+
+        }
+
+        #endregion Methods
+    }
+
+    /// <summary>
+    /// Stores the mapping between game situations and related update procedure
+    /// </summary>
+    internal class GameSituationMapping
+    {
+        #region Fields
+
+        /// <summary>
+        /// Stores game situation as keys and Dictionary (Competences + ULevel) as Values 
+        /// </summary>
+        internal Dictionary<String, Dictionary<String, String>> mappingUp = new Dictionary<string, Dictionary<String, String>>();
+        internal Dictionary<String, Dictionary<String, String>> mappingDown = new Dictionary<string, Dictionary<String, String>>();
+
+        #endregion Fields
+        #region Constructors
+
+        internal GameSituationMapping(DomainModel dm)
+        {
+            foreach (SituationRelation sr in dm.relations.situations.situations)
+            {
+                Dictionary<String, String> newSituationMapUp = new Dictionary<string, string>();
+                Dictionary<String, String> newSituationMapDown = new Dictionary<string, string>();
+                foreach (CompetenceSituation cs in sr.competences)
+                {
+                    newSituationMapUp.Add(cs.id, cs.up);
+                    newSituationMapDown.Add(cs.id, cs.down);
+                }
+                mappingUp.Add(sr.id, newSituationMapUp);
+                mappingDown.Add(sr.id, newSituationMapDown);
+            }
+        }
+
+        #endregion Constructors
+        #region Methods
+
+        /// <summary>
+        /// This Methods updates the competence based on a gamesituation and information about success/failure
+        /// </summary>
+        /// <param name="activity"> string representing the observed activity </param>
+        internal void updateCompetenceAccordingToGamesituation(String gamesituationId, Boolean success)
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion Methods
+    }
 }

@@ -134,6 +134,29 @@ namespace CompetenceAssessmentAssetNameSpace
         }
 
         /// <summary>
+        /// Method for updating the competence based on observed in-game activities
+        /// </summary>
+        /// <param name="activity"> observed activity </param>
+        public void updateCompetenceStateAccordingToActivity(String activity)
+        {
+            if (CompetenceAssessmentHandler.Instance.getCompetenceState() == null)
+                CompetenceAssessmentHandler.Instance.registerNewPlayer(CompetenceAssessmentHandler.Instance.getDMA().getDomainModel());
+            CompetenceAssessmentHandler.Instance.activityMapping.updateCompetenceAccordingToActivity(activity);
+        }
+
+        /// <summary>
+        /// Updates the competence state according to the current game situation and information about sucess/failure
+        /// </summary>
+        /// <param name="gamesituationId"> id of the gamesituation </param>
+        /// <param name="success"> true, if the gamesituation was mastered, false otherwise</param>
+        public void updateCompetenceStateAccordingToGamesituation(String gamesituationId, Boolean success)
+        {
+            if (CompetenceAssessmentHandler.Instance.getCompetenceState() == null)
+                CompetenceAssessmentHandler.Instance.registerNewPlayer(CompetenceAssessmentHandler.Instance.getDMA().getDomainModel());
+            CompetenceAssessmentHandler.Instance.gameSituationMapping.updateCompetenceAccordingToGamesituation(gamesituationId,success);
+        }
+
+        /// <summary>
         /// Method returning the current competence state of a player.
         /// </summary>
         /// 

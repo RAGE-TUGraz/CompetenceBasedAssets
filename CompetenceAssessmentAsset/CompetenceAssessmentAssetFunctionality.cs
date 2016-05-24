@@ -1240,9 +1240,32 @@ namespace CompetenceAssessmentAssetNameSpace
                 return;
 
             competencesToUpdate = mapping[activity];
+            UpdateLevelStorage uls =  CompetenceAssessmentHandler.Instance.updateLevelStorage;
 
-            //creating data for the update
-            throw new NotImplementedException();
+            List<String> competences = new List<string>();
+            List<Boolean> evidences = new List<bool>();
+            List<EvidencePower> evidencePowers = new List<EvidencePower>();
+            foreach(String competence in competencesToUpdate.Keys)
+            {
+                competences.Add(competence);
+                String[] ULevelDirection = competencesToUpdate[competence];
+                switch (ULevelDirection[1])
+                {
+                    case "low":  evidencePowers.Add(EvidencePower.Low); break; 
+                    case "medium":  evidencePowers.Add(EvidencePower.Medium); break; 
+                    case "high":  evidencePowers.Add(EvidencePower.High); break; 
+                    default: throw new Exception("UpdateLevel unknown!");
+                }
+                switch (ULevelDirection[0])
+                {
+                    case "up": evidences.Add(true); break;
+                    case "down": evidences.Add(false); break;
+                    default: throw new Exception("Updatedirection unknown!");
+                }
+            }
+
+            CompetenceAssessmentHandler.Instance.loggingCA("Performing update based on activity.");
+            CompetenceAssessmentHandler.Instance.getCAA().updateCompetenceState(competences, evidences, evidencePowers);
 
         }
 
@@ -1287,10 +1310,38 @@ namespace CompetenceAssessmentAssetNameSpace
         /// <summary>
         /// This Methods updates the competence based on a gamesituation and information about success/failure
         /// </summary>
-        /// <param name="activity"> string representing the observed activity </param>
+        /// <param name="gamesituationId"> string representing the played game situation </param>
+        /// <param name="success"> string giving information about the player's success during the game situation </param>
         internal void updateCompetenceAccordingToGamesituation(String gamesituationId, Boolean success)
         {
-            throw new NotImplementedException();
+            //searching for the activity in the mapping
+            Dictionary<String, String> competencesToUpdate;
+            Dictionary<String, Dictionary<String, String>> mapping = success ? mappingUp : mappingDown;
+            if (!mapping.ContainsKey(gamesituationId))
+                return;
+
+            competencesToUpdate = mapping[gamesituationId];
+            UpdateLevelStorage uls = CompetenceAssessmentHandler.Instance.updateLevelStorage;
+
+            List<String> competences = new List<string>();
+            List<Boolean> evidences = new List<bool>();
+            List<EvidencePower> evidencePowers = new List<EvidencePower>();
+            foreach (String competence in competencesToUpdate.Keys)
+            {
+                competences.Add(competence);
+                String ULevel = competencesToUpdate[competence];
+                switch (ULevel)
+                {
+                    case "low": evidencePowers.Add(EvidencePower.Low); break;
+                    case "medium": evidencePowers.Add(EvidencePower.Medium); break;
+                    case "high": evidencePowers.Add(EvidencePower.High); break;
+                    default: throw new Exception("UpdateLevel unknown!");
+                }
+                evidences.Add(success);
+            }
+
+            CompetenceAssessmentHandler.Instance.loggingCA("Performing update based on game situation.");
+            CompetenceAssessmentHandler.Instance.getCAA().updateCompetenceState(competences, evidences, evidencePowers);
         }
 
         #endregion Methods

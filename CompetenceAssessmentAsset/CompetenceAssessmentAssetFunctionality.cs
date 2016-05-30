@@ -689,47 +689,17 @@ namespace CompetenceAssessmentAssetNameSpace
         {
             CompetenceAssessmentHandler cah = CompetenceAssessmentHandler.Instance;
             ULevel ulevel = evidence ? CompetenceAssessmentHandler.Instance.updateLevelStorage.up[evidencePower] : CompetenceAssessmentHandler.Instance.updateLevelStorage.down[evidencePower];
-            double newXi0 = ulevel.xi;
-            double newXi1 = ulevel.xi;
+
 
             Dictionary<string, double> pairs = new Dictionary<string, double>();
             Double denominator;
 
             //additionaInformation structure: {downgrading->lose a competence for sure?, upgrading->gaine a competence for sure?, upgrading-> is it possible to gaine more than one competence?}
+            double[] updateValues = getUpdateValues(ulevel, evidence, cs, com);
+            double newXi0 = updateValues[0];
+            double newXi1 = updateValues[1];
 
-            //upgrading->gaine a competence for sure?
-            if (ulevel.minonecompetence && evidence )
-            {
-                //newXi0=max()
-            }
-
-            //upgrading-> is it possible to gaine more than one competence?
-            if (ulevel.maxonelevel && evidence && com.successors.Count > 0)
-            {
-                //newXi0=min()
-                //get most likely successor
-                Competence mostLikelySuccesor = com.successors[0];
-                foreach (Competence compe in com.successors)
-                {
-                    if (cs.getValue(compe.id) > cs.getValue(mostLikelySuccesor.id))
-                        mostLikelySuccesor = compe;
-                }
-            }
-
-            //downgrading->lose a competence for sure?
-            if (ulevel.minonecompetence && !evidence && com.prerequisites.Count > 0)  
-            {
-                //newXi1=max()
-                //get least likely prerequisite
-                Competence leastLikelyPrerequisite = com.prerequisites[0];
-                foreach (Competence compe in com.prerequisites)
-                {
-                    if (cs.getValue(compe.id) < cs.getValue(leastLikelyPrerequisite.id))
-                        leastLikelyPrerequisite = compe;
-                }
-            }
-            
-
+            //starting the update procedure
             foreach (Competence comp in cs.getCurrentValues().Keys.ToList())
             {
                 pairs[comp.id] = 0.0;
@@ -765,6 +735,184 @@ namespace CompetenceAssessmentAssetNameSpace
             checkConsistency(pairs, evidence);
 
             return (pairs);
+        }
+
+        /// <summary>
+        /// Method for adapting the xi-values to the given additional information about the update
+        /// </summary>
+        /// <param name="ulevel"> Update information (original xi values and additional information)</param>
+        /// <param name="evidence"> indicates if there is an up- or downgrade</param>
+        /// <param name="cs"> competence state</param>
+        /// <param name="com">competence, which gets updated</param>
+        /// <returns> the adopted xi values </returns>
+        private double[] getUpdateValues(ULevel ulevel, Boolean evidence, CompetenceState cs, Competence com)
+        {
+
+            List<Competence> possibleCompetencesToShiftMinOneLevel = new List<Competence>();
+            Boolean isCompetenceMastered = cs.getMasteredCompetences().Contains(com);
+
+            double newXi0 = ulevel.xi;
+            double newXi1 = ulevel.xi;
+
+            //add competence for minonelevel-property 
+            if (evidence && (ulevel.minonecompetence || ulevel.maxonelevel))
+            {
+                if (!isCompetenceMastered)
+                {
+                    List<Competence> candidatesToShift = new List<Competence>();
+                    candidatesToShift.Add(com);
+
+                    List<Competence> prerequisitesNotMastered;
+                    while (candidatesToShift.Count > 0)
+                    {
+                        prerequisitesNotMastered = candidatesToShift[0].getPrerequisitesNotMastered(cs);
+                        if (prerequisitesNotMastered.Count == 0)
+                            possibleCompetencesToShiftMinOneLevel.Add(candidatesToShift[0]);
+                        else
+                            foreach (Competence c in prerequisitesNotMastered)
+                                candidatesToShift.Add(c);
+                        candidatesToShift.RemoveAt(0);
+                    }
+                }
+                else
+                {
+                    List<Competence> candidatesToGetShiftElements = new List<Competence>();
+                    candidatesToGetShiftElements.Add(com);
+                    while (candidatesToGetShiftElements.Count > 0)
+                    {
+                        foreach (Competence c in candidatesToGetShiftElements[0].successors)
+                        {
+                            if (cs.getMasteredCompetences().Contains(c))
+                                candidatesToGetShiftElements.Add(c);
+                            else
+                                if (c.allPrerequisitesMet(cs))
+                                possibleCompetencesToShiftMinOneLevel.Add(c);
+                        }
+                        candidatesToGetShiftElements.RemoveAt(0);
+                    }
+                }
+            }
+            else if ((!evidence) && (ulevel.minonecompetence || ulevel.maxonelevel))
+            {
+                if (!isCompetenceMastered)
+                {
+                    List<Competence> candidatesToGetShiftElements = new List<Competence>();
+                    candidatesToGetShiftElements.Add(com);
+                    while (candidatesToGetShiftElements.Count > 0)
+                    {
+                        foreach (Competence c in candidatesToGetShiftElements[0].prerequisites)
+                        {
+                            if (!cs.getMasteredCompetences().Contains(c))
+                                candidatesToGetShiftElements.Add(c);
+                            else
+                                possibleCompetencesToShiftMinOneLevel.Add(c);
+                        }
+                        candidatesToGetShiftElements.RemoveAt(0);
+                    }
+                }
+                else
+                {
+                    List<Competence> candidateShiftElements = new List<Competence>();
+                    candidateShiftElements.Add(com);
+
+                    List<Competence> successorsMastered;
+                    while (candidateShiftElements.Count > 0)
+                    {
+                        successorsMastered = new List<Competence>();
+                        foreach (Competence c in candidateShiftElements[0].successors)
+                        {
+                            if (cs.getMasteredCompetences().Contains(c))
+                                successorsMastered.Add(c);
+                        }
+                        if (successorsMastered.Count == 0)
+                            possibleCompetencesToShiftMinOneLevel.Add(candidateShiftElements[0]);
+                        else
+                            foreach (Competence succomp in successorsMastered)
+                                candidateShiftElements.Add(succomp);
+                        candidateShiftElements.RemoveAt(0);
+                    }
+                }
+            }
+
+
+
+            //upgrading->gaine a competence for sure?
+            if (ulevel.minonecompetence && evidence && possibleCompetencesToShiftMinOneLevel.Count > 0)
+            {
+
+                Competence mostLikelyPrerequisite = possibleCompetencesToShiftMinOneLevel[0];
+                foreach (Competence competence in possibleCompetencesToShiftMinOneLevel)
+                {
+                    if (cs.getValue(competence.id) > cs.getValue(mostLikelyPrerequisite.id))
+                        mostLikelyPrerequisite = competence;
+                }
+                Double valForUpdate = ((cs.transitionProbability + epsilon) * (1 - cs.getValue(com.id))) / (cs.getValue(mostLikelyPrerequisite.id) - cs.getValue(com.id) * (cs.transitionProbability + epsilon));
+                newXi0 = Math.Max(valForUpdate, newXi0);
+            }
+
+
+            //downgrading->lose a competence for sure?
+            if (ulevel.minonecompetence && !evidence && possibleCompetencesToShiftMinOneLevel.Count > 0)
+            {
+                Competence leastLikelyPrerequisite = possibleCompetencesToShiftMinOneLevel[0];
+                foreach (Competence compe in possibleCompetencesToShiftMinOneLevel)
+                {
+                    if (cs.getValue(compe.id) < cs.getValue(leastLikelyPrerequisite.id))
+                        leastLikelyPrerequisite = compe;
+                }
+                Double valForUpdate = ((cs.transitionProbability + epsilon - 1) * cs.getValue(com.id)) / (cs.getValue(leastLikelyPrerequisite.id) - cs.getValue(com.id) - (cs.transitionProbability + epsilon - 1) + (cs.transitionProbability + epsilon - 1) * cs.getValue(com.id));
+                newXi1 = Math.Max(newXi1, valForUpdate);
+            }
+
+            //handling maxonelevel-property
+            if (ulevel.maxonelevel && possibleCompetencesToShiftMinOneLevel.Count > 0)
+            {
+                List<Competence> possibleCompetencesToShiftMaxOneLevel = new List<Competence>();
+                if (evidence)
+                {
+                    foreach (Competence competence in possibleCompetencesToShiftMinOneLevel)
+                        foreach (Competence comp in competence.getSuccessorsWithAllPrerequisitesMasteredButThis(cs))
+                            if (!possibleCompetencesToShiftMaxOneLevel.Contains(comp))
+                                possibleCompetencesToShiftMaxOneLevel.Add(comp);
+                }
+                else
+                {
+                    foreach (Competence competence in possibleCompetencesToShiftMinOneLevel)
+                        foreach (Competence comp in competence.getPrerequisiteWithAllSuccessorsNotInCompetenceStateButThis(cs))
+                            if (!possibleCompetencesToShiftMaxOneLevel.Contains(comp))
+                                possibleCompetencesToShiftMaxOneLevel.Add(comp);
+                }
+
+                //upgrading->gaine not more than one competence level
+                if (evidence && possibleCompetencesToShiftMaxOneLevel.Count > 0)
+                {
+                    Competence mostLikelyPrerequisite = possibleCompetencesToShiftMaxOneLevel[0];
+                    foreach (Competence competence in possibleCompetencesToShiftMaxOneLevel)
+                    {
+                        if (cs.getValue(competence.id) > cs.getValue(mostLikelyPrerequisite.id))
+                            mostLikelyPrerequisite = competence;
+                    }
+                    Double valForUpdate = ((cs.transitionProbability - epsilon) * (1 - cs.getValue(com.id))) / (cs.getValue(mostLikelyPrerequisite.id) - cs.getValue(com.id) * (cs.transitionProbability - epsilon));
+                    newXi0 = Math.Min(valForUpdate, newXi0);
+                }
+
+
+                //downgrading->lose not more than one competence level
+                if ((!evidence) && possibleCompetencesToShiftMaxOneLevel.Count > 0)
+                {
+                    Competence leastLikelyPrerequisite = possibleCompetencesToShiftMaxOneLevel[0];
+                    foreach (Competence compe in possibleCompetencesToShiftMaxOneLevel)
+                    {
+                        if (cs.getValue(compe.id) < cs.getValue(leastLikelyPrerequisite.id))
+                            leastLikelyPrerequisite = compe;
+                    }
+                    Double valForUpdate = ((cs.transitionProbability - epsilon - 1) * cs.getValue(com.id)) / (cs.getValue(leastLikelyPrerequisite.id) - cs.getValue(com.id) - (cs.transitionProbability - epsilon - 1) + (cs.transitionProbability - epsilon - 1) * cs.getValue(com.id));
+                    newXi1 = Math.Min(newXi1, valForUpdate);
+                }
+            }
+
+            double[] updateValues = { newXi0,newXi1};
+            return updateValues;
         }
 
         /// <summary>
@@ -940,6 +1088,88 @@ namespace CompetenceAssessmentAssetNameSpace
         public Boolean isIndirectSuccessorOf(Competence com)
         {
             return (!com.isIndirectPrerequesiteOf(this));
+        }
+
+        /// <summary>
+        /// Method returning the set of all direct prerequisites not mastered with an given competence state
+        /// </summary>
+        /// <param name="cs"> competence state for wich the set should be returned </param>
+        /// <returns> List of not possessed direct prerequisite competences </returns>
+        public List<Competence> getPrerequisitesNotMastered(CompetenceState cs)
+        {
+            List<Competence> prereqNotMastered = new List<Competence>();
+            foreach (Competence com in this.prerequisites)
+                if (cs.getValue(com.id) < cs.transitionProbability)
+                    prereqNotMastered.Add(com);
+            return (prereqNotMastered);
+        }
+
+        /// <summary>
+        /// Method determining, if all prerequisites to one competence are met
+        /// </summary>
+        /// <param name="cs"> Competence for which this is determined </param>
+        /// <returns> True, if all prerequisites are met, false otherwise</returns>
+        public Boolean allPrerequisitesMet(CompetenceState cs)
+        {
+            Boolean allPrerequisitesMet = true;
+            foreach(Competence com in this.prerequisites)
+            {
+                if (cs.getValue(com.id) < cs.transitionProbability)
+                {
+                    allPrerequisitesMet = false;
+                    break;
+                }
+            }
+
+            return allPrerequisitesMet;
+        }
+
+        /// <summary>
+        /// Method for getting all successor-competence for which all prerequisites are met, but this one
+        /// </summary>
+        /// <param name="cs"> Competence state </param>
+        /// <returns>successor-competence for which all prerequisites are met, but this one</returns>
+        public List<Competence> getSuccessorsWithAllPrerequisitesMasteredButThis(CompetenceState cs)
+        {
+            List<Competence> successorsWithAllPrerequisitesMasteredButThis = new List<Competence>();
+            foreach(Competence competence in this.successors)
+            {
+                List<Competence> prerequisitesNotMastered = competence.getPrerequisitesNotMastered(cs);
+                if (prerequisitesNotMastered.Count == 1 && prerequisitesNotMastered[0].id.Equals(this.id))
+                    successorsWithAllPrerequisitesMasteredButThis.Add(competence);
+            }
+            return successorsWithAllPrerequisitesMasteredButThis;
+        }
+
+        /// <summary>
+        /// Method for getting all mastered successors of one competence
+        /// </summary>
+        /// <param name="cs"> Competence state </param>
+        /// <returns>all mastered successors of one competence</returns>
+        public List<Competence> getSuccessorsMastered(CompetenceState cs)
+        {
+            List<Competence> successorsMastered = new List<Competence>();
+            foreach (Competence competence in this.successors)
+                if (cs.getValue(competence.id) >= cs.transitionProbability)
+                    successorsMastered.Add(competence);
+            return (successorsMastered);
+        }
+
+        /// <summary>
+        /// Method for getting all prerequisite competences for one competence for which non successor is mastered but this one
+        /// </summary>
+        /// <param name="cs"> competence state </param>
+        /// <returns>all prerequisite competences for one competence for which non successor is mastered but this one</returns>
+        public List<Competence> getPrerequisiteWithAllSuccessorsNotInCompetenceStateButThis(CompetenceState cs)
+        {
+            List<Competence> prerequisiteWithAllSuccessorsNotInCompetenceStateButThis = new List<Competence>();
+            foreach (Competence competence in this.prerequisites)
+            {
+                List<Competence> successorsMastered = competence.getSuccessorsMastered(cs);
+                if (successorsMastered.Count == 1 && successorsMastered[0].id.Equals(this.id))
+                    prerequisiteWithAllSuccessorsNotInCompetenceStateButThis.Add(competence);
+            }
+            return prerequisiteWithAllSuccessorsNotInCompetenceStateButThis;
         }
 
         #endregion Methods

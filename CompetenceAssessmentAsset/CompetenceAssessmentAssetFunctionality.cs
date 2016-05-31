@@ -244,7 +244,6 @@ namespace CompetenceAssessmentAssetNameSpace
         /// <param name="evidencePowers"> Contains the power of the evidence (Low,Medium,High) </param>
         internal void updateCompetenceState(List<String> compList, List<Boolean> evidenceList, List<EvidencePower> evidencePowers)
         {
-            //data structure for storing xi-limits per competence to update (downgrading->lose a competence for sure?/upgrading->gaine a competence for sure? AND is it possible to gaine more than one competence?)
             //ATTENTION: when updating more than one competence -> take mean - xi-limits may not work! [maybe replace mean by max/min]
             
             for (int i = 0; i < compList.Count; i++)
@@ -334,6 +333,7 @@ namespace CompetenceAssessmentAssetNameSpace
             loggingCA("Competence assessment asset tests called: ");
             performTest1();
             performTest2();
+            performTest3();
             loggingCA("Competence assessment asset tests finished. ");
         }
 
@@ -383,6 +383,112 @@ namespace CompetenceAssessmentAssetNameSpace
             loggingCA("End Test 2");
         }
 
+        /// <summary>
+        /// Testcase for testing implementation of update procedure with additional information
+        /// </summary>
+        private void performTest3()
+        {
+            loggingCA("Start test 3");
+            loggingCA("Transition Probability: " +transitionProbability);
+
+            //setting up test environment
+            setTestEnvironment3("2000","false","true");
+            this.competenceState.setCompetenceValue(this.competenceStructure.getCompetenceById("C1"), this.transitionProbability * (1.2));
+            this.competenceState.setCompetenceValue(this.competenceStructure.getCompetenceById("C2"), this.transitionProbability * (1.1));
+            this.competenceState.setCompetenceValue(this.competenceStructure.getCompetenceById("C3"), this.transitionProbability * (0.9));
+            this.competenceState.setCompetenceValue(this.competenceStructure.getCompetenceById("C4"), this.transitionProbability * (0.8));
+
+            //perform update
+            getCompetenceState().print();
+            List<String> compList = new List<string>();
+            List<Boolean> evidenceList = new List<Boolean>();
+            List<EvidencePower> evidencePowers = new List<EvidencePower>();
+            compList.Add("C4");
+            evidenceList.Add(false);
+            evidencePowers.Add(EvidencePower.Medium);
+            getCAA().updateCompetenceState(compList, evidenceList, evidencePowers);
+            getCompetenceState().print();
+            getCompetenceState().printMasteredCompetences();
+
+            registerNewPlayer(getDMA().getDomainModel());
+            loggingCA("End test 3");
+        }
+
+        /// <summary>
+        /// Method for setting asset parameter to default-test values
+        /// </summary>
+        private void setTestEnvironment3(string xi, string minonecompetence, string maxonelevel)
+        {
+            //create DomainModel
+            DomainModel dm = new DomainModel();
+            //Competences
+            Elements elements = new Elements();
+            CompetenceList cl = new CompetenceList();
+            CompetenceDesc cd1 = new CompetenceDesc("C1");
+            CompetenceDesc cd2 = new CompetenceDesc("C2");
+            CompetenceDesc cd3 = new CompetenceDesc("C3");
+            CompetenceDesc cd4 = new CompetenceDesc("C4");
+            CompetenceDesc[] cdArray = { cd1, cd2, cd3, cd4 };
+            List<CompetenceDesc> cdList = new List<CompetenceDesc>(cdArray);
+            cl.competenceList = cdList;
+            elements.competences = cl;
+            dm.elements = elements;
+            //Competences prerequisites
+            Relations relations = new Relations();
+            CompetenceprerequisitesList cpl = new CompetenceprerequisitesList();
+            CompetenceP cp1 = new CompetenceP("C2", "C1");
+            CompetenceP cp2 = new CompetenceP("C3", "C2");
+            CompetenceP cp3 = new CompetenceP("C4", "C3");
+            CompetenceP[] cpArray = { cp1, cp2, cp3 };
+            List<CompetenceP> cpList = new List<CompetenceP>(cpArray);
+            cpl.competences = cpList;
+            relations.competenceprerequisites = cpl;
+            dm.relations = relations;
+            //Update Levels
+            UpdateLevel ul1 = new UpdateLevel();
+            ul1.direction = "up";
+            ul1.power = "low";
+            ul1.xi = xi;
+            ul1.minonecompetence = minonecompetence;
+            ul1.maxonelevel = maxonelevel;
+            UpdateLevel ul2 = new UpdateLevel();
+            ul2.direction = "up";
+            ul2.power = "medium";
+            ul2.xi = xi;
+            ul2.minonecompetence = minonecompetence;
+            ul2.maxonelevel = maxonelevel;
+            UpdateLevel ul3 = new UpdateLevel();
+            ul3.direction = "up";
+            ul3.power = "high";
+            ul3.xi = xi;
+            ul3.minonecompetence = minonecompetence;
+            ul3.maxonelevel = maxonelevel;
+            UpdateLevel ul4 = new UpdateLevel();
+            ul4.direction = "down";
+            ul4.power = "low";
+            ul4.xi = xi;
+            ul4.minonecompetence = minonecompetence;
+            ul4.maxonelevel = maxonelevel;
+            UpdateLevel ul5 = new UpdateLevel();
+            ul5.direction = "down";
+            ul5.power = "medium";
+            ul5.xi = xi;
+            ul5.minonecompetence = minonecompetence;
+            ul5.maxonelevel = maxonelevel;
+            UpdateLevel ul6 = new UpdateLevel();
+            ul6.direction = "down";
+            ul6.power = "high";
+            ul6.xi = xi;
+            ul6.minonecompetence = minonecompetence;
+            ul6.maxonelevel = maxonelevel;
+            UpdateLevel[] ulArray = { ul1, ul2, ul3, ul4, ul5, ul6 };
+            dm.updateLevels = new UpdateLevels();
+            dm.updateLevels.updateLevelList = new List<UpdateLevel>(ulArray);
+
+
+            //set needed structures for asset functionality
+            this.registerNewPlayer(dm);
+        }
 
         /// <summary>
         /// Method creating an example domain model
@@ -753,6 +859,8 @@ namespace CompetenceAssessmentAssetNameSpace
 
             double newXi0 = ulevel.xi;
             double newXi1 = ulevel.xi;
+            double xi0 = newXi0;
+            double xi1 = newXi1;
 
             //add competence for minonelevel-property 
             if (evidence && (ulevel.minonecompetence || ulevel.maxonelevel))
@@ -834,34 +942,39 @@ namespace CompetenceAssessmentAssetNameSpace
                 }
             }
 
-
+            /*
+            String str = "Possible competences to shift:  ";
+            foreach (Competence c in possibleCompetencesToShiftMinOneLevel)
+                str += c.id + ",";
+            CompetenceAssessmentHandler.Instance.loggingCA(str);
+            */
 
             //upgrading->gaine a competence for sure?
             if (ulevel.minonecompetence && evidence && possibleCompetencesToShiftMinOneLevel.Count > 0)
             {
-
-                Competence mostLikelyPrerequisite = possibleCompetencesToShiftMinOneLevel[0];
+                double lowestXiNeededForUpdate = 0;
+                double currentXiNeededForUpdate;
                 foreach (Competence competence in possibleCompetencesToShiftMinOneLevel)
                 {
-                    if (cs.getValue(competence.id) > cs.getValue(mostLikelyPrerequisite.id))
-                        mostLikelyPrerequisite = competence;
+                    currentXiNeededForUpdate = competence.calculateXi(com, cs.transitionProbability + epsilon, cs, evidence);
+                    if (lowestXiNeededForUpdate==0 || (lowestXiNeededForUpdate > currentXiNeededForUpdate))
+                        lowestXiNeededForUpdate = currentXiNeededForUpdate;
                 }
-                Double valForUpdate = ((cs.transitionProbability + epsilon) * (1 - cs.getValue(com.id))) / (cs.getValue(mostLikelyPrerequisite.id) - cs.getValue(com.id) * (cs.transitionProbability + epsilon));
-                newXi0 = Math.Max(valForUpdate, newXi0);
+                newXi0 = Math.Max(lowestXiNeededForUpdate, newXi0);
             }
 
-
             //downgrading->lose a competence for sure?
-            if (ulevel.minonecompetence && !evidence && possibleCompetencesToShiftMinOneLevel.Count > 0)
+            if (ulevel.minonecompetence && (!evidence) && possibleCompetencesToShiftMinOneLevel.Count > 0)
             {
-                Competence leastLikelyPrerequisite = possibleCompetencesToShiftMinOneLevel[0];
-                foreach (Competence compe in possibleCompetencesToShiftMinOneLevel)
+                double lowestXiNeededForUpdate = 0;
+                double currentXiNeededForUpdate;
+                foreach (Competence competence in possibleCompetencesToShiftMinOneLevel)
                 {
-                    if (cs.getValue(compe.id) < cs.getValue(leastLikelyPrerequisite.id))
-                        leastLikelyPrerequisite = compe;
+                    currentXiNeededForUpdate = competence.calculateXi(com, cs.transitionProbability - epsilon, cs, evidence);
+                    if (lowestXiNeededForUpdate == 0 || (lowestXiNeededForUpdate > currentXiNeededForUpdate))
+                        lowestXiNeededForUpdate = currentXiNeededForUpdate; 
                 }
-                Double valForUpdate = ((cs.transitionProbability + epsilon - 1) * cs.getValue(com.id)) / (cs.getValue(leastLikelyPrerequisite.id) - cs.getValue(com.id) - (cs.transitionProbability + epsilon - 1) + (cs.transitionProbability + epsilon - 1) * cs.getValue(com.id));
-                newXi1 = Math.Max(newXi1, valForUpdate);
+                newXi1 = Math.Max(lowestXiNeededForUpdate, newXi1);
             }
 
             //handling maxonelevel-property
@@ -883,32 +996,56 @@ namespace CompetenceAssessmentAssetNameSpace
                                 possibleCompetencesToShiftMaxOneLevel.Add(comp);
                 }
 
+                
+                String str2 = "Possible competences to shift:  ";
+                foreach (Competence c in possibleCompetencesToShiftMaxOneLevel)
+                    str2 += c.id + ",";
+                CompetenceAssessmentHandler.Instance.loggingCA(str2);
+
+
                 //upgrading->gaine not more than one competence level
                 if (evidence && possibleCompetencesToShiftMaxOneLevel.Count > 0)
                 {
-                    Competence mostLikelyPrerequisite = possibleCompetencesToShiftMaxOneLevel[0];
+                    double maxXiAllowedForUpdate = 0;
+                    double currentXiAllowedForUpdate;
                     foreach (Competence competence in possibleCompetencesToShiftMaxOneLevel)
                     {
-                        if (cs.getValue(competence.id) > cs.getValue(mostLikelyPrerequisite.id))
-                            mostLikelyPrerequisite = competence;
+                        currentXiAllowedForUpdate = competence.calculateXi(com, cs.transitionProbability - epsilon, cs, evidence);
+                        if ((maxXiAllowedForUpdate ==0 || (maxXiAllowedForUpdate > currentXiAllowedForUpdate))&& currentXiAllowedForUpdate>1)
+                            maxXiAllowedForUpdate = currentXiAllowedForUpdate;
                     }
-                    Double valForUpdate = ((cs.transitionProbability - epsilon) * (1 - cs.getValue(com.id))) / (cs.getValue(mostLikelyPrerequisite.id) - cs.getValue(com.id) * (cs.transitionProbability - epsilon));
-                    newXi0 = Math.Min(valForUpdate, newXi0);
+                    newXi0 = (maxXiAllowedForUpdate > 1) ? Math.Min(maxXiAllowedForUpdate, newXi0) : newXi0;
+                    //newXi0 = Math.Max(newXi0, 1 + epsilon);
                 }
 
 
                 //downgrading->lose not more than one competence level
                 if ((!evidence) && possibleCompetencesToShiftMaxOneLevel.Count > 0)
                 {
-                    Competence leastLikelyPrerequisite = possibleCompetencesToShiftMaxOneLevel[0];
-                    foreach (Competence compe in possibleCompetencesToShiftMaxOneLevel)
+                    double maxXiAllowedForUpdate = 0;
+                    double currentXiAllowedForUpdate;
+                    foreach (Competence competence in possibleCompetencesToShiftMaxOneLevel)
                     {
-                        if (cs.getValue(compe.id) < cs.getValue(leastLikelyPrerequisite.id))
-                            leastLikelyPrerequisite = compe;
+                        currentXiAllowedForUpdate = competence.calculateXi(com, cs.transitionProbability + epsilon, cs, evidence);
+                        if ((maxXiAllowedForUpdate == 0 || (maxXiAllowedForUpdate > currentXiAllowedForUpdate)) && currentXiAllowedForUpdate > 1)
+                            maxXiAllowedForUpdate = currentXiAllowedForUpdate;
                     }
-                    Double valForUpdate = ((cs.transitionProbability - epsilon - 1) * cs.getValue(com.id)) / (cs.getValue(leastLikelyPrerequisite.id) - cs.getValue(com.id) - (cs.transitionProbability - epsilon - 1) + (cs.transitionProbability - epsilon - 1) * cs.getValue(com.id));
-                    newXi1 = Math.Min(newXi1, valForUpdate);
+                    newXi1 = (maxXiAllowedForUpdate>1) ? Math.Min(maxXiAllowedForUpdate, newXi1) : newXi1;
+                    //newXi1 = Math.Max(newXi1, 1 + epsilon);
                 }
+            }
+
+            if (evidence && (xi0 != newXi0))
+            {
+                CompetenceAssessmentHandler.Instance.loggingCA("xi0 changed from " + xi0 + " to " + newXi0 + " due to additional information.");
+                if (newXi0 < 1)
+                    throw new Exception("Internal error Competence Assessment Asset: Value not allowed!");
+            }
+            else if ((!evidence) && (xi1 != newXi1))
+            {
+                CompetenceAssessmentHandler.Instance.loggingCA("xi1 changed from " + xi1 + " to " + newXi1 + " due to additional information.");
+                if (newXi1 < 1)
+                    throw new Exception("Internal error Competence Assessment Asset: Value not allowed!");
             }
 
             double[] updateValues = { newXi0,newXi1};
@@ -1172,6 +1309,44 @@ namespace CompetenceAssessmentAssetNameSpace
             return prerequisiteWithAllSuccessorsNotInCompetenceStateButThis;
         }
 
+        /// <summary>
+        /// Method for calculating an update value, such that the competence reaches a certain limit
+        /// </summary>
+        /// <param name="updatedCompetence"> competence which gets updated </param>
+        /// <param name="limitToBeReached"> the probability to be reached for this competence </param>
+        /// <param name="cs"> the corresponding competence state </param>
+        /// <param name="evidenceDirection"> indicates if an up- or downgrad is happening </param>
+        /// <returns> the xi value for reaching the certain probability </returns>
+        public double calculateXi(Competence updatedCompetence, double limitToBeReached, CompetenceState cs, Boolean evidenceDirection)
+        {
+            if (evidenceDirection)
+            {
+                if (updatedCompetence.isIndirectPrerequesiteOf(this) && updatedCompetence.id != this.id)
+                {
+                    return ((limitToBeReached*(1-cs.getValue(updatedCompetence.id))) /(cs.getValue(this.id)-cs.getValue(updatedCompetence.id)*limitToBeReached));
+                }
+                else if (this.isIndirectPrerequesiteOf(updatedCompetence))
+                {
+                    return ((limitToBeReached-cs.getValue(updatedCompetence)*limitToBeReached-cs.getValue(this.id)+cs.getValue(updatedCompetence.id))/(cs.getValue(updatedCompetence.id)*(1-limitToBeReached)));
+                }
+                else
+                    throw new Exception("This line should not be reached!");
+            }
+            else
+            {
+                if (updatedCompetence.isIndirectPrerequesiteOf(this) && updatedCompetence.id != this.id)
+                {
+                    return ((cs.getValue(this.id)-limitToBeReached*cs.getValue(updatedCompetence.id))/(limitToBeReached*(1-cs.getValue(updatedCompetence.id))));
+                }
+                else if (this.isIndirectPrerequesiteOf(updatedCompetence))
+                {
+                    return ((cs.getValue(updatedCompetence.id)*(limitToBeReached-1))/(-limitToBeReached*(1-cs.getValue(updatedCompetence.id))+(cs.getValue(this.id)-cs.getValue(updatedCompetence.id))));
+                }
+                else
+                    throw new Exception("This line should not be reached!");
+            }
+        }
+
         #endregion Methods
 
     }
@@ -1307,6 +1482,22 @@ namespace CompetenceAssessmentAssetNameSpace
             }
             CompetenceAssessmentHandler.Instance.loggingCA(str);
 
+        }
+
+        /// <summary>
+        /// Methd for printing out only the mastered competences
+        /// </summary>
+        public void printMasteredCompetences()
+        {
+            CompetenceAssessmentHandler.Instance.loggingCA("Competences mastered:");
+            //CompetenceAssessmentHandler.Instance.loggingCA("=================");
+            String str = "";
+            foreach (var pair in this.getMasteredCompetences())
+            {
+                str += "(" + pair.id + ":" + Math.Round(this.getValue(pair.id), 2) + ")";
+                //CompetenceAssessmentHandler.Instance.loggingCA("Key: " + pair.Key.id + " Value: " + Math.Round(pair.Value,2));
+            }
+            CompetenceAssessmentHandler.Instance.loggingCA(str);
         }
 
         /// <summary>
@@ -1446,12 +1637,15 @@ namespace CompetenceAssessmentAssetNameSpace
 
         internal ActivityMapping(DomainModel dm)
         {
-            foreach(ActivitiesRelation ac in dm.relations.activities.activities)
+            if(dm.relations.activities != null && dm.relations.activities.activities != null)
             {
-                Dictionary<String, String[]> newActivityMap = new Dictionary<string, string[]>();
-                foreach(CompetenceActivity cac in ac.competences)
-                    newActivityMap.Add(cac.id,new string[]{cac.power, cac.direction});
-                mapping.Add(ac.id,newActivityMap);
+                foreach (ActivitiesRelation ac in dm.relations.activities.activities)
+                {
+                    Dictionary<String, String[]> newActivityMap = new Dictionary<string, string[]>();
+                    foreach (CompetenceActivity cac in ac.competences)
+                        newActivityMap.Add(cac.id, new string[] { cac.power, cac.direction });
+                    mapping.Add(ac.id, newActivityMap);
+                }
             }
         }
 
@@ -1520,17 +1714,20 @@ namespace CompetenceAssessmentAssetNameSpace
 
         internal GameSituationMapping(DomainModel dm)
         {
-            foreach (SituationRelation sr in dm.relations.situations.situations)
+            if(dm.relations.situations != null && dm.relations.situations.situations != null)
             {
-                Dictionary<String, String> newSituationMapUp = new Dictionary<string, string>();
-                Dictionary<String, String> newSituationMapDown = new Dictionary<string, string>();
-                foreach (CompetenceSituation cs in sr.competences)
+                foreach (SituationRelation sr in dm.relations.situations.situations)
                 {
-                    newSituationMapUp.Add(cs.id, cs.up);
-                    newSituationMapDown.Add(cs.id, cs.down);
+                    Dictionary<String, String> newSituationMapUp = new Dictionary<string, string>();
+                    Dictionary<String, String> newSituationMapDown = new Dictionary<string, string>();
+                    foreach (CompetenceSituation cs in sr.competences)
+                    {
+                        newSituationMapUp.Add(cs.id, cs.up);
+                        newSituationMapDown.Add(cs.id, cs.down);
+                    }
+                    mappingUp.Add(sr.id, newSituationMapUp);
+                    mappingDown.Add(sr.id, newSituationMapDown);
                 }
-                mappingUp.Add(sr.id, newSituationMapUp);
-                mappingDown.Add(sr.id, newSituationMapDown);
             }
         }
 

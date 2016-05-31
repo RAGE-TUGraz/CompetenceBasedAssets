@@ -24,8 +24,6 @@
   http://kti.tugraz.at/css/
 
   Created by: Matthias Maurer, TUGraz <mmaurer@tugraz.at>
-  Changed by: Matthias Maurer, TUGraz <mmaurer@tugraz.at>
-  Changed on: 2016-02-22
 */
 
 using AssetManagerPackage;
@@ -249,7 +247,8 @@ namespace CompetenceAssessmentAssetNameSpace
             for (int i = 0; i < compList.Count; i++)
             {
                 string evi = evidenceList[i] ? "up" : "down";
-                loggingCA("updating " + compList[i] + ":" + evi);
+                string power = (evidencePowers[i] == EvidencePower.Low) ? "low" : (evidencePowers[i] == EvidencePower.Medium) ? "medium" : "high";
+                loggingCA("updating " + compList[i] + ":" + evi+" ("+power+")");
             }
 
             if (competenceState == null)
@@ -334,6 +333,8 @@ namespace CompetenceAssessmentAssetNameSpace
             performTest1();
             performTest2();
             performTest3();
+            performTest4();
+            performTest5();
             loggingCA("Competence assessment asset tests finished. ");
         }
 
@@ -436,9 +437,9 @@ namespace CompetenceAssessmentAssetNameSpace
             //Competences prerequisites
             Relations relations = new Relations();
             CompetenceprerequisitesList cpl = new CompetenceprerequisitesList();
-            CompetenceP cp1 = new CompetenceP("C2", "C1");
-            CompetenceP cp2 = new CompetenceP("C3", "C2");
-            CompetenceP cp3 = new CompetenceP("C4", "C3");
+            CompetenceP cp1 = new CompetenceP("C2", new String[] { "C1" });
+            CompetenceP cp2 = new CompetenceP("C3", new String[] { "C2" });
+            CompetenceP cp3 = new CompetenceP("C4", new String[] { "C3" });
             CompetenceP[] cpArray = { cp1, cp2, cp3 };
             List<CompetenceP> cpList = new List<CompetenceP>(cpArray);
             cpl.competences = cpList;
@@ -491,13 +492,63 @@ namespace CompetenceAssessmentAssetNameSpace
         }
 
         /// <summary>
+        /// Testing updates for game situations
+        /// </summary>
+        private void performTest4()
+        {
+            loggingCA("Start test 4");
+            registerNewPlayer(createExampleDomainModel());
+
+            getCompetenceState().print();
+            getCAA().updateCompetenceStateAccordingToGamesituation("gs2",true);
+            getCompetenceState().print();
+
+            getCompetenceState().print();
+            getCAA().updateCompetenceStateAccordingToGamesituation("gs6", true);
+            getCompetenceState().print();
+
+            getCompetenceState().print();
+            getCAA().updateCompetenceStateAccordingToGamesituation("gs10", false);
+            getCompetenceState().print();
+
+            getCompetenceState().print();
+            getCAA().updateCompetenceStateAccordingToGamesituation("gs99", false);
+            getCompetenceState().print();
+
+            loggingCA("End test 4");
+        }
+
+        /// <summary>
+        /// Testing updates for game situations
+        /// </summary>
+        private void performTest5()
+        {
+            loggingCA("Start test 5");
+            registerNewPlayer(createExampleDomainModel());
+
+            getCompetenceState().print();
+            getCAA().updateCompetenceStateAccordingToActivity("activity1");
+            getCompetenceState().print();
+
+            getCompetenceState().print();
+            getCAA().updateCompetenceStateAccordingToActivity("a4");
+            getCompetenceState().print();
+
+            getCompetenceState().print();
+            getCAA().updateCompetenceStateAccordingToActivity("a2");
+            getCompetenceState().print();
+
+            loggingCA("End test 5");
+        }
+
+        /// <summary>
         /// Method creating an example domain model
         /// </summary>
         /// <returns></returns>
         public DomainModel createExampleDomainModel()
         {
             DomainModel dm = new DomainModel();
-
+            
 
             //Competences
             Elements elements = new Elements();
@@ -534,53 +585,105 @@ namespace CompetenceAssessmentAssetNameSpace
             sl.situationList = loList;
             elements.situations = sl;
 
+            //activities
+            ActivityList al = new ActivityList();
+            Activity a1 = new Activity("a1");
+            Activity a2 = new Activity("a2");
+            Activity a3 = new Activity("a3");
+            Activity a4 = new Activity("a4");
+            Activity a5 = new Activity("a5");
+            Activity[] aArray = { a1,a2,a3,a4,a5};
+            List<Activity> aList = new List<Activity>(aArray);
+            al.activityList = aList;
+            elements.activities = al;
+
             //Competences prerequisites
             Relations relations = new Relations();
             CompetenceprerequisitesList cpl = new CompetenceprerequisitesList();
-            CompetenceP cp1 = new CompetenceP("C5", "C1");
-            CompetenceP cp2 = new CompetenceP("C5", "C2");
-            CompetenceP cp3 = new CompetenceP("C6", "C4");
-            CompetenceP cp4 = new CompetenceP("C7", "C4");
-            CompetenceP cp5 = new CompetenceP("C8", "C3");
-            CompetenceP cp6 = new CompetenceP("C8", "C6");
-            CompetenceP cp7 = new CompetenceP("C9", "C5");
-            CompetenceP cp10 = new CompetenceP("C9", "C8");
-            CompetenceP cp8 = new CompetenceP("C10", "C9");
-            CompetenceP cp9 = new CompetenceP("C10", "C7");
-            CompetenceP[] cpArray = { cp1, cp2, cp3, cp4, cp5, cp6, cp7, cp8, cp9, cp10 };
+            CompetenceP cp1 = new CompetenceP("C5", new String[] { "C1","C2" });
+            CompetenceP cp3 = new CompetenceP("C6", new String[] { "C4" });
+            CompetenceP cp4 = new CompetenceP("C7", new String[] { "C4" });
+            CompetenceP cp5 = new CompetenceP("C8", new String[] { "C3", "C6" });
+            CompetenceP cp7 = new CompetenceP("C9", new String[] { "C5", "C8" });
+            CompetenceP cp8 = new CompetenceP("C10", new String[] { "C9", "C7" });
+            CompetenceP[] cpArray = { cp1,  cp3, cp4, cp5,  cp7, cp8 };
             List<CompetenceP> cpList = new List<CompetenceP>(cpArray);
             cpl.competences = cpList;
             relations.competenceprerequisites = cpl;
 
             //assignmend of competences to game situations (=learning objects)
             SituationRelationList lorl = new SituationRelationList();
-            SituationRelation lor1 = new SituationRelation("gs1", "C1");
-            SituationRelation lor2 = new SituationRelation("gs2", "C2");
-            SituationRelation lor3 = new SituationRelation("gs3", "C3");
-            SituationRelation lor4 = new SituationRelation("gs4", "C4");
-            SituationRelation lor5 = new SituationRelation("gs5", "C5");
-            SituationRelation lor6 = new SituationRelation("gs5", "C1");
-            SituationRelation lor7 = new SituationRelation("gs5", "C2");
-            SituationRelation lor8 = new SituationRelation("gs6", "C6");
-            SituationRelation lor9 = new SituationRelation("gs6", "C4");
-            SituationRelation lor10 = new SituationRelation("gs7", "C4");
-            SituationRelation lor11 = new SituationRelation("gs7", "C7");
-            SituationRelation lor12 = new SituationRelation("gs8", "C8");
-            SituationRelation lor13 = new SituationRelation("gs8", "C6");
-            SituationRelation lor14 = new SituationRelation("gs8", "C3");
-            SituationRelation lor15 = new SituationRelation("gs9", "C9");
-            SituationRelation lor16 = new SituationRelation("gs9", "C5");
-            SituationRelation lor17 = new SituationRelation("gs9", "C8");
-            SituationRelation lor18 = new SituationRelation("gs10", "C10");
-            SituationRelation lor19 = new SituationRelation("gs10", "C9");
-            SituationRelation lor20 = new SituationRelation("gs10", "C7");
-            SituationRelation[] lorArray = { lor1, lor2, lor3, lor4, lor5, lor6, lor7, lor8, lor9, lor10, lor11, lor12, lor13, lor14, lor15, lor16, lor17, lor18, lor19, lor20 };
+            SituationRelation lor1 = new SituationRelation("gs1",new String[] { "C1" });
+            SituationRelation lor2 = new SituationRelation("gs2", new String[] { "C2" });
+            SituationRelation lor3 = new SituationRelation("gs3", new String[] { "C3" });
+            SituationRelation lor4 = new SituationRelation("gs4", new String[] { "C4" });
+            SituationRelation lor5 = new SituationRelation("gs5", new String[] { "C5", "C1", "C2" });
+            SituationRelation lor8 = new SituationRelation("gs6", new String[] { "C6", "C4" });
+            SituationRelation lor10 = new SituationRelation("gs7", new String[] { "C4", "C7" });
+            SituationRelation lor12 = new SituationRelation("gs8", new String[] { "C8", "C6", "C3" });
+            SituationRelation lor15 = new SituationRelation("gs9", new String[] { "C9", "C5", "C8" });
+            SituationRelation lor18 = new SituationRelation("gs10", new String[] { "C10", "C9", "C7" });
+            SituationRelation[] lorArray = { lor1, lor2, lor3, lor4, lor5,  lor8,  lor10,  lor12,  lor15,  lor18 };
             List<SituationRelation> lorList = new List<SituationRelation>(lorArray);
             lorl.situations = lorList;
             relations.situations = lorl;
 
+            //assignmend of competences to activities
+            ActivityRelationList arl = new ActivityRelationList();
+            ActivitiesRelation ar1 = new ActivitiesRelation("a1",new CompetenceActivity[] { new CompetenceActivity("C1","medium","up")});
+            ActivitiesRelation ar2 = new ActivitiesRelation("a2", new CompetenceActivity[] { new CompetenceActivity("C1", "medium", "up"), new CompetenceActivity("C2", "low", "down") });
+            ActivitiesRelation ar3 = new ActivitiesRelation("a3", new CompetenceActivity[] { new CompetenceActivity("C5", "low", "up"), new CompetenceActivity("C4", "high", "down") });
+            ActivitiesRelation ar4 = new ActivitiesRelation("a4", new CompetenceActivity[] { new CompetenceActivity("C1", "high", "up"), new CompetenceActivity("C8", "high", "up") });
+            ActivitiesRelation ar5 = new ActivitiesRelation("a5", new CompetenceActivity[] { new CompetenceActivity("C6", "low", "down"), new CompetenceActivity("C7", "medium", "up") });
+            ActivitiesRelation[] arArray = {ar1,ar2,ar3,ar4,ar5 };
+            List<ActivitiesRelation> arList = new List<ActivitiesRelation>(arArray);
+            arl.activities = arList;
+            relations.activities = arl;
+
+            //general 
             dm.elements = elements;
             dm.relations = relations;
+
+            //Update Levels
+            UpdateLevel ul1 = new UpdateLevel();
+            ul1.direction = "up";
+            ul1.power = "low";
+            ul1.xi = "1.2";
+            ul1.minonecompetence = "false";
+            ul1.maxonelevel = "true";
+            UpdateLevel ul2 = new UpdateLevel();
+            ul2.direction = "up";
+            ul2.power = "medium";
+            ul2.xi = "2";
+            ul2.minonecompetence = "false";
+            ul2.maxonelevel = "true";
+            UpdateLevel ul3 = new UpdateLevel();
+            ul3.direction = "up";
+            ul3.power = "high";
+            ul3.xi = "4";
+            ul3.minonecompetence = "true";
+            ul3.maxonelevel = "false";
+            UpdateLevel ul4 = new UpdateLevel();
+            ul4.direction = "down";
+            ul4.power = "low";
+            ul4.xi = "1.2";
+            ul4.minonecompetence = "false";
+            ul4.maxonelevel = "true";
+            UpdateLevel ul5 = new UpdateLevel();
+            ul5.direction = "down";
+            ul5.power = "medium";
+            ul5.xi = "2";
+            ul5.minonecompetence = "false";
+            ul5.maxonelevel = "true";
+            UpdateLevel ul6 = new UpdateLevel();
+            ul6.direction = "down";
+            ul6.power = "high";
+            ul6.xi = "4";
+            ul6.minonecompetence = "true";
+            ul6.maxonelevel = "false";
+            UpdateLevel[] ulArray = { ul1, ul2, ul3, ul4, ul5, ul6 };
+            dm.updateLevels = new UpdateLevels();
+            dm.updateLevels.updateLevelList = new List<UpdateLevel>(ulArray);
 
             return dm;
         }
@@ -996,12 +1099,12 @@ namespace CompetenceAssessmentAssetNameSpace
                                 possibleCompetencesToShiftMaxOneLevel.Add(comp);
                 }
 
-                
+                /*
                 String str2 = "Possible competences to shift:  ";
                 foreach (Competence c in possibleCompetencesToShiftMaxOneLevel)
                     str2 += c.id + ",";
                 CompetenceAssessmentHandler.Instance.loggingCA(str2);
-
+                */
 
                 //upgrading->gaine not more than one competence level
                 if (evidence && possibleCompetencesToShiftMaxOneLevel.Count > 0)
@@ -1661,7 +1764,10 @@ namespace CompetenceAssessmentAssetNameSpace
             //searching for the activity in the mapping
             Dictionary<String, String[]> competencesToUpdate;
             if (!mapping.ContainsKey(activity))
+            {
+                CompetenceAssessmentHandler.Instance.loggingCA("The received activity " + activity + " is unknown.");
                 return;
+            }
 
             competencesToUpdate = mapping[activity];
             UpdateLevelStorage uls =  CompetenceAssessmentHandler.Instance.updateLevelStorage;
@@ -1673,14 +1779,14 @@ namespace CompetenceAssessmentAssetNameSpace
             {
                 competences.Add(competence);
                 String[] ULevelDirection = competencesToUpdate[competence];
-                switch (ULevelDirection[1])
+                switch (ULevelDirection[0])
                 {
                     case "low":  evidencePowers.Add(EvidencePower.Low); break; 
                     case "medium":  evidencePowers.Add(EvidencePower.Medium); break; 
                     case "high":  evidencePowers.Add(EvidencePower.High); break; 
                     default: throw new Exception("UpdateLevel unknown!");
                 }
-                switch (ULevelDirection[0])
+                switch (ULevelDirection[1])
                 {
                     case "up": evidences.Add(true); break;
                     case "down": evidences.Add(false); break;
@@ -1688,7 +1794,7 @@ namespace CompetenceAssessmentAssetNameSpace
                 }
             }
 
-            CompetenceAssessmentHandler.Instance.loggingCA("Performing update based on activity.");
+            CompetenceAssessmentHandler.Instance.loggingCA("Performing update based on activity '"+activity+"'.");
             CompetenceAssessmentHandler.Instance.getCAA().updateCompetenceState(competences, evidences, evidencePowers);
 
         }
@@ -1745,7 +1851,10 @@ namespace CompetenceAssessmentAssetNameSpace
             Dictionary<String, String> competencesToUpdate;
             Dictionary<String, Dictionary<String, String>> mapping = success ? mappingUp : mappingDown;
             if (!mapping.ContainsKey(gamesituationId))
+            {
+                CompetenceAssessmentHandler.Instance.loggingCA("The received game situation "+gamesituationId+" is unknown.");
                 return;
+            }
 
             competencesToUpdate = mapping[gamesituationId];
             UpdateLevelStorage uls = CompetenceAssessmentHandler.Instance.updateLevelStorage;

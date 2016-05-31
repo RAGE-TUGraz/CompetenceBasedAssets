@@ -24,8 +24,6 @@
   http://kti.tugraz.at/css/
 
   Created by: Matthias Maurer, TUGraz <mmaurer@tugraz.at>
-  Changed by: Matthias Maurer, TUGraz <mmaurer@tugraz.at>
-  Changed on: 2016-02-22
 */
 
 using AssetManagerPackage;
@@ -365,8 +363,9 @@ namespace DomainModelAssetNameSpace
         /// <returns></returns>
         public DomainModel createExampleDomainModel()
         {
+
             DomainModel dm = new DomainModel();
-            
+
 
             //Competences
             Elements elements = new Elements();
@@ -406,50 +405,77 @@ namespace DomainModelAssetNameSpace
             //Competences prerequisites
             Relations relations = new Relations();
             CompetenceprerequisitesList cpl = new CompetenceprerequisitesList();
-            CompetenceP cp1 = new CompetenceP("C5", "C1");
-            CompetenceP cp2 = new CompetenceP("C5", "C2");
-            CompetenceP cp3 = new CompetenceP("C6", "C4");
-            CompetenceP cp4 = new CompetenceP("C7", "C4");
-            CompetenceP cp5 = new CompetenceP("C8", "C3");
-            CompetenceP cp6 = new CompetenceP("C8", "C6");
-            CompetenceP cp7 = new CompetenceP("C9", "C5");
-            CompetenceP cp10 = new CompetenceP("C9", "C8");
-            CompetenceP cp8 = new CompetenceP("C10", "C9");
-            CompetenceP cp9 = new CompetenceP("C10", "C7");
-            CompetenceP[] cpArray = { cp1, cp2, cp3, cp4, cp5, cp6, cp7, cp8, cp9, cp10 };
+            CompetenceP cp1 = new CompetenceP("C5", new String[] { "C1", "C2" });
+            CompetenceP cp3 = new CompetenceP("C6", new String[] { "C4" });
+            CompetenceP cp4 = new CompetenceP("C7", new String[] { "C4" });
+            CompetenceP cp5 = new CompetenceP("C8", new String[] { "C3", "C6" });
+            CompetenceP cp7 = new CompetenceP("C9", new String[] { "C5", "C8" });
+            CompetenceP cp8 = new CompetenceP("C10", new String[] { "C9", "C7" });
+            CompetenceP[] cpArray = { cp1, cp3, cp4, cp5, cp7, cp8 };
             List<CompetenceP> cpList = new List<CompetenceP>(cpArray);
             cpl.competences = cpList;
             relations.competenceprerequisites = cpl;
 
             //assignmend of competences to game situations (=learning objects)
             SituationRelationList lorl = new SituationRelationList();
-            SituationRelation lor1 = new SituationRelation("gs1", "C1");
-            SituationRelation lor2 = new SituationRelation("gs2", "C2");
-            SituationRelation lor3 = new SituationRelation("gs3", "C3");
-            SituationRelation lor4 = new SituationRelation("gs4", "C4");
-            SituationRelation lor5 = new SituationRelation("gs5", "C5");
-            SituationRelation lor6 = new SituationRelation("gs5", "C1");
-            SituationRelation lor7 = new SituationRelation("gs5", "C2");
-            SituationRelation lor8 = new SituationRelation("gs6", "C6");
-            SituationRelation lor9 = new SituationRelation("gs6", "C4");
-            SituationRelation lor10 = new SituationRelation("gs7", "C4");
-            SituationRelation lor11 = new SituationRelation("gs7", "C7");
-            SituationRelation lor12 = new SituationRelation("gs8", "C8");
-            SituationRelation lor13 = new SituationRelation("gs8", "C6");
-            SituationRelation lor14 = new SituationRelation("gs8", "C3");
-            SituationRelation lor15 = new SituationRelation("gs9", "C9");
-            SituationRelation lor16 = new SituationRelation("gs9", "C5");
-            SituationRelation lor17 = new SituationRelation("gs9", "C8");
-            SituationRelation lor18 = new SituationRelation("gs10", "C10");
-            SituationRelation lor19 = new SituationRelation("gs10", "C9");
-            SituationRelation lor20 = new SituationRelation("gs10", "C7");
-            SituationRelation[] lorArray = { lor1, lor2, lor3, lor4, lor5, lor6, lor7, lor8, lor9, lor10, lor11, lor12, lor13, lor14, lor15, lor16, lor17, lor18, lor19, lor20 };
+            SituationRelation lor1 = new SituationRelation("gs1", new String[] { "C1" });
+            SituationRelation lor2 = new SituationRelation("gs2", new String[] { "C2" });
+            SituationRelation lor3 = new SituationRelation("gs3", new String[] { "C3" });
+            SituationRelation lor4 = new SituationRelation("gs4", new String[] { "C4" });
+            SituationRelation lor5 = new SituationRelation("gs5", new String[] { "C5", "C1", "C2" });
+            SituationRelation lor8 = new SituationRelation("gs6", new String[] { "C6", "C4" });
+            SituationRelation lor10 = new SituationRelation("gs7", new String[] { "C4", "C7" });
+            SituationRelation lor12 = new SituationRelation("gs8", new String[] { "C8", "C6", "C3" });
+            SituationRelation lor15 = new SituationRelation("gs9", new String[] { "C9", "C5", "C8" });
+            SituationRelation lor18 = new SituationRelation("gs10", new String[] { "C10", "C9", "C7" });
+            SituationRelation[] lorArray = { lor1, lor2, lor3, lor4, lor5, lor8, lor10, lor12, lor15, lor18 };
             List<SituationRelation> lorList = new List<SituationRelation>(lorArray);
             lorl.situations = lorList;
             relations.situations = lorl;
-            
+
             dm.elements = elements;
             dm.relations = relations;
+
+            //Update Levels
+            UpdateLevel ul1 = new UpdateLevel();
+            ul1.direction = "up";
+            ul1.power = "low";
+            ul1.xi = "1.2";
+            ul1.minonecompetence = "false";
+            ul1.maxonelevel = "true";
+            UpdateLevel ul2 = new UpdateLevel();
+            ul2.direction = "up";
+            ul2.power = "medium";
+            ul2.xi = "2";
+            ul2.minonecompetence = "false";
+            ul2.maxonelevel = "true";
+            UpdateLevel ul3 = new UpdateLevel();
+            ul3.direction = "up";
+            ul3.power = "high";
+            ul3.xi = "4";
+            ul3.minonecompetence = "true";
+            ul3.maxonelevel = "false";
+            UpdateLevel ul4 = new UpdateLevel();
+            ul4.direction = "down";
+            ul4.power = "low";
+            ul4.xi = "1.2";
+            ul4.minonecompetence = "false";
+            ul4.maxonelevel = "true";
+            UpdateLevel ul5 = new UpdateLevel();
+            ul5.direction = "down";
+            ul5.power = "medium";
+            ul5.xi = "2";
+            ul5.minonecompetence = "false";
+            ul5.maxonelevel = "true";
+            UpdateLevel ul6 = new UpdateLevel();
+            ul6.direction = "down";
+            ul6.power = "high";
+            ul6.xi = "4";
+            ul6.minonecompetence = "true";
+            ul6.maxonelevel = "false";
+            UpdateLevel[] ulArray = { ul1, ul2, ul3, ul4, ul5, ul6 };
+            dm.updateLevels = new UpdateLevels();
+            dm.updateLevels.updateLevelList = new List<UpdateLevel>(ulArray);
 
             return dm;
         }
@@ -1310,7 +1336,17 @@ namespace DomainModelAssetNameSpace
         public string id { get; set; }
 
         #endregion Properties
+        #region Constructors
 
+        public Activity() { }
+
+        public Activity(string id)
+        {
+            this.id = id;
+        }
+
+        #endregion Constructors
+        #region Methods
         /// <summary>
         /// Diagnostic-method printing Domainmodel data
         /// </summary>
@@ -1318,6 +1354,7 @@ namespace DomainModelAssetNameSpace
         {
             DomainModelHandler.Instance.loggingDM("---id:" + id);
         }
+        #endregion Methods
     }
     
     public class SituationsList
@@ -1501,6 +1538,7 @@ namespace DomainModelAssetNameSpace
             }
         }
 
+        /*
         public void addSituationRelation(string situationId, string competenceId)
         {
             Boolean found = false;
@@ -1518,8 +1556,9 @@ namespace DomainModelAssetNameSpace
                 }
             }
             if (!found)
-                situations.Add(new SituationRelation(situationId,competenceId));
+                situations.Add(new SituationRelation(situationId,new String[] { competenceId }));
         }
+        */
     }
 
     public class SituationRelation
@@ -1536,15 +1575,18 @@ namespace DomainModelAssetNameSpace
 
         public SituationRelation() { }
 
-        public SituationRelation(string situationId, string competenceId)
+        public SituationRelation(string situationId, string[] competenceId)
         {
             id = situationId;
-            CompetenceSituation competence = new CompetenceSituation();
-            competence.id = competenceId;
-            competence.up = "medium";
-            competence.down = "medium";
             competences = new List<CompetenceSituation>();
-            competences.Add(competence);
+            foreach(String cid in competenceId)
+            {
+                CompetenceSituation competence = new CompetenceSituation();
+                competence.id = cid;
+                competence.up = "medium";
+                competence.down = "medium";
+                competences.Add(competence);
+            }
         }
 
         #endregion Constructors
@@ -1610,6 +1652,7 @@ namespace DomainModelAssetNameSpace
             }
         }
 
+        /*
         public void addActivityRelation(String activitytId, String competenceId)
         {
             Boolean found = false;
@@ -1623,8 +1666,9 @@ namespace DomainModelAssetNameSpace
                     break;
                 }
             if (!found)
-                this.activities.Add(new ActivitiesRelation(activitytId, competenceId));
+                this.activities.Add(new ActivitiesRelation(activitytId, competenceId ));
         }
+        */
     }
 
     public class ActivitiesRelation
@@ -1650,13 +1694,19 @@ namespace DomainModelAssetNameSpace
         /// 
         /// <param name="activitytId">activity id</param>
         /// <param name="competenceId">competence id for a competence which is part of the learning object</param>
-        public ActivitiesRelation(String activitytId, String competenceId)
+        public ActivitiesRelation(String activitytId, CompetenceActivity[] competenceId)
         {
             this.id = activitytId;
-            CompetenceActivity clo = new CompetenceActivity();
-            clo.id = competenceId;
             this.competences = new List<CompetenceActivity>();
-            this.competences.Add(clo);
+            foreach(CompetenceActivity cid in competenceId)
+                this.competences.Add(cid);
+        }
+
+        public ActivitiesRelation(String id, string competenceId)
+        {
+            this.id = id;
+            competences = new List<CompetenceActivity>();
+            competences.Add(new CompetenceActivity(competenceId,"medium","up"));
         }
 
         #endregion Constructors
@@ -1687,7 +1737,19 @@ namespace DomainModelAssetNameSpace
         public String direction { get; set; }
 
         #endregion Properties
+        #region Constructors
 
+        public CompetenceActivity() { }
+
+        public CompetenceActivity(string id, string power, string direction)
+        {
+            this.id = id;
+            this.power = power;
+            this.direction = direction;
+        }
+
+        #endregion Constructors
+        #region Methods
         /// <summary>
         /// Diagnostic-method printing Domainmodel data
         /// </summary>
@@ -1697,6 +1759,7 @@ namespace DomainModelAssetNameSpace
             DomainModelHandler.Instance.loggingDM("---power comp.:" + power);
             DomainModelHandler.Instance.loggingDM("---direction comp.:" + direction);
         }
+        #endregion Methods
     }
 
     public class CompetenceprerequisitesList
@@ -1720,6 +1783,7 @@ namespace DomainModelAssetNameSpace
             }
         }
 
+        /*
         public void addPrerequisiteCompetence(String id, String prerequisiteID)
         {
             Boolean found = false;
@@ -1735,8 +1799,9 @@ namespace DomainModelAssetNameSpace
                 }
             }
             if (!found)
-                competences.Add(new CompetenceP(id, prerequisiteID));
+                competences.Add(new CompetenceP(id, new String[] { prerequisiteID }));
         }
+        */
     }
 
     public class CompetenceP
@@ -1763,13 +1828,16 @@ namespace DomainModelAssetNameSpace
         /// 
         /// <param name="id"> id of the competence </param>
         /// <param name="prerequisiteID"> id of the prerequisite competence </param>
-        public CompetenceP(String id, String prerequisiteID)
+        public CompetenceP(String id, String[] prerequisiteIDs)
         {
             this.id = id;
-            Prereqcompetence precom = new Prereqcompetence();
-            precom.id = prerequisiteID;
             prereqcompetences = new List<Prereqcompetence>();
-            prereqcompetences.Add(precom);
+            foreach (String pid in prerequisiteIDs)
+            {
+                Prereqcompetence precom = new Prereqcompetence();
+                precom.id = pid;
+                prereqcompetences.Add(precom);
+            }
         }
 
         #endregion Constructors

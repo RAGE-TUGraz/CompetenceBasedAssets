@@ -212,7 +212,17 @@ namespace CompetenceBasedAdaptionAssetNameSpace
         /// <returns> A dictionary containing the game situations as keys and the number of times they where player by the player as values. </returns>
         internal Dictionary<GameSituation, int> getGameSituationHistory()
         {
-              return gameSituationHistory;
+            if (gameSituationHistory == null)
+                gameSituationHistory = new Dictionary<GameSituation, int>();
+
+            if(gameSituationHistory.Count != this.gameSituationStructure.GameSituations.Count)
+            {
+                gameSituationHistory = new Dictionary<GameSituation, int>();
+                foreach (GameSituation gs in gameSituationStructure.GameSituations)
+                    gameSituationHistory.Add(gs,0);
+            }
+
+            return gameSituationHistory;
         }
 
         /// <summary>
@@ -273,14 +283,7 @@ namespace CompetenceBasedAdaptionAssetNameSpace
         {
             loggingPRA("Gamesituation completed - sending evidence to update competences.");
             GameSituation gs = getCurrentGameSituation();
-            List<Boolean> successList = new List<bool>();
-            List<EvidencePower> evidencePower = new List<EvidencePower>();
-            foreach (String com in gs.Competences)
-            {
-                successList.Add(success);
-                evidencePower.Add(EvidencePower.Medium);
-            }
-            getCAA().updateCompetenceState(gs.Competences, successList, evidencePower);
+            getCAA().updateCompetenceStateAccordingToGamesituation(gs.Id,success);
         }
 
         /// <summary>
@@ -293,7 +296,6 @@ namespace CompetenceBasedAdaptionAssetNameSpace
             GameSituationStructure gss = new GameSituationStructure(dm);
             setGameSituationStructure( gss);
             setCurrentGameSituation( gss.InitialGameSituation);
-            //getCAA().registerNewPlayer(playerId, dm);
         }
 
         #endregion PublicMethods
@@ -310,8 +312,8 @@ namespace CompetenceBasedAdaptionAssetNameSpace
             if (DoLogging)
             {
                 if (competenceBasedAdaptionAsset == null)
-                    competenceBasedAdaptionAsset = (CompetenceBasedAdaptionAsset)AssetManager.Instance.findAssetByClass("CompetenceRecommendationAsset");
-                competenceBasedAdaptionAsset.Log(severity, "[CRA]: " + msg);
+                    competenceBasedAdaptionAsset = (CompetenceBasedAdaptionAsset)AssetManager.Instance.findAssetByClass("CompetenceBasedAdaptionAsset");
+                competenceBasedAdaptionAsset.Log(severity, "[CBAA]: " + msg);
             }
         }
 
@@ -321,7 +323,7 @@ namespace CompetenceBasedAdaptionAssetNameSpace
         public void performAllTests()
         {
             loggingPRA("Competence recommendation asset tests called: ");
-            //performTest1();
+            performTest1();
             performTest2();
             loggingPRA("Competence recommendation asset tests finished. ");
         }
@@ -340,6 +342,8 @@ namespace CompetenceBasedAdaptionAssetNameSpace
         /// </summary>
         private void performTest2()
         {
+            List<String> userInputSimulation = new List<string>(new String[] {"s","s","s","f","s","s", "s", "s", "f", "f", "s", "s", "s", "s", "s", "s", "s", "e" });
+
             registerNewPlayer(getDMA().getDomainModel());
             GameSituationStructure gss = getGameSituationStructure();
             String gs = getCurrentGameSituationId();
@@ -354,8 +358,9 @@ namespace CompetenceBasedAdaptionAssetNameSpace
             {
                 while (!line.Equals("s") && !line.Equals("f") && !line.Equals("e"))
                 {
-                    loggingPRA("Entering game situation " + gs + ". How did the player performe (s-success,f-failure,e-exit)?");
-                    line = Console.ReadLine();
+                    //loggingPRA("Entering game situation " + gs + ". How did the player performe (s-success,f-failure,e-exit)?");
+                    //line = Console.ReadLine();
+                    line = userInputSimulation[0];
                 }
                 if (!line.Equals("e"))
                 {
@@ -377,6 +382,7 @@ namespace CompetenceBasedAdaptionAssetNameSpace
                 }
                 line = "";
                 gs = getNextGameSituationId();
+                userInputSimulation.RemoveAt(0);
             }
             loggingPRA("Games end reached!");
         }

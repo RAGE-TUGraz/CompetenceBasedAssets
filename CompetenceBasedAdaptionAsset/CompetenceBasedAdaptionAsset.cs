@@ -24,8 +24,6 @@
   http://kti.tugraz.at/css/
 
   Created by: Matthias Maurer, TUGraz <mmaurer@tugraz.at>
-  Changed by: Matthias Maurer, TUGraz <mmaurer@tugraz.at>
-  Changed on: 2016-02-22
 */
 
 namespace CompetenceBasedAdaptionAssetNameSpace
@@ -84,6 +82,7 @@ namespace CompetenceBasedAdaptionAssetNameSpace
             }
         }
 
+
         #endregion Constructors
         #region Properties
 
@@ -115,15 +114,13 @@ namespace CompetenceBasedAdaptionAssetNameSpace
         #endregion Properties
         #region Methods
 
-        // Your code goes here.
-        /*
-        public void test()
+        /// <summary>
+        /// Method for performing all testcases
+        /// </summary>
+        public void performTests()
         {
-            Console.WriteLine("CompetenceRecommendation method called!");
-            CompetenceRecommendationHandler.Instance.performAllTests();
+            CompetenceBasedAdaptionHandler.Instance.performAllTests();
         }
-        */
-
 
         /// <summary>
         /// Method returning the next game situation id for the player.

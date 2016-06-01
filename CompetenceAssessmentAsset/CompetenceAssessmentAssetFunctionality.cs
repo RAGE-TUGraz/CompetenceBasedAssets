@@ -1045,12 +1045,16 @@ namespace CompetenceAssessmentAssetNameSpace
                 }
             }
 
-            /*
-            String str = "Possible competences to shift:  ";
+            String str0 = "In CS:  ";
+            foreach (Competence c in cs.getMasteredCompetences())
+                str0 += c.id + ",";
+            CompetenceAssessmentHandler.Instance.loggingCA(str0);
+
+            String str = com.id+" Possible competences to shift minonecompetence:  ";
             foreach (Competence c in possibleCompetencesToShiftMinOneLevel)
                 str += c.id + ",";
             CompetenceAssessmentHandler.Instance.loggingCA(str);
-            */
+            
 
             //upgrading->gaine a competence for sure?
             if (ulevel.minonecompetence && evidence && possibleCompetencesToShiftMinOneLevel.Count > 0)
@@ -1088,23 +1092,23 @@ namespace CompetenceAssessmentAssetNameSpace
                 {
                     foreach (Competence competence in possibleCompetencesToShiftMinOneLevel)
                         foreach (Competence comp in competence.getSuccessorsWithAllPrerequisitesMasteredButThis(cs))
-                            if (!possibleCompetencesToShiftMaxOneLevel.Contains(comp))
+                            if ((!possibleCompetencesToShiftMaxOneLevel.Contains(comp)) && (com.isIndirectPrerequesiteOf(comp) || comp.isIndirectPrerequesiteOf(com)))
                                 possibleCompetencesToShiftMaxOneLevel.Add(comp);
                 }
                 else
                 {
                     foreach (Competence competence in possibleCompetencesToShiftMinOneLevel)
                         foreach (Competence comp in competence.getPrerequisiteWithAllSuccessorsNotInCompetenceStateButThis(cs))
-                            if (!possibleCompetencesToShiftMaxOneLevel.Contains(comp))
+                            if ((!possibleCompetencesToShiftMaxOneLevel.Contains(comp)) && (com.isIndirectPrerequesiteOf(comp) || comp.isIndirectPrerequesiteOf(com)))
                                 possibleCompetencesToShiftMaxOneLevel.Add(comp);
                 }
 
-                /*
-                String str2 = "Possible competences to shift:  ";
+                
+                String str2 = "Possible competences to shift maxonelevel:  ";
                 foreach (Competence c in possibleCompetencesToShiftMaxOneLevel)
                     str2 += c.id + ",";
                 CompetenceAssessmentHandler.Instance.loggingCA(str2);
-                */
+                
 
                 //upgrading->gaine not more than one competence level
                 if (evidence && possibleCompetencesToShiftMaxOneLevel.Count > 0)

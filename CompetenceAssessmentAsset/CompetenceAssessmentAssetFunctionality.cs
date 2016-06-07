@@ -1045,6 +1045,7 @@ namespace CompetenceAssessmentAssetNameSpace
                 }
             }
 
+            /*
             String str0 = "In CS:  ";
             foreach (Competence c in cs.getMasteredCompetences())
                 str0 += c.id + ",";
@@ -1054,7 +1055,7 @@ namespace CompetenceAssessmentAssetNameSpace
             foreach (Competence c in possibleCompetencesToShiftMinOneLevel)
                 str += c.id + ",";
             CompetenceAssessmentHandler.Instance.loggingCA(str);
-            
+            */
 
             //upgrading->gaine a competence for sure?
             if (ulevel.minonecompetence && evidence && possibleCompetencesToShiftMinOneLevel.Count > 0)
@@ -1103,12 +1104,12 @@ namespace CompetenceAssessmentAssetNameSpace
                                 possibleCompetencesToShiftMaxOneLevel.Add(comp);
                 }
 
-                
+                /*
                 String str2 = "Possible competences to shift maxonelevel:  ";
                 foreach (Competence c in possibleCompetencesToShiftMaxOneLevel)
                     str2 += c.id + ",";
                 CompetenceAssessmentHandler.Instance.loggingCA(str2);
-                
+                */
 
                 //upgrading->gaine not more than one competence level
                 if (evidence && possibleCompetencesToShiftMaxOneLevel.Count > 0)
@@ -1126,7 +1127,7 @@ namespace CompetenceAssessmentAssetNameSpace
                 }
 
 
-                //downgrading->lose not more than one competence level
+                //downgrading->make sure to lose not more than one competence level
                 if ((!evidence) && possibleCompetencesToShiftMaxOneLevel.Count > 0)
                 {
                     double maxXiAllowedForUpdate = 0;
@@ -1142,6 +1143,7 @@ namespace CompetenceAssessmentAssetNameSpace
                 }
             }
 
+            //logging
             if (evidence && (xi0 != newXi0))
             {
                 CompetenceAssessmentHandler.Instance.loggingCA("xi0 changed from " + xi0 + " to " + newXi0 + " due to additional information.");

@@ -342,7 +342,7 @@ namespace CompetenceBasedAdaptionAssetNameSpace
         /// </summary>
         private void performTest2()
         {
-            List<String> userInputSimulation = new List<string>(new String[] {"s","s","s","f","s","s", "s", "s", "f", "f", "s", "s", "s", "s", "s", "s", "s", "e" });
+            List<String> userInputSimulation = new List<string>(new String[] {"s","s","s","f","s","f", "f", "s", "f", "f", "s", "s", "s", "s", "s", "s", "s", "e" });
 
             registerNewPlayer(getDMA().getDomainModel());
             GameSituationStructure gss = getGameSituationStructure();

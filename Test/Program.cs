@@ -48,6 +48,7 @@ namespace TestCompetence
             am.Bridge = new Bridge();
 
             DomainModelAsset dma = new DomainModelAsset();
+
             CompetenceAssessmentAsset caa = new CompetenceAssessmentAsset();
             CompetenceBasedAdaptionAsset cra = new CompetenceBasedAdaptionAsset();
 

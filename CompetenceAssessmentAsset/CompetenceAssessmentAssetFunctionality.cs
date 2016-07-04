@@ -272,23 +272,20 @@ namespace CompetenceAssessmentAssetNameSpace
 
         }
 
-        /*
         /// <summary>
-        /// Method for updating the competence state of a player.
+        /// Method for sending the current probabilities for possessing a competence to the tracker
         /// </summary>
-        /// 
-        /// <param name="playerId"> Player Id for the update - specifies for which player the competence state gets updated. </param>
-        /// <param name="compList"> List of Strings - each String describes a competence.  </param>
-        /// <param name="evidence"> Specifies if the evidences are speaking for or against the competence. </param>
-        /// 
-        internal void updateCompetenceState(List<String> compList, Boolean evidence)
+        internal void sendCompetenceStateToTracker()
         {
-            List<Boolean> evidenceList = new List<Boolean>();
-            foreach (String str in compList)
-                evidenceList.Add(evidence);
-            updateCompetenceState( compList, evidenceList);
+            loggingCA("Sending competence values to the tracker.");
+
+            CompetenceState cs =  getCompetenceState();
+            Dictionary<Competence,double> competenceValues =  cs.getCurrentValues();
+            foreach(Competence competence in competenceValues.Keys)
+            {
+                loggingCA(competence.id +": "+competenceValues[competence]);
+            }
         }
-        */
 
         /// <summary>
         /// Returns the competence state of the player.
@@ -820,23 +817,9 @@ namespace CompetenceAssessmentAssetNameSpace
                 cs.setCompetenceValue(comp, sum[comp.id] / compList.Count);
             }
 
-        }
+            CompetenceAssessmentHandler.Instance.sendCompetenceStateToTracker();
 
-        /*
-        /// <summary>
-        /// Method for updating a competence state with one evidences.
-        /// </summary>
-        /// 
-        /// <param name="cs"> Specifies competence state to update. </param>
-        /// <param name="comp"> Speciefies for which Competence evidence is observed. </param>
-        /// <param name="evidence"> Specifies if evidence is observed for (true) or against (false) possessing a competence. </param>
-        /// <param name="xi0List"> Algorithm parameter for updating competence probabilities. </param>
-        /// <param name="xi1List"> Algorithm parameter for updating competence probabilities. </param>
-        internal void updateCompetenceState(CompetenceState cs, String comp, Boolean evidence, List<double> xi0List, List<double> xi1List)
-        {
-            updateCompetenceState(cs, this.getCompetenceById(comp), evidence, xi0List, xi1List);
         }
-        */
 
         /// <summary>
         /// Method for updating a competence state with a set of evidences.
@@ -859,26 +842,6 @@ namespace CompetenceAssessmentAssetNameSpace
 
             updateCompetenceState(cs, cList, evidenceList, evidencePowers);
         }
-
-        /*
-        /// <summary>
-        /// Method for updating a competence state with one evidence.
-        /// </summary>
-        /// 
-        /// <param name="cs"> Specifies competence state to update. </param>
-        /// <param name="comp"> Speciefies for which Competence evidence is observed. </param>
-        /// <param name="evidence"> Specifies if evidence is observed for (true) or against (false) possessing a competence. </param>
-        /// <param name="xi0List"> Algorithm parameter for updating competence probabilities. </param>
-        /// <param name="xi1List"> Algorithm parameter for updating competence probabilities. </param>
-        internal void updateCompetenceState(CompetenceState cs, Competence comp, Boolean evidence, List<double> xi0List, List<double> xi1List)
-        {
-            List<Competence> compList = new List<Competence>();
-            compList.Add(comp);
-            List<Boolean> evidenceList = new List<Boolean>();
-            evidenceList.Add(evidence);
-            updateCompetenceState(cs, compList, evidenceList, xi0List, xi1List);
-        }
-        */
 
         /// <summary>
         /// Method for updating a competence state with one evidence.

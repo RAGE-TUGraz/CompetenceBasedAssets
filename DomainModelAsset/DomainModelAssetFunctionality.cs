@@ -138,6 +138,15 @@ namespace DomainModelAssetNameSpace
             return dm;
         }
 
+        /// <summary>
+        /// Method for setting the domain model
+        /// </summary>
+        /// <param name="dm"> The new doamin model</param>
+        internal void setDomainModel(DomainModel dm)
+        {
+            domainModel = dm;
+        }
+
         
         /// <summary>
         /// Method for storing a domain model.
@@ -190,10 +199,18 @@ namespace DomainModelAssetNameSpace
                     string body = dmas.Source;
                     WebServiceResponse wsr = new WebServiceResponse();
                     //currentPlayerId = playerId;
-                    iwr.WebServiceRequest("get", uri, headers, body, wsr);
-                    //currentPlayerId = null;
 
-                    return (domainModel);
+                    RequestSetttings rs = new RequestSetttings();
+                    rs.method = "get";
+                    rs.uri = uri;
+                    rs.requestHeaders = headers;
+                    rs.body = body;
+
+                    RequestResponse rr = new RequestResponse();
+
+                    iwr.WebServiceRequest(rs, out rr);
+
+                    return (this.getDMFromXmlString(rr.responsMessage));
                 }
                 else
                 {
@@ -269,7 +286,7 @@ namespace DomainModelAssetNameSpace
         {
             loggingDM("Domain model asset tests called: ");
             performTest1();
-            //performTest2();
+            performTest2();
             performTest3();
             loggingDM("Domain model asset tests finished. ");
         }
@@ -309,9 +326,9 @@ namespace DomainModelAssetNameSpace
         /// <summary>
         /// Loads web-domain model.
         /// </summary>
-        /*
         private void performTest2()
         {
+            loggingDM("DomainModelAsset: Starting Test 2");
             DomainModelAssetSettings oldDMAS = getDMA().getSettings();
             DomainModelAssetSettings dmas = new DomainModelAssetSettings();
             dmas.WebSource = true;
@@ -321,6 +338,7 @@ namespace DomainModelAssetNameSpace
             try
             {
                 DomainModel dm = getDMA().getDomainModel();
+                loggingDM(dm.toXmlString());
             }
             catch(Exception e)
             {
@@ -329,18 +347,20 @@ namespace DomainModelAssetNameSpace
             }
 
             getDMA().Settings = oldDMAS;
+            loggingDM("DomainModelAsset: Ending Test 2");
         }
-        */
+        
 
         /// <summary>
         /// Loading and printing local domain model
         /// </summary>
         private void performTest3()
         {
+            loggingDM("DomainModelAsset: Start Test 3");
             DomainModelAssetSettings oldDMAS = getDMA().getSettings();
             DomainModelAssetSettings dmas = new DomainModelAssetSettings();
             dmas.WebSource = false;
-            dmas.Source = "dmNew.xml";
+            dmas.Source = "dmOLD.xml";
             getDMA().Settings = dmas;
 
             try
@@ -350,11 +370,12 @@ namespace DomainModelAssetNameSpace
             }
             catch (Exception e)
             {
-                loggingDM("Loading of domain model 'dmNew.xml' not possible.");
+                loggingDM("Loading of domain model 'dmOLD.xml' not possible.");
                 loggingDM(e.Message);
             }
 
             getDMA().Settings = oldDMAS;
+            loggingDM("DomainModelAsset: End Test 3");
         }
 
         /// <summary>
@@ -485,10 +506,12 @@ namespace DomainModelAssetNameSpace
 
     }
 
+    
+
     /// <summary>
     /// Implementation of the WebServiceResponse-Interface for handling web requests.
     /// </summary>
-    public class WebServiceResponse : IWebServiceResponse
+    public class WebServiceResponse //: IWebServiceResponse
     {
         /// <summary>
         /// Describes behaviour in case the web request failed.
@@ -514,6 +537,8 @@ namespace DomainModelAssetNameSpace
             DomainModelHandler.Instance.storeDomainModel(DomainModelHandler.Instance.getDMFromXmlString(body));
         }
     }
+
+    
 
     /// <summary>
     /// Classes for Serializing/Deserializing Domainmodels (e.g. DM like http://css-kmi.tugraz.at:8080/compod/rest/getdomainmodel?id=isr2013)
@@ -1190,7 +1215,8 @@ namespace DomainModelAssetNameSpace
             DomainModelHandler.Instance.loggingDM("Printing out DM:");
             elements.print();
             relations.print();
-            updateLevels.print();
+            if(updateLevels != null)
+                updateLevels.print();
         }
 
         #region Methods

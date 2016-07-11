@@ -94,6 +94,7 @@ namespace DomainModelAssetNameSpace
             set
             {
                 settings = (value as DomainModelAssetSettings);
+                DomainModelHandler.Instance.setDomainModel(null);
             }
         }
 
@@ -111,6 +112,15 @@ namespace DomainModelAssetNameSpace
         public DomainModel getDomainModel()
         {
             return DomainModelHandler.Instance.getDomainModel();
+        }
+
+        /// <summary>
+        /// Method for setting the domain model
+        /// </summary>
+        /// <param name="dm"> The new doamin model</param>
+        public void setDomainModel(DomainModel dm)
+        {
+            DomainModelHandler.Instance.setDomainModel(dm);
         }
 
         /// <summary>

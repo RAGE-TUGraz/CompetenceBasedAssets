@@ -10,3 +10,5 @@ C:\Users\mmaurer\documents\visual studio 2015\Projects\A_Competences\CompetenceB
 C:\Users\mmaurer\documents\visual studio 2015\Projects\A_Competences\CompetenceBasedAdaptionAsset\obj\Debug\CompetenceBasedAdaptionAsset.csprojResolveAssemblyReference.cache
 C:\Users\mmaurer\documents\visual studio 2015\Projects\A_Competences\CompetenceBasedAdaptionAsset\obj\Debug\CompetenceRecommendationAsset.dll
 C:\Users\mmaurer\documents\visual studio 2015\Projects\A_Competences\CompetenceBasedAdaptionAsset\obj\Debug\CompetenceRecommendationAsset.pdb
+C:\Users\mmaurer\Documents\Visual Studio 2015\Projects\A_Competences\CompetenceBasedAdaptionAsset\bin\Debug\ModelAsset.dll
+C:\Users\mmaurer\Documents\Visual Studio 2015\Projects\A_Competences\CompetenceBasedAdaptionAsset\bin\Debug\ModelAsset.pdb

@@ -73,6 +73,10 @@ namespace CompetenceAssessmentAssetNameSpace
         /// </summary>
         private DomainModelAsset domainModelAsset = null;
 
+        /// <summary>
+        /// Instance of the game storage asset
+        /// </summary>
+        private GameStorageClientAsset gameStorage = null;
 
         /// <summary>
         /// Instance of the CompetenceAssessmentAsset
@@ -281,10 +285,37 @@ namespace CompetenceAssessmentAssetNameSpace
 
             CompetenceState cs =  getCompetenceState();
             Dictionary<Competence,double> competenceValues =  cs.getCurrentValues();
-            foreach(Competence competence in competenceValues.Keys)
+
+            //storing the data
+            GameStorageClientAsset storage = getGameStorageAsset();
+            foreach (Competence competence in competenceValues.Keys)
             {
-                loggingCA(competence.id +": "+competenceValues[competence]);
+                storage["competenceState"][competence.id].Value =  competenceValues[competence];
+                //loggingCA(competence.id +": "+ storage["competenceState"][competence.id].Value);
             }
+
+            //storing the updated data
+            storage.SaveData("competenceState", StorageLocations.Server, SerializingFormat.Xml);
+        }
+
+        /// <summary>
+        /// Method returning the client game storage asset
+        /// </summary>
+        /// <returns></returns>
+        internal GameStorageClientAsset getGameStorageAsset()
+        {
+            if(gameStorage == null)
+            {
+                gameStorage = new GameStorageClientAsset();
+                gameStorage.AddModel("competenceState");
+                CompetenceState cs = this.getCompetenceState();
+                foreach(Competence comp in cs.getCurrentValues().Keys)
+                {
+                    gameStorage["competenceState"].AddChild(comp.id, StorageLocations.Server);
+                    gameStorage["competenceState"][comp.id].Value = cs.getValue(comp);
+                }
+            }
+            return gameStorage;
         }
 
         /// <summary>
@@ -342,7 +373,9 @@ namespace CompetenceAssessmentAssetNameSpace
         private void performTest1()
         {
             loggingCA("Start Test 1");
+
             DomainModel dm = createExampleDomainModel();
+            getDMA().setDomainModel(dm);
             CompetenceStructure cst = createCompetenceStructure( dm);
             CompetenceState cs = createCompetenceState(cst);
             cs.print();
@@ -516,7 +549,7 @@ namespace CompetenceAssessmentAssetNameSpace
         }
 
         /// <summary>
-        /// Testing updates for game situations
+        /// Testing updates for activities
         /// </summary>
         private void performTest5()
         {
@@ -817,7 +850,7 @@ namespace CompetenceAssessmentAssetNameSpace
                 cs.setCompetenceValue(comp, sum[comp.id] / compList.Count);
             }
 
-            CompetenceAssessmentHandler.Instance.sendCompetenceStateToTracker();
+            //CompetenceAssessmentHandler.Instance.sendCompetenceStateToTracker();
 
         }
 
@@ -1661,17 +1694,26 @@ namespace CompetenceAssessmentAssetNameSpace
 
         internal UpdateLevelStorage(DomainModel dm)
         {
-            foreach(UpdateLevel ul in dm.updateLevels.updateLevelList)
+            if(dm.updateLevels != null && dm.updateLevels.updateLevelList != null)
             {
-                ULevel newLevel = new ULevel();
-                newLevel.maxonelevel = ul.maxonelevel.Equals("true") ? true : false;
-                newLevel.minonecompetence = ul.minonecompetence.Equals("true") ? true : false;
-                newLevel.xi = Double.Parse(ul.xi);
-                EvidencePower power = (ul.power.Equals("low")) ? EvidencePower.Low : (ul.power.Equals("medium")) ? EvidencePower.Medium : EvidencePower.High;
-                if (ul.direction.Equals("up"))
-                    up.Add(power, newLevel);
-                else if (ul.direction.Equals("down"))
-                    down.Add(power, newLevel);
+                foreach (UpdateLevel ul in dm.updateLevels.updateLevelList)
+                {
+                    ULevel newLevel = new ULevel();
+                    newLevel.maxonelevel = ul.maxonelevel.Equals("true") ? true : false;
+                    newLevel.minonecompetence = ul.minonecompetence.Equals("true") ? true : false;
+                    newLevel.xi = Double.Parse(ul.xi);
+                    EvidencePower power = (ul.power.Equals("low")) ? EvidencePower.Low : (ul.power.Equals("medium")) ? EvidencePower.Medium : EvidencePower.High;
+                    if (ul.direction.Equals("up"))
+                        up.Add(power, newLevel);
+                    else if (ul.direction.Equals("down"))
+                        down.Add(power, newLevel);
+                }
+
+            }
+            else
+            {
+                CompetenceAssessmentHandler.Instance.loggingCA("No update-levels specified for the competence assessment!");
+                throw new Exception("No update-levels specified for the competence assessment!");
             }
         }
 

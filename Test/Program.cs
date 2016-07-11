@@ -146,8 +146,9 @@ namespace TestCompetence
         }
 
         #endregion ILog
+        
         #region IWebServiceRequest
-
+        /*
         public void WebServiceRequest(string method, Uri uri, Dictionary<string, string> headers, string body, IWebServiceResponse response)
         {
             string url = uri.AbsoluteUri;
@@ -180,6 +181,55 @@ namespace TestCompetence
             }
         }
 
+        */
+
+        public void WebServiceRequest(RequestSetttings requestSettings, out RequestResponse requestResponse)
+        {
+            string url = requestSettings.uri.AbsoluteUri;
+
+            if (string.Equals(requestSettings.method, "get", StringComparison.CurrentCultureIgnoreCase))
+            {
+                try
+                {
+                    HttpWebRequest request = (HttpWebRequest)WebRequest.Create(requestSettings.uri);
+                    HttpWebResponse webResponse = (HttpWebResponse)request.GetResponse();
+                    Stream resStream = webResponse.GetResponseStream();
+
+                    Dictionary<string, string> responseHeader = new Dictionary<string, string>();
+                    foreach (string key in webResponse.Headers.AllKeys)
+                        responseHeader.Add(key, webResponse.Headers[key]);
+
+                    StreamReader reader = new StreamReader(resStream);
+                    string dm = reader.ReadToEnd();
+
+                    requestResponse = new RequestResponse();
+                    requestResponse.method = requestSettings.method;
+                    requestResponse.requestHeaders = requestSettings.requestHeaders;
+                    requestResponse.responseCode = (int)webResponse.StatusCode;
+                    requestResponse.responseHeaders = responseHeader;
+                    requestResponse.responsMessage = dm;
+                    requestResponse.uri = requestSettings.uri;
+                }
+                catch (Exception e)
+                {
+                    requestResponse = new RequestResponse();
+                    requestResponse.method = requestSettings.method;
+                    requestResponse.requestHeaders = requestSettings.requestHeaders;
+                    requestResponse.responsMessage = "FAIL";
+                    requestResponse.uri = requestSettings.uri;
+                }
+            }
+            else
+            {
+                requestResponse = new RequestResponse();
+                requestResponse.method = requestSettings.method;
+                requestResponse.requestHeaders = requestSettings.requestHeaders;
+                requestResponse.responsMessage = "FAIL";
+                requestResponse.uri = requestSettings.uri;
+            }
+        }
+
         #endregion IWebServiceRequest
+
     }
 }

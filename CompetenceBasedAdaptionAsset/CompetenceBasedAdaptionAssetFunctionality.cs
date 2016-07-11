@@ -333,8 +333,10 @@ namespace CompetenceBasedAdaptionAssetNameSpace
         /// </summary>
         private void performTest1()
         {
+            loggingPRA("Start Test 1");
             GameSituationStructure gss = createExampleGSS();
             gss.diagnosticPrint();
+            loggingPRA("End Test 1");
         }
 
         /// <summary>
@@ -342,6 +344,9 @@ namespace CompetenceBasedAdaptionAssetNameSpace
         /// </summary>
         private void performTest2()
         {
+            loggingPRA("Start Test 2");
+            
+
             List<String> userInputSimulation = new List<string>(new String[] {"s","s","s","f","s","f", "f", "s", "f", "f", "s", "s", "s", "s", "s", "s", "s", "e" });
 
             registerNewPlayer(getDMA().getDomainModel());
@@ -385,6 +390,7 @@ namespace CompetenceBasedAdaptionAssetNameSpace
                 userInputSimulation.RemoveAt(0);
             }
             loggingPRA("Games end reached!");
+            loggingPRA("End Test 2");
         }
 
         /// <summary>

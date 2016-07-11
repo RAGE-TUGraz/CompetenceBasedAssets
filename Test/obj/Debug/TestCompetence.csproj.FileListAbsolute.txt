@@ -12,3 +12,5 @@ C:\Users\mmaurer\documents\visual studio 2015\Projects\A_Competences\Test\obj\De
 C:\Users\mmaurer\documents\visual studio 2015\Projects\A_Competences\Test\obj\Debug\Test.pdb
 C:\Users\mmaurer\documents\visual studio 2015\Projects\A_Competences\Test\bin\Debug\RageAssetManager.dll
 C:\Users\mmaurer\documents\visual studio 2015\Projects\A_Competences\Test\bin\Debug\RageAssetManager.xml
+C:\Users\mmaurer\Documents\Visual Studio 2015\Projects\A_Competences\Test\bin\Debug\ModelAsset.dll
+C:\Users\mmaurer\Documents\Visual Studio 2015\Projects\A_Competences\Test\bin\Debug\ModelAsset.pdb

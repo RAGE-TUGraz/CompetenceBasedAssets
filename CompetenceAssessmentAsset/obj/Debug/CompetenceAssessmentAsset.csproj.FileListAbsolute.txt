@@ -10,3 +10,5 @@ C:\Users\mmaurer\documents\visual studio 2015\Projects\A_Competences\CompetenceA
 C:\Users\mmaurer\documents\visual studio 2015\Projects\A_Competences\CompetenceAssessmentAsset\bin\Debug\RageAssetManager.xml
 C:\Users\mmaurer\Documents\Visual Studio 2015\Projects\A_Competences\CompetenceAssessmentAsset\bin\Debug\ModelAsset.dll
 C:\Users\mmaurer\Documents\Visual Studio 2015\Projects\A_Competences\CompetenceAssessmentAsset\bin\Debug\ModelAsset.pdb
+C:\Users\mmaurer\Documents\Visual Studio 2015\Projects\A_Competences\CompetenceAssessmentAsset\bin\Debug\TrackerAsset.dll
+C:\Users\mmaurer\Documents\Visual Studio 2015\Projects\A_Competences\CompetenceAssessmentAsset\bin\Debug\TrackerAsset.pdb

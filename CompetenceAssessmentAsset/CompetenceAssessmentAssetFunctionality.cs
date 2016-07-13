@@ -230,6 +230,9 @@ namespace CompetenceAssessmentAssetNameSpace
         internal void registerNewPlayer(DomainModel dm)
         {
             CompetenceStructure cstr = createCompetenceStructure(dm);
+
+            gameStorage = null;
+
             createCompetenceState(cstr);
             this.updateLevelStorage = new UpdateLevelStorage(dm);
             this.gameSituationMapping = new GameSituationMapping(dm);
@@ -279,9 +282,11 @@ namespace CompetenceAssessmentAssetNameSpace
         /// <summary>
         /// Method for sending the current probabilities for possessing a competence to the tracker
         /// </summary>
-        internal void sendCompetenceStateToTracker()
+        internal void storeCompetenceStateToGameStorageServer()
         {
-            loggingCA("Sending competence values to the tracker.");
+            CompetenceAssessmentAssetSettings caas = getCAA().getSettings();
+            String model = "CompetenceAssessmentAsset&" + caas.GameId + competenceStructure.domainModelId;
+            
 
             CompetenceState cs =  getCompetenceState();
             Dictionary<Competence,double> competenceValues =  cs.getCurrentValues();
@@ -289,13 +294,68 @@ namespace CompetenceAssessmentAssetNameSpace
             //storing the data
             GameStorageClientAsset storage = getGameStorageAsset();
             foreach (Competence competence in competenceValues.Keys)
+                storage[model][competence.id].Value =  competenceValues[competence];
+            
+            //storing the updated data
+            if (storage.CheckHealth())
             {
-                storage["competenceState"][competence.id].Value =  competenceValues[competence];
-                //loggingCA(competence.id +": "+ storage["competenceState"][competence.id].Value);
+                if (storage.Login(caas.GameStorageUsername, caas.GameStoragePassword))
+                    loggingCA("logged in - game storage");
+                else
+                    loggingCA("Login failed - game storage");
+            }
+            if (storage.Connected)
+                storage.SaveData(model, StorageLocations.Server, SerializingFormat.Json);
+            else
+            {
+                loggingCA("Not connected to game storage.");
+            }
+            
+        }
+
+        /// <summary>
+        /// Method for loading the competence state.
+        /// </summary>
+        internal void loadCompetenceStateFromGameStorageServer()
+        {
+            GameStorageClientAsset storage = getGameStorageAsset();
+
+            CompetenceAssessmentAssetSettings caas = getCAA().getSettings();
+            String model = "CompetenceAssessmentAsset&" + caas.GameId + competenceStructure.domainModelId;
+
+            //loading data from the server
+            if (storage.CheckHealth())
+            {
+                loggingCA(storage.Health);
+
+                if (storage.Login(caas.GameStorageUsername, caas.GameStoragePassword))
+                {
+                    loggingCA("Logged in - game storage");
+                }
             }
 
-            //storing the updated data
-            storage.SaveData("competenceState", StorageLocations.Server, SerializingFormat.Xml);
+            if (storage.Connected)
+            {
+
+                storage.LoadData(model, StorageLocations.Server, SerializingFormat.Json);
+
+                //storing data in data structure
+                CompetenceState cs = getCompetenceState();
+                Dictionary<Competence, double> competenceValues = cs.getCurrentValues();
+
+
+                foreach (Node node in storage[model].Children)
+                    cs.setCompetenceValue(competenceStructure.getCompetenceById(node.Name), (double)node.Value);
+                
+
+                loggingCA("Competence values restored from server.");
+            }
+            else
+            {
+                loggingCA("The game storage is missing, loading of competence values from server not possible.");
+                throw new Exception("Game storage missing!");
+            }
+            
         }
 
         /// <summary>
@@ -307,12 +367,60 @@ namespace CompetenceAssessmentAssetNameSpace
             if(gameStorage == null)
             {
                 gameStorage = new GameStorageClientAsset();
-                gameStorage.AddModel("competenceState");
-                CompetenceState cs = this.getCompetenceState();
-                foreach(Competence comp in cs.getCurrentValues().Keys)
+                gameStorage.Bridge = AssetManager.Instance.Bridge;
+
+
+                //set server data
+                GameStorageClientAssetSettings gscas = new GameStorageClientAssetSettings();
+                CompetenceAssessmentAssetSettings caas = getCAA().getSettings();
+                gscas.A2Port = caas.GameStorageA2Port;
+                gscas.BasePath = caas.GameStorageBasePath;
+                gscas.Host = caas.GameStorageHost;
+                gscas.Port = caas.GameStoragePort;
+                gscas.Secure = caas.GameStorageSecure;
+                gscas.UserToken = caas.GameStorageUserToken;
+                gameStorage.Settings = gscas;
+
+                if (competenceStructure == null)
+                    getCAA().getCompetenceState();
+
+                //try to load model, if possible -> load competence state, else create model and store model + competence state
+                String model = "CompetenceAssessmentAsset&"+caas.GameId + competenceStructure.domainModelId;
+                
+                //loading data from the server
+                if (gameStorage.CheckHealth())
                 {
-                    gameStorage["competenceState"].AddChild(comp.id, StorageLocations.Server);
-                    gameStorage["competenceState"][comp.id].Value = cs.getValue(comp);
+                    loggingCA(gameStorage.Health);
+
+                    if (gameStorage.Login(caas.GameStorageUsername, caas.GameStoragePassword))
+                    {
+                        loggingCA("Logged in - game storage");
+                    }
+                }
+
+                Boolean isStructureRestored = false;
+
+                if (gameStorage.Connected)
+                {
+                    gameStorage.AddModel(model);
+                    isStructureRestored =  gameStorage.LoadStructure(model, StorageLocations.Server);
+
+                    if (isStructureRestored)
+                    {
+                        loggingCA("Structure was restored from game storage server.");
+                        loadCompetenceStateFromGameStorageServer();
+                    }
+                    else
+                    {
+                        loggingCA("Structure could not be restored from game storage server - creating new one.");
+                        //gameStorage.AddModel(model);
+                        CompetenceState cs = this.getCompetenceState();
+                        foreach (Competence comp in cs.getCurrentValues().Keys)
+                            gameStorage[model].AddChild(comp.id, StorageLocations.Server).Value = cs.getValue(comp);
+
+                        gameStorage.SaveStructure(model, StorageLocations.Server);
+                        gameStorage.SaveData(model, StorageLocations.Server, SerializingFormat.Json);
+                    }
                 }
             }
             return gameStorage;
@@ -358,11 +466,15 @@ namespace CompetenceAssessmentAssetNameSpace
         public void performAllTests()
         {
             loggingCA("Competence assessment asset tests called: ");
+            
             performTest1();
             performTest2();
             performTest3();
             performTest4();
             performTest5();
+            performTest6();
+            performTest7();
+            performTest8();
             loggingCA("Competence assessment asset tests finished. ");
         }
 
@@ -572,6 +684,143 @@ namespace CompetenceAssessmentAssetNameSpace
         }
 
         /// <summary>
+        /// Testing the game storage asset server features
+        /// </summary>
+        private void performTest6()
+        {
+            loggingCA("Start Test 6");
+
+            registerNewPlayer(createExampleDomainModel());
+            loadCompetenceStateFromGameStorageServer();
+            loggingCA("Starting with competence state:");
+            getCompetenceState().print();
+            getCAA().updateCompetenceStateAccordingToGamesituation("gs2", true);
+            loggingCA("Before storing competences state:");
+            getCompetenceState().print();
+            storeCompetenceStateToGameStorageServer();
+            getCAA().updateCompetenceStateAccordingToGamesituation("gs10", true);
+            loggingCA("Before loading competence state:");
+            getCompetenceState().print();
+            loadCompetenceStateFromGameStorageServer();
+            loggingCA("After loading competence state:");
+            getCompetenceState().print();
+            
+            loggingCA("End Test 6");
+        }
+
+        private void performTest7()
+        {
+            loggingCA("Start Test 7");
+
+            String model = "test&uzhguZkr&We1";
+
+            //setting up the game storage
+            gameStorage = new GameStorageClientAsset();
+            gameStorage.Bridge = AssetManager.Instance.Bridge;
+            GameStorageClientAssetSettings gscas = new GameStorageClientAssetSettings();
+            gscas.A2Port = 3000;
+            gscas.Port = 3400;
+            gscas.Host = "192.168.222.166";
+            gscas.BasePath = "/api/";
+            gscas.Secure = false;
+            //gscas.UserToken = "a";
+            gameStorage.Settings = gscas;
+
+            gameStorage.AddModel(model);
+            gameStorage[model].AddChild("t1", StorageLocations.Server);
+            gameStorage[model]["t1"].Value = 0.2;
+            loggingCA("stored data:" + gameStorage[model]["t1"].Value);
+
+
+            //storing the data
+            if (gameStorage.CheckHealth())
+            {
+                loggingCA(gameStorage.Health);
+
+                if(gameStorage.Login("student", "student"))
+                {
+                    loggingCA("Logged in");
+                }
+            }
+                
+
+            if (gameStorage.Connected)
+            {
+                gameStorage.SaveStructure(model, StorageLocations.Server);
+                gameStorage.SaveData(model, StorageLocations.Server, SerializingFormat.Json);
+            }
+
+            gameStorage[model].Clear();
+
+            //loading data from the server
+            if (gameStorage.CheckHealth())
+            {
+                loggingCA(gameStorage.Health);
+
+                if (gameStorage.Login("student", "student"))
+                {
+                    loggingCA("Logged in");
+                }
+            }
+            if (gameStorage.Connected)
+            {
+                gameStorage.LoadStructure(model, StorageLocations.Server);
+
+                gameStorage.LoadData(model, StorageLocations.Server, SerializingFormat.Json);
+
+                foreach (Node node in gameStorage[model].Children)
+                {
+                    Console.WriteLine("{0} {1} = {2}", node.Value.GetType().Name, node.Name, node.Value);
+                }
+            }
+
+            //prompting loaded data
+            loggingCA("loaded data:" + gameStorage[model]["t1"].Value);
+
+            loggingCA("End Test 7");
+        }
+
+        private void performTest8()
+        {
+            loggingCA("Start Test 8");
+
+            TrackerAsset ta = TrackerAsset.Instance;
+            TrackerAssetSettings tas = new TrackerAssetSettings();
+            tas.BasePath = "/api/";
+            tas.Host = "192.168.222.166";
+            tas.TrackingCode = "5784a7c1e8c85f6e00fab465gdj3utijicin3ik9";  //from the game
+            tas.UserToken = "a";
+            tas.Secure = false;
+            tas.Port = 3000;
+            tas.StorageType = TrackerAsset.StorageTypes.net;
+            tas.TraceFormat = TrackerAsset.TraceFormats.json;
+            ta.Settings = tas;
+
+            if (ta.CheckHealth())
+            {
+                loggingCA(ta.Health);
+                if(ta.Login("student", "student"))
+                {
+                    loggingCA("logged in - tracker");
+                }
+            }
+
+            if (ta.Connected)
+            {
+                ta.Start();
+                ta.setVar("C1","0.3");
+                ta.Flush();
+            }
+            else
+            {
+                loggingCA("Not connected to tracker.");
+            }
+          
+
+            loggingCA("End Test 8");
+        }
+
+        /// <summary>
         /// Method creating an example domain model
         /// </summary>
         /// <returns></returns>
@@ -731,7 +980,7 @@ namespace CompetenceAssessmentAssetNameSpace
         #region Fields 
 
         /// <summary>
-        /// Domainmodel-ID
+        /// Domainmodel-ID, consistent of concatenation of all competences in lexicographic order
         /// </summary>
         internal String domainModelId;
 
@@ -757,7 +1006,6 @@ namespace CompetenceAssessmentAssetNameSpace
         /// <param name="dm"> DomainModel which is used to create the CompetenceStructure. </param>
         internal CompetenceStructure(DomainModel dm)
         {
-            //domainModelId = dm.metadata.id;
 
             //adding competences
             foreach (CompetenceDesc comd in dm.elements.competences.competenceList)
@@ -775,7 +1023,14 @@ namespace CompetenceAssessmentAssetNameSpace
                 }
             }
 
+            List<String> competenceNames = new List<string>();
+            foreach (Competence comp in this.competences)
+                competenceNames.Add(comp.id);
+            competenceNames.Sort();
 
+            domainModelId = "";
+            foreach (String id in competenceNames)
+                domainModelId +="&"+id;
         }
 
         #endregion Constructors
@@ -850,7 +1105,7 @@ namespace CompetenceAssessmentAssetNameSpace
                 cs.setCompetenceValue(comp, sum[comp.id] / compList.Count);
             }
 
-            //CompetenceAssessmentHandler.Instance.sendCompetenceStateToTracker();
+            CompetenceAssessmentHandler.Instance.storeCompetenceStateToGameStorageServer();
 
         }
 

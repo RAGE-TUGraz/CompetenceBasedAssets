@@ -41,6 +41,9 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml" />
+    <Reference Include="TrackerAsset">
+      <HintPath>..\..\..\..\..\Desktop\ClientSideTrackerAsset-master\bin\Debug\TrackerAsset.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CompetenceAssessmentAsset.cs" />

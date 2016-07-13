@@ -50,72 +50,86 @@ namespace CompetenceAssessmentAssetNameSpace
         public CompetenceAssessmentAssetSettings()
             : base()
         {
-            // Set Default values here.
-            TestProperty = "Hello Default World";
-            TestList = new String[] { "Red", "Green", "Blue" };
-            TestPrivate = true;
+            GameId = "notSpecified";
+            GameStorageUsername = "student";
+            GameStoragePassword = "student";
+            GameStorageA2Port = 3000;
+            GameStoragePort = 3400;
+            GameStorageHost = "192.168.222.166";
+            GameStorageBasePath = "/api/";
+            GameStorageSecure = false;
+            GameStorageUserToken = "a";
+
         }
 
         #endregion Constructors
 
         #region Properties
 
-        /// <summary>
-        /// Gets or sets the test property.
-        /// </summary>
-        ///
-        /// <value>
-        /// The test property.
-        /// </value>
         [XmlElement()]
-        public String TestProperty
+        public String GameStorageUsername
         {
             get;
             set;
         }
 
-        /// <summary>
-        /// Gets the string[].
-        /// </summary>
-        ///
-        /// <value>
-        /// .
-        /// </value>
-        [XmlArray()]
-        [XmlArrayItem("ListItem")]
-        public String[] TestList
+        [XmlElement()]
+        public String GameStoragePassword
         {
             get;
             set;
         }
 
-        /// <summary>
-        /// Gets a value indicating whether the test read only.
-        /// </summary>
-        ///
-        /// <value>
-        /// true if test read only, false if not.
-        /// </value>
-        public Boolean TestReadOnly
-        {
-            get
-            {
-                return true;
-            }
-        }
-
-        /// <summary>
-        /// Gets a value indicating whether the test private.
-        /// </summary>
-        ///
-        /// <value>
-        /// true if test private only, false if not.
-        /// </value>
-        public Boolean TestPrivate
+        [XmlElement()]
+        public int GameStorageA2Port
         {
             get;
-            private set;
+            set;
         }
+
+        [XmlElement()]
+        public int GameStoragePort
+        {
+            get;
+            set;
+        }
+
+        [XmlElement()]
+        public String GameStorageHost
+        {
+            get;
+            set;
+        }
+
+        [XmlElement()]
+        public String GameStorageBasePath
+        {
+            get;
+            set;
+        }
+
+        [XmlElement()]
+        public Boolean GameStorageSecure
+        {
+            get;
+            set;
+        }
+
+        [XmlElement()]
+        public String GameStorageUserToken
+        {
+            get;
+            set;
+        }
+
+        [XmlElement()]
+        public String GameId
+        {
+            get;
+            set;
+        }
+
+
 
         #endregion Properties
     }

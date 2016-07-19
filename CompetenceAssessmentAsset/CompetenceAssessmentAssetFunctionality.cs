@@ -74,11 +74,6 @@ namespace CompetenceAssessmentAssetNameSpace
         private DomainModelAsset domainModelAsset = null;
 
         /// <summary>
-        /// If true, gamestorage stores data to the server
-        /// </summary>
-        private Boolean storageLocationGameStorageServer = false;
-
-        /// <summary>
         /// Instance of the game storage asset
         /// </summary>
         private GameStorageClientAsset gameStorage = null;
@@ -302,26 +297,9 @@ namespace CompetenceAssessmentAssetNameSpace
                 storage[model][competence.id].Value =  competenceValues[competence];
 
             //storing the updated data
-            if (storageLocationGameStorageServer)
-            {
-                if (storage.CheckHealth())
-                {
-                    if (storage.Login(caas.GameStorageUsername, caas.GameStoragePassword))
-                        loggingCA("logged in - game storage");
-                    else
-                        loggingCA("Login failed - game storage");
-                }
-                if (storage.Connected)
-                    storage.SaveData(model, StorageLocations.Server, SerializingFormat.Json);
-                else
-                {
-                    loggingCA("Not connected to game storage.");
-                }
-            }
-            else
-            {
-                storage.SaveData(model, StorageLocations.Local, SerializingFormat.Json);
-            }
+            storage.SaveData(model, StorageLocations.Local, SerializingFormat.Json);
+            loggingCA("Competencestate stored locally.");
+            
             
         }
 
@@ -335,56 +313,20 @@ namespace CompetenceAssessmentAssetNameSpace
             CompetenceAssessmentAssetSettings caas = getCAA().getSettings();
             String model = "CompetenceAssessmentAsset&" + caas.GameId + competenceStructure.domainModelId;
 
-            if (storageLocationGameStorageServer)
-            {
-                //loading data from the server
-                if (storage.CheckHealth())
-                {
-                    loggingCA(storage.Health);
 
-                    if (storage.Login(caas.GameStorageUsername, caas.GameStoragePassword))
-                    {
-                        loggingCA("Logged in - game storage");
-                    }
-                }
+            storage.LoadData(model, StorageLocations.Local, SerializingFormat.Json);
 
-                if (storage.Connected)
-                {
-
-                    storage.LoadData(model, StorageLocations.Server, SerializingFormat.Json);
-
-                    //storing data in data structure
-                    CompetenceState cs = getCompetenceState();
-                    Dictionary<Competence, double> competenceValues = cs.getCurrentValues();
+            //storing data in data structure
+            CompetenceState cs = getCompetenceState();
+            Dictionary<Competence, double> competenceValues = cs.getCurrentValues();
 
 
-                    foreach (Node node in storage[model].Children)
-                        cs.setCompetenceValue(competenceStructure.getCompetenceById(node.Name), (double)node.Value);
+            foreach (Node node in storage[model].Children)
+                cs.setCompetenceValue(competenceStructure.getCompetenceById(node.Name), (double)node.Value);
 
 
-                    loggingCA("Competence values restored from server.");
-                }
-                else
-                {
-                    loggingCA("The game storage is missing, loading of competence values from server not possible.");
-                    throw new Exception("Game storage missing!");
-                }
-            }
-            else
-            {
-                storage.LoadData(model, StorageLocations.Local, SerializingFormat.Json);
-
-                //storing data in data structure
-                CompetenceState cs = getCompetenceState();
-                Dictionary<Competence, double> competenceValues = cs.getCurrentValues();
-
-
-                foreach (Node node in storage[model].Children)
-                    cs.setCompetenceValue(competenceStructure.getCompetenceById(node.Name), (double)node.Value);
-
-
-                loggingCA("Competence values restored from local file.");
-            }
+            loggingCA("Competence values restored from local file.");
+            
 
             
         }
@@ -403,22 +345,8 @@ namespace CompetenceAssessmentAssetNameSpace
                 //set server data
                 GameStorageClientAssetSettings gscas = new GameStorageClientAssetSettings();
                 CompetenceAssessmentAssetSettings caas = getCAA().getSettings();
-                StorageLocations storageLocation;
-                if (storageLocationGameStorageServer)
-                {
-                    gscas.A2Port = caas.GameStorageA2Port;
-                    gscas.BasePath = caas.GameStorageBasePath;
-                    gscas.Host = caas.GameStorageHost;
-                    gscas.Port = caas.GameStoragePort;
-                    gscas.Secure = caas.GameStorageSecure;
-                    gscas.UserToken = caas.GameStorageUserToken;
-                    gameStorage.Settings = gscas;
-                    storageLocation = StorageLocations.Server;
-                }
-                else
-                {
-                    storageLocation = StorageLocations.Local;
-                }
+                StorageLocations storageLocation = StorageLocations.Local;
+                
 
                 if (competenceStructure == null)
                     getCAA().getCompetenceState();
@@ -426,63 +354,24 @@ namespace CompetenceAssessmentAssetNameSpace
                 //try to load model, if possible -> load competence state, else create model and store model + competence state
                 String model = "CompetenceAssessmentAsset&"+caas.GameId + competenceStructure.domainModelId;
 
-                if (storageLocationGameStorageServer)
+                gameStorage.AddModel(model);
+                Boolean isStructureRestored = gameStorage.LoadStructure(model, storageLocation);
+                if (isStructureRestored)
                 {
-                    //loading data from the server
-                    if (gameStorage.CheckHealth())
-                    {
-                        loggingCA(gameStorage.Health);
-
-                        if (gameStorage.Login(caas.GameStorageUsername, caas.GameStoragePassword))
-                        {
-                            loggingCA("Logged in - game storage");
-                        }
-                    }
-
-                    Boolean isStructureRestored = false;
-
-                    if (gameStorage.Connected)
-                    {
-                        gameStorage.AddModel(model);
-                        isStructureRestored = gameStorage.LoadStructure(model, storageLocation);
-
-                        if (isStructureRestored)
-                        {
-                            loggingCA("Structure was restored from game storage server.");
-                            loadCompetenceStateFromGameStorage();
-                        }
-                        else
-                        {
-                            loggingCA("Structure could not be restored from game storage server - creating new one.");
-                            CompetenceState cs = this.getCompetenceState();
-                            foreach (Competence comp in cs.getCurrentValues().Keys)
-                                gameStorage[model].AddChild(comp.id, storageLocation).Value = cs.getValue(comp);
-
-                            gameStorage.SaveStructure(model, storageLocation);
-                            gameStorage.SaveData(model, storageLocation, SerializingFormat.Json);
-                        }
-                    }
+                    loggingCA("Structure was restored from local file.");
+                    loadCompetenceStateFromGameStorage();
                 }
                 else
                 {
-                    gameStorage.AddModel(model);
-                    Boolean isStructureRestored = gameStorage.LoadStructure(model, storageLocation);
-                    if (isStructureRestored)
-                    {
-                        loggingCA("Structure was restored from local file.");
-                        loadCompetenceStateFromGameStorage();
-                    }
-                    else
-                    {
-                        loggingCA("Structure could not be restored from local file - creating new one.");
-                        CompetenceState cs = this.getCompetenceState();
-                        foreach (Competence comp in cs.getCurrentValues().Keys)
-                            gameStorage[model].AddChild(comp.id, storageLocation).Value = cs.getValue(comp);
+                    loggingCA("Structure could not be restored from local file - creating new one.");
+                    CompetenceState cs = this.getCompetenceState();
+                    foreach (Competence comp in cs.getCurrentValues().Keys)
+                        gameStorage[model].AddChild(comp.id, storageLocation).Value = cs.getValue(comp);
 
-                        gameStorage.SaveStructure(model, storageLocation);
-                        gameStorage.SaveData(model, storageLocation, SerializingFormat.Json);
-                    }
+                    gameStorage.SaveStructure(model, storageLocation);
+                    gameStorage.SaveData(model, storageLocation, SerializingFormat.Json);
                 }
+                
 
             }
             return gameStorage;

@@ -74,6 +74,11 @@ namespace CompetenceAssessmentAssetNameSpace
         private DomainModelAsset domainModelAsset = null;
 
         /// <summary>
+        /// Instance of the tracker asset
+        /// </summary>
+        private TrackerAsset tracker = null;
+
+        /// <summary>
         /// Instance of the game storage asset
         /// </summary>
         private GameStorageClientAsset gameStorage = null;
@@ -285,7 +290,7 @@ namespace CompetenceAssessmentAssetNameSpace
         internal void storeCompetenceStateToGameStorage()
         {
             CompetenceAssessmentAssetSettings caas = getCAA().getSettings();
-            String model = "CompetenceAssessmentAsset&" + caas.GameId + competenceStructure.domainModelId;
+            String model = "CompetenceAssessmentAsset" + competenceStructure.domainModelId;
             
 
             CompetenceState cs =  getCompetenceState();
@@ -299,8 +304,9 @@ namespace CompetenceAssessmentAssetNameSpace
             //storing the updated data
             storage.SaveData(model, StorageLocations.Local, SerializingFormat.Json);
             loggingCA("Competencestate stored locally.");
-            
-            
+
+            //send data to the tracker
+            sendCompetenceValuesToTracker();
         }
 
         /// <summary>
@@ -311,7 +317,7 @@ namespace CompetenceAssessmentAssetNameSpace
             GameStorageClientAsset storage = getGameStorageAsset();
 
             CompetenceAssessmentAssetSettings caas = getCAA().getSettings();
-            String model = "CompetenceAssessmentAsset&" + caas.GameId + competenceStructure.domainModelId;
+            String model = "CompetenceAssessmentAsset" +  competenceStructure.domainModelId;
 
 
             storage.LoadData(model, StorageLocations.Local, SerializingFormat.Json);
@@ -344,7 +350,6 @@ namespace CompetenceAssessmentAssetNameSpace
 
                 //set server data
                 GameStorageClientAssetSettings gscas = new GameStorageClientAssetSettings();
-                CompetenceAssessmentAssetSettings caas = getCAA().getSettings();
                 StorageLocations storageLocation = StorageLocations.Local;
                 
 
@@ -352,7 +357,7 @@ namespace CompetenceAssessmentAssetNameSpace
                     getCAA().getCompetenceState();
 
                 //try to load model, if possible -> load competence state, else create model and store model + competence state
-                String model = "CompetenceAssessmentAsset&"+caas.GameId + competenceStructure.domainModelId;
+                String model = "CompetenceAssessmentAsset"+ competenceStructure.domainModelId;
 
                 gameStorage.AddModel(model);
                 Boolean isStructureRestored = gameStorage.LoadStructure(model, storageLocation);
@@ -375,6 +380,71 @@ namespace CompetenceAssessmentAssetNameSpace
 
             }
             return gameStorage;
+        }
+
+        /// <summary>
+        /// Method for sending the competence state to the tracker
+        /// </summary>
+        internal void sendCompetenceValuesToTracker()
+        {
+            //get the tracker
+            if(tracker == null)
+            {
+                if (AssetManager.Instance.findAssetsByClass("TrackerAsset").Count >= 1)
+                {
+                    tracker = (TrackerAsset)AssetManager.Instance.findAssetsByClass("TrackerAsset")[0];
+                    loggingCA("Found tracker for tracking competence values!");
+                }
+                else
+                {
+                    loggingCA("No tracker implemented - creating new one");
+                    tracker = TrackerAsset.Instance;
+                    TrackerAssetSettings tas = new TrackerAssetSettings();
+                    tas.BasePath = "/api/";
+                    tas.Host = "192.168.222.166";
+                    tas.TrackingCode = "5784a7c1e8c85f6e00fab465gdj3utijicin3ik9"; 
+                    tas.Secure = false;
+                    tas.Port = 3000;
+                    tas.StorageType = TrackerAsset.StorageTypes.net;
+                    tas.TraceFormat = TrackerAsset.TraceFormats.json;
+                    tracker.Settings = tas;
+                    /*
+                    loggingCA("No tracker implemented - competence state is not send to the server");
+                    return;
+                    */
+                    /*
+                    loggingCA("No tracker implemented - competence state is not send to the server - tracks are stored local!");
+                    TrackerAsset ta = TrackerAsset.Instance;
+                    TrackerAssetSettings tas = new TrackerAssetSettings();
+                    tas.StorageType = TrackerAsset.StorageTypes.local;
+                    tas.TraceFormat = TrackerAsset.TraceFormats.json;
+                    ta.Settings = tas;
+                    */
+                }
+            }
+
+            if (tracker.CheckHealth())
+            {
+                loggingCA(tracker.Health);
+                if (tracker.Login("student", "student"))
+                {
+                    loggingCA("logged in - tracker");
+                }
+            }
+
+            if (tracker.Connected)
+            {
+                tracker.Start();
+                Dictionary<Competence, Double> cs = getCompetenceState().getCurrentValues();
+                foreach(Competence competence in cs.Keys)
+                    tracker.setVar(competence.id, cs[competence].ToString());
+                tracker.Completable.Completed("CompetenceAssessmentAsset");
+                tracker.Flush();
+            }
+            else
+            {
+                loggingCA("Not connected to tracker.");
+            }
         }
 
         /// <summary>

@@ -50,16 +50,8 @@ namespace CompetenceAssessmentAssetNameSpace
         public CompetenceAssessmentAssetSettings()
             : base()
         {
-            GameId = "notSpecified";
-            GameStorageUsername = "student";
-            GameStoragePassword = "student";
-            GameStorageA2Port = 3000;
-            GameStoragePort = 3400;
-            GameStorageHost = "192.168.222.166";
-            GameStorageBasePath = "/api/";
-            GameStorageSecure = false;
-            GameStorageUserToken = "a";
-
+            Username = "student";
+            Password = "student";
         }
 
         #endregion Constructors
@@ -67,70 +59,21 @@ namespace CompetenceAssessmentAssetNameSpace
         #region Properties
 
         [XmlElement()]
-        public String GameStorageUsername
+        public String Username
         {
             get;
             set;
         }
 
         [XmlElement()]
-        public String GameStoragePassword
+        public String Password
         {
             get;
             set;
         }
-
-        [XmlElement()]
-        public int GameStorageA2Port
-        {
-            get;
-            set;
-        }
-
-        [XmlElement()]
-        public int GameStoragePort
-        {
-            get;
-            set;
-        }
-
-        [XmlElement()]
-        public String GameStorageHost
-        {
-            get;
-            set;
-        }
-
-        [XmlElement()]
-        public String GameStorageBasePath
-        {
-            get;
-            set;
-        }
-
-        [XmlElement()]
-        public Boolean GameStorageSecure
-        {
-            get;
-            set;
-        }
-
-        [XmlElement()]
-        public String GameStorageUserToken
-        {
-            get;
-            set;
-        }
-
-        [XmlElement()]
-        public String GameId
-        {
-            get;
-            set;
-        }
-
-
 
         #endregion Properties
+
+
     }
 }

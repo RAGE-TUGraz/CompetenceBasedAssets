@@ -141,12 +141,12 @@ namespace TestCompetence
 
         #endregion IDataStorage
         #region ILog
-
+        
         public void Log(Severity severity, string msg)
         {
             Console.WriteLine("BRIDGE:  " + msg);
         }
-
+        
         #endregion ILog    
         #region IWebServiceRequest
 

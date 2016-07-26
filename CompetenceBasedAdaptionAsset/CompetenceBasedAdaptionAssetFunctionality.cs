@@ -132,6 +132,14 @@ namespace CompetenceBasedAdaptionAssetNameSpace
         #region InternalMethods
 
         /// <summary>
+        /// Method for resetting the Asset - if for example the settigns are changed
+        /// </summary>
+        public void resetAsset()
+        {
+            this.currentGameSituation = null;
+        }
+
+        /// <summary>
         /// Method returning an instance of the DomainModelAsset.
         /// </summary>
         /// <returns> Instance of the DomainModelAsset </returns>
@@ -271,7 +279,7 @@ namespace CompetenceBasedAdaptionAssetNameSpace
             GameSituation gs = getCurrentGameSituation();
             if (gs == null)
                 return null;
-            return getCurrentGameSituation().Id;
+            return gs.Id;
         }
 
         /// <summary>
@@ -526,7 +534,7 @@ namespace CompetenceBasedAdaptionAssetNameSpace
     /// <summary>
     /// Class describing a game situation.
     /// </summary>
-    internal class GameSituation
+    public class GameSituation
     {
         #region Fields
 
@@ -564,7 +572,7 @@ namespace CompetenceBasedAdaptionAssetNameSpace
         /// <summary>
         /// List containing all competences (as String) needed to master this game situation.
         /// </summary>
-        internal List<String> Competences
+        public List<String> Competences
         {
             get
             {
@@ -579,7 +587,7 @@ namespace CompetenceBasedAdaptionAssetNameSpace
         /// <summary>
         /// Identification of the game situation.
         /// </summary>
-        internal String Id
+        public String Id
         {
             get
             {
@@ -594,7 +602,7 @@ namespace CompetenceBasedAdaptionAssetNameSpace
         /// <summary>
         /// List of all possible successors to this game situation based on story-path.
         /// </summary>
-        internal List<GameSituation> Successors
+        public List<GameSituation> Successors
         {
             get
             {
@@ -648,7 +656,7 @@ namespace CompetenceBasedAdaptionAssetNameSpace
     /// <summary>
     /// Class describing non-functional game situation dependencies.
     /// </summary>
-    internal class GameSituationStructure
+    public class GameSituationStructure
     {
         #region Fields
 
@@ -698,7 +706,7 @@ namespace CompetenceBasedAdaptionAssetNameSpace
         /// <summary>
         /// List containing all Gamesituations for a player.
         /// </summary>
-        internal List<GameSituation> GameSituations
+        public List<GameSituation> GameSituations
         {
             get
             {
@@ -713,7 +721,7 @@ namespace CompetenceBasedAdaptionAssetNameSpace
         /// <summary>
         /// Gamesituation starting the game.
         /// </summary>
-        internal GameSituation InitialGameSituation
+        public GameSituation InitialGameSituation
         {
             get
             {
@@ -806,7 +814,7 @@ namespace CompetenceBasedAdaptionAssetNameSpace
         /// <summary>
         /// Prints out the GSS.
         /// </summary>
-        internal void diagnosticPrint()
+        public void diagnosticPrint()
         {
             CompetenceBasedAdaptionHandler.Instance.loggingPRA("******************************************************************************");
             CompetenceBasedAdaptionHandler.Instance.loggingPRA("       GAME SITUATION STRUCTURE:       ");

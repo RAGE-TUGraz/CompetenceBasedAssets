@@ -52,11 +52,23 @@ namespace CompetenceAssessmentAssetNameSpace
         {
             Username = "student";
             Password = "student";
-        }
+            /// <summary>
+            /// Limit: Probabilities equal or higher as this value are assumed to indicate mastery of a competence by a learner 
+            /// </summary>
+            TransitionProbability = 0.7;
+    }
 
         #endregion Constructors
 
         #region Properties
+
+
+        [XmlElement()]
+        public double TransitionProbability
+        {
+            get;
+            set;
+        }
 
         [XmlElement()]
         public String Username

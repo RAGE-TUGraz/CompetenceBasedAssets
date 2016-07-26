@@ -108,6 +108,7 @@ namespace CompetenceBasedAdaptionAssetNameSpace
             set
             {
                 settings = (value as CompetenceBasedAdaptionAssetSettings);
+                CompetenceBasedAdaptionHandler.Instance.resetAsset();
             }
         }
 

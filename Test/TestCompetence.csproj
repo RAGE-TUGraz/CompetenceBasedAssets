@@ -42,7 +42,7 @@
     </Reference>
     <Reference Include="RageAssetManager, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\AssetManager\RageAssetManager\bin\Debug\RageAssetManager.dll</HintPath>
+      <HintPath>..\..\AssetManager\RageAssetManager\obj\Debug\RageAssetManager.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

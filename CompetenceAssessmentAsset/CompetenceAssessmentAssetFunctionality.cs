@@ -397,6 +397,7 @@ namespace CompetenceAssessmentAssetNameSpace
                 }
                 else
                 {
+                    /*
                     loggingCA("No tracker implemented - creating new one");
                     tracker = TrackerAsset.Instance;
                     TrackerAssetSettings tas = new TrackerAssetSettings();
@@ -408,11 +409,14 @@ namespace CompetenceAssessmentAssetNameSpace
                     tas.StorageType = TrackerAsset.StorageTypes.net;
                     tas.TraceFormat = TrackerAsset.TraceFormats.json;
                     tracker.Settings = tas;
-                    /*
+                    */
+                    
+                    //no tracking
                     loggingCA("No tracker implemented - competence state is not send to the server");
                     return;
-                    */
+                    
                     /*
+                    //local tracking
                     loggingCA("No tracker implemented - competence state is not send to the server - tracks are stored local!");
                     TrackerAsset ta = TrackerAsset.Instance;
                     TrackerAssetSettings tas = new TrackerAssetSettings();
@@ -493,9 +497,11 @@ namespace CompetenceAssessmentAssetNameSpace
             performTest3();
             performTest4();
             performTest5();
+            /*
             performTest6();
             performTest7();
             performTest8();
+            */
             loggingCA("Competence assessment asset tests finished. ");
         }
 

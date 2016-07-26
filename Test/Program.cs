@@ -89,7 +89,7 @@ namespace TestCompetence
         }
     }
 
-    class Bridge : IBridge, IVirtualProperties, ILog, IDataStorage, IWebServiceRequest, ISerializer
+    class Bridge : IBridge, /*IVirtualProperties,*/ ILog, IDataStorage, IWebServiceRequest, ISerializer
     {
         #region IDataStorage
 
@@ -330,6 +330,7 @@ namespace TestCompetence
         }
 
         #endregion ISerializer
+        /*
         #region IVirtualProperties Members
 
         /// <summary>
@@ -353,6 +354,7 @@ namespace TestCompetence
         }
 
         #endregion IVirtualProperties Members
+        */
         #region IWebServiceRequest Members
 
         // See http://stackoverflow.com/questions/12224602/a-method-for-making-http-requests-on-unity-ios

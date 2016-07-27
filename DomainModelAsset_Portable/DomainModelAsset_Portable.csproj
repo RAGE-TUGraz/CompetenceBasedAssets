@@ -35,21 +35,21 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="..\..\..\..\..\Documents\Visual Studio 2015\Projects\A_Competences\DomainModelAsset\DomainModelAsset.cs">
+    <Compile Include="..\DomainModelAsset\DomainModelAsset.cs">
       <Link>DomainModelAsset.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\..\..\Documents\Visual Studio 2015\Projects\A_Competences\DomainModelAsset\DomainModelAssetSettings.cs">
+    <Compile Include="..\DomainModelAsset\DomainModelAssetSettings.cs">
       <Link>DomainModelAssetSettings.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\..\..\Documents\Visual Studio 2015\Projects\A_Competences\DomainModelAsset\Properties\AssemblyInfo.cs">
+    <Compile Include="..\DomainModelAsset\Properties\AssemblyInfo.cs">
       <Link>Properties\AssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\..\..\Documents\Visual Studio 2015\Projects\A_Competences\DomainModelAsset\DomainModelAssetFunctionality.cs">
+    <Compile Include="..\DomainModelAsset\DomainModelAssetFunctionality.cs">
       <Link>DomainModelAssetFunctionality.cs</Link>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\..\..\..\..\Documents\Visual Studio 2015\Projects\A_Competences\DomainModelAsset\Resources\DomainModelAsset.VersionAndDependencies.xml">
+    <Content Include="..\DomainModelAsset\Resources\DomainModelAsset.VersionAndDependencies.xml">
       <Link>Resources\DomainModelAsset.VersionAndDependencies.xml</Link>
     </Content>
   </ItemGroup>

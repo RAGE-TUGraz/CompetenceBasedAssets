@@ -35,21 +35,21 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="..\..\..\..\..\Documents\Visual Studio 2015\Projects\A_Competences\CompetenceAssessmentAsset\CompetenceAssessmentAsset.cs">
+    <Compile Include="..\CompetenceAssessmentAsset\CompetenceAssessmentAsset.cs">
       <Link>CompetenceAssessmentAsset.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\..\..\Documents\Visual Studio 2015\Projects\A_Competences\CompetenceAssessmentAsset\CompetenceAssessmentAssetSettings.cs">
+    <Compile Include="..\CompetenceAssessmentAsset\CompetenceAssessmentAssetSettings.cs">
       <Link>CompetenceAssessmentAssetSettings.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\..\..\Documents\Visual Studio 2015\Projects\A_Competences\CompetenceAssessmentAsset\Properties\AssemblyInfo.cs">
+    <Compile Include="..\CompetenceAssessmentAsset\Properties\AssemblyInfo.cs">
       <Link>Properties\AssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\..\..\Documents\Visual Studio 2015\Projects\A_Competences\CompetenceAssessmentAsset\CompetenceAssessmentAssetFunctionality.cs">
+    <Compile Include="..\CompetenceAssessmentAsset\CompetenceAssessmentAssetFunctionality.cs">
       <Link>CompetenceAssessmentAssetFunctionality.cs</Link>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\..\..\..\..\Documents\Visual Studio 2015\Projects\A_Competences\CompetenceAssessmentAsset\Resources\CompetenceAssessmentAsset.VersionAndDependencies.xml">
+    <Content Include="..\CompetenceAssessmentAsset\Resources\CompetenceAssessmentAsset.VersionAndDependencies.xml">
       <Link>Resources\CompetenceAssessmentAsset.VersionAndDependencies.xml</Link>
     </Content>
   </ItemGroup>

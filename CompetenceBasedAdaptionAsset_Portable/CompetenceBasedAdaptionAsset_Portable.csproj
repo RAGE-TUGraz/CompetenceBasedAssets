@@ -35,21 +35,21 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="..\..\..\..\..\Documents\Visual Studio 2015\Projects\A_Competences\CompetenceBasedAdaptionAsset\CompetenceBasedAdaptionAsset.cs">
+    <Compile Include="..\CompetenceBasedAdaptionAsset\CompetenceBasedAdaptionAsset.cs">
       <Link>CompetenceBasedAdaptionAsset.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\..\..\Documents\Visual Studio 2015\Projects\A_Competences\CompetenceBasedAdaptionAsset\CompetenceBasedAdaptionAssetSettings.cs">
+    <Compile Include="..\CompetenceBasedAdaptionAsset\CompetenceBasedAdaptionAssetSettings.cs">
       <Link>CompetenceBasedAdaptionAssetSettings.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\..\..\Documents\Visual Studio 2015\Projects\A_Competences\CompetenceBasedAdaptionAsset\Properties\AssemblyInfo.cs">
+    <Compile Include="..\CompetenceBasedAdaptionAsset\Properties\AssemblyInfo.cs">
       <Link>Properties\AssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\..\..\Documents\Visual Studio 2015\Projects\A_Competences\CompetenceBasedAdaptionAsset\CompetenceBasedAdaptionAssetFunctionality.cs">
+    <Compile Include="..\CompetenceBasedAdaptionAsset\CompetenceBasedAdaptionAssetFunctionality.cs">
       <Link>CompetenceBasedAdaptionAssetFunctionality.cs</Link>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\..\..\..\..\Documents\Visual Studio 2015\Projects\A_Competences\CompetenceBasedAdaptionAsset\Resources\CompetenceBasedAdaptionAsset.VersionAndDependencies.xml">
+    <Content Include="..\CompetenceBasedAdaptionAsset\Resources\CompetenceBasedAdaptionAsset.VersionAndDependencies.xml">
       <Link>Resources\CompetenceBasedAdaptionAsset.VersionAndDependencies.xml</Link>
     </Content>
   </ItemGroup>

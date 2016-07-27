@@ -48,7 +48,6 @@ namespace CompetenceAssessmentAssetNameSpace
         private CompetenceAssessmentAssetSettings settings = null;
 
         #endregion Fields
-
         #region Constructors
 
         /// <summary>
@@ -78,7 +77,6 @@ namespace CompetenceAssessmentAssetNameSpace
         }
 
         #endregion Constructors
-
         #region Properties
 
         /// <summary>
@@ -108,17 +106,7 @@ namespace CompetenceAssessmentAssetNameSpace
         }
 
         #endregion Properties
-
         #region Methods
-
-        /// <summary>
-        /// Method for internal testing
-        /// </summary>
-        public void performTests()
-        {
-            //Console.WriteLine("CompetenceAssessment methode called!");
-            CompetenceAssessmentHandler.Instance.performAllTests();
-        }
         
         /// <summary>
         /// Method for updating the competence state of a player.

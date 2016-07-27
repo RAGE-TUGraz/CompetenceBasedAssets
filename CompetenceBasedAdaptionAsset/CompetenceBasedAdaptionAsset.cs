@@ -116,14 +116,6 @@ namespace CompetenceBasedAdaptionAssetNameSpace
         #region Methods
 
         /// <summary>
-        /// Method for performing all testcases
-        /// </summary>
-        public void performTests()
-        {
-            CompetenceBasedAdaptionHandler.Instance.performAllTests();
-        }
-
-        /// <summary>
         /// Method returning the next game situation id for the player.
         /// </summary>
         /// 

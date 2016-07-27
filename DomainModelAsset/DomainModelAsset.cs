@@ -114,24 +114,6 @@ namespace DomainModelAssetNameSpace
             return DomainModelHandler.Instance.getDomainModel();
         }
 
-        /// <summary>
-        /// Method for setting the domain model
-        /// </summary>
-        /// <param name="dm"> The new doamin model</param>
-        public void setDomainModel(DomainModel dm)
-        {
-            DomainModelHandler.Instance.setDomainModel(dm);
-        }
-
-        /// <summary>
-        /// Method for performing Assets-functionality tests.
-        /// </summary>
-        public void performTests()
-        {
-            DomainModelHandler.Instance.performAllTests();
-        }
-
-
         #endregion PublicMethods
         #region InternalMethods
 

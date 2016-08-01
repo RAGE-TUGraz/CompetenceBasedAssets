@@ -1285,7 +1285,9 @@ namespace TestCompetence
 
         public bool Exists(string fileId)
         {
-            throw new NotImplementedException();
+#warning Change DataStorage-path if needed in Program.cs, Class Bridge, Variable IDataStoragePath
+            string filePath = IDataStoragePath + fileId;
+            return (File.Exists(filePath));
         }
 
         public string[] Files()

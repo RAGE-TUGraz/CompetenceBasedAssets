@@ -7,7 +7,7 @@
     <ProjectGuid>{03A03A0F-9DB4-48FE-8110-011C307B3E11}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>CompetenceAssessmentAsset_Portable</RootNamespace>
+    <RootNamespace>CompetenceAssessmentAssetNameSpace</RootNamespace>
     <AssemblyName>CompetenceAssessmentAsset_Portable</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>Profile7</TargetFrameworkProfile>

@@ -7,7 +7,7 @@
     <ProjectGuid>{DF3CED40-85A8-4D01-B26A-7A75FF310684}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>CompetenceBasedAdaptionAsset_Portable</RootNamespace>
+    <RootNamespace>CompetenceBasedAdaptionAssetNameSpace</RootNamespace>
     <AssemblyName>CompetenceBasedAdaptionAsset_Portable</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>Profile7</TargetFrameworkProfile>

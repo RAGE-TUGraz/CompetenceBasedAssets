@@ -7,7 +7,7 @@
     <ProjectGuid>{58125DD6-A403-4698-810B-5BFAE5ACAFA9}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>AssetPackage</RootNamespace>
+    <RootNamespace>DomainModelAssetNameSpace</RootNamespace>
     <AssemblyName>DomainModelAsset</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

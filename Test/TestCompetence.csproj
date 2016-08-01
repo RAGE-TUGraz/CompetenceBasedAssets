@@ -7,8 +7,8 @@
     <ProjectGuid>{14C0BFE8-9DB8-4A5C-B09B-E47F109D6A72}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>TestCompetences</RootNamespace>
-    <AssemblyName>TestCompetences</AssemblyName>
+    <RootNamespace>TestCompetence</RootNamespace>
+    <AssemblyName>TestCompetence</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

@@ -7,7 +7,7 @@
     <ProjectGuid>{978FE41E-25FD-46B4-AE67-F0A9A180D4D1}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>AssetPackage</RootNamespace>
+    <RootNamespace>CompetenceBasedAdaptionAssetNameSpace</RootNamespace>
     <AssemblyName>CompetenceRecommendationAsset</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

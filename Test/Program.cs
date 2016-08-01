@@ -1274,6 +1274,8 @@ namespace TestCompetence
 
     class Bridge : IBridge, /*IVirtualProperties,*/ ILog, IDataStorage, IWebServiceRequest, ISerializer
     {
+        string IDataStoragePath = @"C:\Users\mmaurer\Desktop\rageCsFiles\";
+
         #region IDataStorage
 
         public bool Delete(string fileId)
@@ -1283,8 +1285,7 @@ namespace TestCompetence
 
         public bool Exists(string fileId)
         {
-            string filePath = @"C:\Users\mmaurer\Desktop\rageCsFiles\" + fileId;
-            return(File.Exists(filePath));
+            throw new NotImplementedException();
         }
 
         public string[] Files()
@@ -1294,7 +1295,8 @@ namespace TestCompetence
 
         public string Load(string fileId)
         {
-            string filePath = @"C:\Users\mmaurer\Desktop\rageCsFiles\" + fileId;
+#warning Change Loading-path if needed in Program.cs, Class Bridge, Variable IDataStoragePath
+            string filePath = IDataStoragePath + fileId;
             try
             {   // Open the text file using a stream reader.
                 using (StreamReader sr = new StreamReader(filePath))
@@ -1306,8 +1308,7 @@ namespace TestCompetence
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
-                Console.WriteLine("Error by loading the DM!");
+                Console.WriteLine("Error by loading the DM! - Maybe you need to change the path: \"" + IDataStoragePath + "\"");
             }
 
             return (null);
@@ -1315,7 +1316,8 @@ namespace TestCompetence
 
         public void Save(string fileId, string fileData)
         {
-            string filePath = @"C:\Users\mmaurer\Desktop\rageCsFiles\" + fileId;
+#warning Change Saving-path if needed in Program.cs, Class Bridge, Variable IDataStoragePath
+            string filePath = IDataStoragePath + fileId;
             using (StreamWriter file = new StreamWriter(filePath))
             {
                 file.Write(fileData);
@@ -1324,7 +1326,7 @@ namespace TestCompetence
 
         #endregion IDataStorage
         #region ILog
-        
+
         public void Log(Severity severity, string msg)
         {
             Console.WriteLine("BRIDGE:  " + msg);

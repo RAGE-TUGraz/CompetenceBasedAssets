@@ -196,21 +196,20 @@ namespace DomainModelAssetNameSpace
                     Uri uri = new Uri(dmas.Source);
                     Dictionary<string, string> headers = new Dictionary<string, string>();
                     //headers.Add("user", playerId);
-                    string body = dmas.Source;
+                    //string body = dmas.Source;
                     WebServiceResponse wsr = new WebServiceResponse();
                     //currentPlayerId = playerId;
 
                     RequestSetttings rs = new RequestSetttings();
-                    rs.method = "get";
+                    rs.method = "GET";
                     rs.uri = uri;
                     rs.requestHeaders = headers;
-                    rs.body = body;
+                    //rs.body = body;
 
                     RequestResponse rr = new RequestResponse();
 
                     iwr.WebServiceRequest(rs, out rr);
-
-                    return (this.getDMFromXmlString(rr.responsMessage));
+                    return (this.getDMFromXmlString(rr.body));
                 }
                 else
                 {

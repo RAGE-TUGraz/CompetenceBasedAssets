@@ -525,7 +525,7 @@ namespace CompetenceAssessmentAssetNameSpace
         /// </summary>
         /// 
         /// <param name="dm"> DomainModel which is used to create the CompetenceStructure. </param>
-        internal CompetenceStructure(DomainModel dm)
+        public CompetenceStructure(DomainModel dm)
         {
 
             //adding competences
@@ -566,7 +566,7 @@ namespace CompetenceAssessmentAssetNameSpace
         /// <returns>
         /// Competence specified by the given id.
         /// </returns>
-        internal Competence getCompetenceById(String id)
+        public Competence getCompetenceById(String id)
         {
             foreach (Competence com in competences)
             {
@@ -1133,6 +1133,26 @@ namespace CompetenceAssessmentAssetNameSpace
             foreach(Competence com in this.prerequisites)
             {
                 if (cs.getValue(com.id) < cs.transitionProbability)
+                {
+                    allPrerequisitesMet = false;
+                    break;
+                }
+            }
+
+            return allPrerequisitesMet;
+        }
+
+        /// <summary>
+        /// Method determining, if all prerequisites to one competence are met
+        /// </summary>
+        /// <param name="cs"> Competence for which this is determined </param>
+        /// <returns> True, if all prerequisites are met, false otherwise</returns>
+        public Boolean allPrerequisitesMet(Dictionary<string,double> cs)
+        {
+            Boolean allPrerequisitesMet = true;
+            foreach (Competence com in this.prerequisites)
+            {
+                if (cs[com.id] < CompetenceAssessmentHandler.Instance.transitionProbability)
                 {
                     allPrerequisitesMet = false;
                     break;

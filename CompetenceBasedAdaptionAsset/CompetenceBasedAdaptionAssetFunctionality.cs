@@ -568,13 +568,14 @@ namespace CompetenceBasedAdaptionAssetNameSpace
             List<String> mastered = new List<string>();
             foreach(KeyValuePair<String,double> pair in cs)
             {
-                if (pair.Value >= 0.75)
+                double transitionProbability = ((CompetenceAssessmentAssetSettings) CompetenceBasedAdaptionHandler.Instance.getCAA().Settings).TransitionProbability;
+                if (pair.Value >= transitionProbability)
                     mastered.Add(pair.Key);
             }
 
 
             //each GS gets evaluated: int describes the number of competences not mastered and in the new game situation
-            Dictionary<GameSituation, int> gameSituationEvaluation = new Dictionary<GameSituation, int>();
+            Dictionary<GameSituation, int> gameSituationEvaluation0 = new Dictionary<GameSituation, int>();
 
             int minDistanceCompetences = -1;
             int currentDistanceCompetences;
@@ -582,10 +583,34 @@ namespace CompetenceBasedAdaptionAssetNameSpace
             foreach (GameSituation gs in currentGS.Successors)
             {
                 currentDistanceCompetences = gs.getNrNotMasteredCompetences(mastered);
-                gameSituationEvaluation[gs] = currentDistanceCompetences;
+                gameSituationEvaluation0[gs] = currentDistanceCompetences;
                 if (currentDistanceCompetences != 0 && (minDistanceCompetences == -1 || minDistanceCompetences > currentDistanceCompetences))
                     minDistanceCompetences = currentDistanceCompetences;
             }
+
+            //Remove GS with not mastered competences, for which not all prerequisites are mastered!
+            CompetenceStructure compStruct = new CompetenceStructure(CompetenceBasedAdaptionHandler.Instance.getDMA().getDomainModel());
+            Dictionary<GameSituation, int> gameSituationEvaluation = new Dictionary<GameSituation, int>();
+            Boolean allPrerequisitesMet = true;
+            foreach (GameSituation gs in gameSituationEvaluation0.Keys)
+            {
+                allPrerequisitesMet = true;
+                foreach(string com in gs.Competences)
+                {
+                    if (!mastered.Contains(com))
+                    {
+                        if (!compStruct.getCompetenceById(com).allPrerequisitesMet(CompetenceBasedAdaptionHandler.Instance.getCAA().getCompetenceState()))
+                        {
+                            allPrerequisitesMet = false;
+                        }
+                    }
+                }
+                if (allPrerequisitesMet)
+                    gameSituationEvaluation[gs] = gameSituationEvaluation0[gs];
+            }
+
+            if (gameSituationEvaluation.Count == 0)
+                throw new Exception("No suitable GS found (minimal number of new competences, all of which have their prerequisites met)");
 
             //Determining the GS with the smallest distance which was played least often
             Dictionary<GameSituation, int> gameSituationHistory = CompetenceBasedAdaptionHandler.Instance.getGameSituationHistory();

@@ -125,7 +125,7 @@ namespace CompetenceBasedAdaptionAssetNameSpace
             if (CompetenceBasedAdaptionHandler.Instance.getCurrentGameSituationId() == null)
             {
                 CompetenceBasedAdaptionHandler.Instance.registerNewPlayer( CompetenceBasedAdaptionHandler.Instance.getDMA().getDomainModel());
-                return CompetenceBasedAdaptionHandler.Instance.getCurrentGameSituationId();
+                return CompetenceBasedAdaptionHandler.Instance.getNextGameSituationId();
             }
             return CompetenceBasedAdaptionHandler.Instance.getNextGameSituationId();
         }
@@ -141,7 +141,7 @@ namespace CompetenceBasedAdaptionAssetNameSpace
                 CompetenceBasedAdaptionHandler.Instance.registerNewPlayer( CompetenceBasedAdaptionHandler.Instance.getDMA().getDomainModel());
             return CompetenceBasedAdaptionHandler.Instance.getCurrentGameSituationId();
         }
-
+        
         /// <summary>
         /// Method for updating the competence state of the player due to performance in a game situation.
         /// </summary>
@@ -154,7 +154,7 @@ namespace CompetenceBasedAdaptionAssetNameSpace
 
             CompetenceBasedAdaptionHandler.Instance.setGameSituationUpdate(evidence);
         }
-
+        
         #endregion Methods
     }
 }

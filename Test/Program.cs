@@ -834,7 +834,7 @@ namespace TestCompetence
 
                 foreach (Node node in gameStorage[model].Children)
                 {
-                    Console.WriteLine("{0} {1} = {2}", node.Value.GetType().Name, node.Name, node.Value);
+                    log(node.Value.GetType().Name+" "+ node.Name + " = "+ node.Value);
                 }
             }
 
@@ -1310,7 +1310,8 @@ namespace TestCompetence
             }
             catch (Exception e)
             {
-                Console.WriteLine("Error by loading the DM! - Maybe you need to change the path: \"" + IDataStoragePath + "\"");
+                Log(Severity.Error, e.Message);
+                Log(Severity.Error, "Error by loading the DM! - Maybe you need to change the path: \"" + IDataStoragePath + "\"");
             }
 
             return (null);

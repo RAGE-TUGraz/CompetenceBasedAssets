@@ -411,9 +411,11 @@ namespace CompetenceAssessmentAssetNameSpace
                     tracker.Settings = tas;
                     */
                     
+                    
                     //no tracking
                     loggingCA("No tracker implemented - competence state is not send to the server");
                     return;
+                    
                     
                     /*
                     //local tracking
@@ -442,7 +444,9 @@ namespace CompetenceAssessmentAssetNameSpace
                 Dictionary<Competence, Double> cs = getCompetenceState().getCurrentValues();
                 foreach(Competence competence in cs.Keys)
                     tracker.setVar(competence.id, cs[competence].ToString());
+                //tracker.Completable.Initialized("CompetenceAssessmentAsset");
                 tracker.Completable.Completed("CompetenceAssessmentAsset");
+                //tracker.Accesible.Accessed("CompetenceAssessmentAsset");
                 tracker.Flush();
             }
             else

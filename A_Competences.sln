@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CompetenceAssessmentAsset_P
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CompetenceBasedAdaptionAsset_Portable", "CompetenceBasedAdaptionAsset_Portable\CompetenceBasedAdaptionAsset_Portable.csproj", "{DF3CED40-85A8-4D01-B26A-7A75FF310684}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTestCompetences", "UnitTestCompetences\UnitTestCompetences.csproj", "{322FB04A-9EA8-4E22-B6F5-5E028EEC472F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{DF3CED40-85A8-4D01-B26A-7A75FF310684}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DF3CED40-85A8-4D01-B26A-7A75FF310684}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DF3CED40-85A8-4D01-B26A-7A75FF310684}.Release|Any CPU.Build.0 = Release|Any CPU
+		{322FB04A-9EA8-4E22-B6F5-5E028EEC472F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{322FB04A-9EA8-4E22-B6F5-5E028EEC472F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{322FB04A-9EA8-4E22-B6F5-5E028EEC472F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{322FB04A-9EA8-4E22-B6F5-5E028EEC472F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

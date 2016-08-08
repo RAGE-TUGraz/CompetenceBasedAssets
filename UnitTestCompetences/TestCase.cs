@@ -687,6 +687,45 @@ namespace UnitTestCompetences
         }
 
         /// <summary>
+        /// Testing reset method
+        /// </summary>
+        [TestMethod]
+        private void performTest26()
+        {
+            log("Start test 6");
+            DomainModel dm = createExampleDomainModel();
+            setDomainModel(dm);
+            printCS();
+            getCAA().resetCompetenceState();
+            printCS();
+
+            //first update - upgrade
+            List<String> compList = new List<string>();
+            List<Boolean> evidenceList = new List<Boolean>();
+            List<EvidencePower> evidencePowers = new List<EvidencePower>();
+            compList.Add("C1");
+            evidenceList.Add(true);
+            evidencePowers.Add(EvidencePower.Medium);
+            getCAA().updateCompetenceState(compList, evidenceList, evidencePowers);
+            printCS();
+
+            //second update - downgrade
+            List<String> compList2 = new List<string>();
+            List<Boolean> evidenceList2 = new List<Boolean>();
+            List<EvidencePower> evidencePowers2 = new List<EvidencePower>();
+            compList2.Add("C2");
+            evidenceList2.Add(false);
+            evidencePowers2.Add(EvidencePower.Medium);
+            getCAA().updateCompetenceState(compList2, evidenceList2, evidencePowers2);
+            printCS();
+
+            getCAA().resetCompetenceState();
+            printCS();
+
+            log("End test 6");
+        }
+        
+        /// <summary>
         /// Creates a gamestructure and competence state/structure for performing some updates.
         /// </summary>
         [TestMethod]

@@ -81,7 +81,7 @@ namespace CompetenceAssessmentAssetNameSpace
         /// <summary>
         /// Instance of the game storage asset
         /// </summary>
-        private GameStorageClientAsset gameStorage = null;
+        internal GameStorageClientAsset gameStorage = null;
 
         /// <summary>
         /// Instance of the CompetenceAssessmentAsset
@@ -129,7 +129,7 @@ namespace CompetenceAssessmentAssetNameSpace
         /// <summary>
         /// Private ctor - Singelton pattern
         /// </summary>
-        private CompetenceAssessmentHandler() { }
+        private CompetenceAssessmentHandler() {}
 
         #endregion Constructors
         #region Properties
@@ -236,12 +236,16 @@ namespace CompetenceAssessmentAssetNameSpace
         {
             CompetenceStructure cstr = createCompetenceStructure(dm);
 
+            //reset gameStorage
             gameStorage = null;
 
             createCompetenceState(cstr);
             this.updateLevelStorage = new UpdateLevelStorage(dm);
             this.gameSituationMapping = new GameSituationMapping(dm);
             this.activityMapping = new ActivityMapping(dm);
+
+            //reset gameStorage part2
+            getGameStorageAsset();
         }
 
         /// <summary>
@@ -279,7 +283,11 @@ namespace CompetenceAssessmentAssetNameSpace
 
             CompetenceState csta = competenceState;
             CompetenceStructure cstr = competenceStructure;
-            
+
+            //before the update, load the competence state, if needed
+            if (gameStorage == null)
+                loadCompetenceStateFromGameStorage();
+
             cstr.updateCompetenceState(csta, compList, evidenceList,  evidencePowers);
 
         }
@@ -469,6 +477,26 @@ namespace CompetenceAssessmentAssetNameSpace
             }
 
             return competenceState;
+        }
+
+        /// <summary>
+        /// Method for resetting the current competence state to the starting competence state
+        /// </summary>
+        public void resetCompetenceState()
+        {
+            //registerNewPlayer(getDMA().getDomainModel());
+            String model = "CompetenceAssessmentAsset" + competenceStructure.domainModelId;
+            //getCAA().getCompetenceState();
+            CompetenceState cs = new CompetenceState(new CompetenceStructure(getDMA().getDomainModel()));
+            foreach (Competence competence in cs.getCurrentValues().Keys)
+                gameStorage[model][competence.id].Value = cs.getCurrentValues()[competence];
+
+            //storing the updated data
+            gameStorage.SaveData(model, StorageLocations.Local, SerializingFormat.Json);
+            loadCompetenceStateFromGameStorage();
+            loggingCA("Competencestate reset.");
+            //registerNewPlayer(getDMA().getDomainModel());
+
         }
 
         #endregion InternalMethods

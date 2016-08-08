@@ -152,13 +152,27 @@ namespace CompetenceAssessmentAssetNameSpace
         /// <returns> Competence state</returns>
         public Dictionary<string, double> getCompetenceState()
         {
-            if (CompetenceAssessmentHandler.Instance.getCompetenceState() == null)
+            if (CompetenceAssessmentHandler.Instance.getCompetenceState() == null || CompetenceAssessmentHandler.Instance.updateLevelStorage == null)
                 CompetenceAssessmentHandler.Instance.registerNewPlayer(CompetenceAssessmentHandler.Instance.getDMA().getDomainModel());
+
+            if (CompetenceAssessmentHandler.Instance.gameStorage == null)
+                CompetenceAssessmentHandler.Instance.loadCompetenceStateFromGameStorage();
+
             Dictionary<Competence, double> cs = CompetenceAssessmentHandler.Instance.getCompetenceState().getCurrentValues();
             Dictionary<string, double> csNew = new Dictionary<string, double>();
             foreach (KeyValuePair<Competence, double> pair in cs)
                 csNew[pair.Key.id] = pair.Value;
             return csNew;
+        }
+
+        /// <summary>
+        /// Method for resetting the current competence state to the starting competence state
+        /// </summary>
+        public void resetCompetenceState()
+        {
+            if (CompetenceAssessmentHandler.Instance.getCompetenceState() == null || CompetenceAssessmentHandler.Instance.updateLevelStorage == null)
+                CompetenceAssessmentHandler.Instance.registerNewPlayer(CompetenceAssessmentHandler.Instance.getDMA().getDomainModel());
+            CompetenceAssessmentHandler.Instance.resetCompetenceState();
         }
 
         #endregion Methods

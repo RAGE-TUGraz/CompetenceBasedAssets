@@ -1,1 +1,16 @@
+C:\Users\mmaurer\Documents\Visual Studio 2015\Projects\A_Competences\CompetenceBasedAdaptionAsset_Portable\bin\Debug\CompetenceBasedAdaptionAsset_Portable.dll
+C:\Users\mmaurer\Documents\Visual Studio 2015\Projects\A_Competences\CompetenceBasedAdaptionAsset_Portable\bin\Debug\CompetenceBasedAdaptionAsset_Portable.pdb
+C:\Users\mmaurer\Documents\Visual Studio 2015\Projects\A_Competences\CompetenceBasedAdaptionAsset_Portable\bin\Debug\CompetenceAssessmentAsset_Portable.dll
+C:\Users\mmaurer\Documents\Visual Studio 2015\Projects\A_Competences\CompetenceBasedAdaptionAsset_Portable\bin\Debug\DomainModelAsset_Portable.dll
+C:\Users\mmaurer\Documents\Visual Studio 2015\Projects\A_Competences\CompetenceBasedAdaptionAsset_Portable\bin\Debug\RageAssetManager.dll
+C:\Users\mmaurer\Documents\Visual Studio 2015\Projects\A_Competences\CompetenceBasedAdaptionAsset_Portable\bin\Debug\TrackerAsset.dll
+C:\Users\mmaurer\Documents\Visual Studio 2015\Projects\A_Competences\CompetenceBasedAdaptionAsset_Portable\bin\Debug\GameStorageClientAsset_Portable.dll
+C:\Users\mmaurer\Documents\Visual Studio 2015\Projects\A_Competences\CompetenceBasedAdaptionAsset_Portable\bin\Debug\CompetenceAssessmentAsset_Portable.pdb
+C:\Users\mmaurer\Documents\Visual Studio 2015\Projects\A_Competences\CompetenceBasedAdaptionAsset_Portable\bin\Debug\DomainModelAsset_Portable.pdb
+C:\Users\mmaurer\Documents\Visual Studio 2015\Projects\A_Competences\CompetenceBasedAdaptionAsset_Portable\bin\Debug\RageAssetManager.pdb
+C:\Users\mmaurer\Documents\Visual Studio 2015\Projects\A_Competences\CompetenceBasedAdaptionAsset_Portable\bin\Debug\RageAssetManager.xml
+C:\Users\mmaurer\Documents\Visual Studio 2015\Projects\A_Competences\CompetenceBasedAdaptionAsset_Portable\bin\Debug\TrackerAsset.pdb
+C:\Users\mmaurer\Documents\Visual Studio 2015\Projects\A_Competences\CompetenceBasedAdaptionAsset_Portable\bin\Debug\GameStorageClientAsset_Portable.pdb
 C:\Users\mmaurer\Documents\Visual Studio 2015\Projects\A_Competences\CompetenceBasedAdaptionAsset_Portable\obj\Debug\CompetenceBasedAdaptionAsset_Portable.csprojResolveAssemblyReference.cache
+C:\Users\mmaurer\Documents\Visual Studio 2015\Projects\A_Competences\CompetenceBasedAdaptionAsset_Portable\obj\Debug\CompetenceBasedAdaptionAsset_Portable.dll
+C:\Users\mmaurer\Documents\Visual Studio 2015\Projects\A_Competences\CompetenceBasedAdaptionAsset_Portable\obj\Debug\CompetenceBasedAdaptionAsset_Portable.pdb

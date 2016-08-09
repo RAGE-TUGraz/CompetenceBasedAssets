@@ -72,6 +72,10 @@
       <Project>{58125dd6-a403-4698-810b-5bfae5acafa9}</Project>
       <Name>DomainModelAsset</Name>
     </ProjectReference>
+    <ProjectReference Include="..\UnitTestCompetences\UnitTestCompetences.csproj">
+      <Project>{322fb04a-9ea8-4e22-b6f5-5e028eec472f}</Project>
+      <Name>UnitTestCompetences</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

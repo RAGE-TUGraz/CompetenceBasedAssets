@@ -5,7 +5,7 @@ VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CompetenceAssessmentAsset", "CompetenceAssessmentAsset\CompetenceAssessmentAsset.csproj", "{4D1F98C7-6827-4F99-B676-F5C9AF632609}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CompetenceRecommendationAsset", "CompetenceRecommendationAsset\CompetenceRecommendationAsset.csproj", "{978FE41E-25FD-46B4-AE67-F0A9A180D4D1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CompetenceBasedAdaptionAsset", "CompetenceBasedAdaptionAsset\CompetenceBasedAdaptionAsset.csproj", "{978FE41E-25FD-46B4-AE67-F0A9A180D4D1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DomainModelAsset", "DomainModelAsset\DomainModelAsset.csproj", "{58125DD6-A403-4698-810B-5BFAE5ACAFA9}"
 EndProject
@@ -15,7 +15,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DomainModelAsset_Portable",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CompetenceAssessmentAsset_Portable", "CompetenceAssessmentAsset_Portable\CompetenceAssessmentAsset_Portable.csproj", "{03A03A0F-9DB4-48FE-8110-011C307B3E11}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CompetenceRecommendationAsset_Portable", "CompetenceRecommendationAsset_Portable\CompetenceRecommendationAsset_Portable.csproj", "{DF3CED40-85A8-4D01-B26A-7A75FF310684}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CompetenceBasedAdaptionAsset_Portable", "CompetenceBasedAdaptionAsset_Portable\CompetenceBasedAdaptionAsset_Portable.csproj", "{DF3CED40-85A8-4D01-B26A-7A75FF310684}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTestCompetences", "UnitTestCompetences\UnitTestCompetences.csproj", "{322FB04A-9EA8-4E22-B6F5-5E028EEC472F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +53,10 @@ Global
 		{DF3CED40-85A8-4D01-B26A-7A75FF310684}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DF3CED40-85A8-4D01-B26A-7A75FF310684}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DF3CED40-85A8-4D01-B26A-7A75FF310684}.Release|Any CPU.Build.0 = Release|Any CPU
+		{322FB04A-9EA8-4E22-B6F5-5E028EEC472F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{322FB04A-9EA8-4E22-B6F5-5E028EEC472F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{322FB04A-9EA8-4E22-B6F5-5E028EEC472F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{322FB04A-9EA8-4E22-B6F5-5E028EEC472F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

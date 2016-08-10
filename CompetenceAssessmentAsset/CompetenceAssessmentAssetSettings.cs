@@ -50,73 +50,42 @@ namespace CompetenceAssessmentAssetNameSpace
         public CompetenceAssessmentAssetSettings()
             : base()
         {
-            // Set Default values here.
-            TestProperty = "Hello Default World";
-            TestList = new String[] { "Red", "Green", "Blue" };
-            TestPrivate = true;
-        }
+            Username = "student";
+            Password = "student";
+            /// <summary>
+            /// Limit: Probabilities equal or higher as this value are assumed to indicate mastery of a competence by a learner 
+            /// </summary>
+            TransitionProbability = 0.7;
+    }
 
         #endregion Constructors
 
         #region Properties
 
-        /// <summary>
-        /// Gets or sets the test property.
-        /// </summary>
-        ///
-        /// <value>
-        /// The test property.
-        /// </value>
+
         [XmlElement()]
-        public String TestProperty
+        public double TransitionProbability
         {
             get;
             set;
         }
 
-        /// <summary>
-        /// Gets the string[].
-        /// </summary>
-        ///
-        /// <value>
-        /// .
-        /// </value>
-        [XmlArray()]
-        [XmlArrayItem("ListItem")]
-        public String[] TestList
+        [XmlElement()]
+        public String Username
         {
             get;
             set;
         }
 
-        /// <summary>
-        /// Gets a value indicating whether the test read only.
-        /// </summary>
-        ///
-        /// <value>
-        /// true if test read only, false if not.
-        /// </value>
-        public Boolean TestReadOnly
-        {
-            get
-            {
-                return true;
-            }
-        }
-
-        /// <summary>
-        /// Gets a value indicating whether the test private.
-        /// </summary>
-        ///
-        /// <value>
-        /// true if test private only, false if not.
-        /// </value>
-        public Boolean TestPrivate
+        [XmlElement()]
+        public String Password
         {
             get;
-            private set;
+            set;
         }
 
         #endregion Properties
+
+
     }
 }

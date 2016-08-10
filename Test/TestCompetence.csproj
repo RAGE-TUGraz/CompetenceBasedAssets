@@ -7,8 +7,8 @@
     <ProjectGuid>{14C0BFE8-9DB8-4A5C-B09B-E47F109D6A72}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Test</RootNamespace>
-    <AssemblyName>Test</AssemblyName>
+    <RootNamespace>TestCompetence</RootNamespace>
+    <AssemblyName>TestCompetence</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -32,8 +32,17 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="RageAssetManager">
-      <HintPath>..\..\AssetManager 8_2_2016\RageAssetManager\obj\Debug\RageAssetManager.dll</HintPath>
+    <Reference Include="ModelAsset, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\Downloads\ClientSideGameStorageAsset-master\GameStorageClientAsset\bin\Debug\ModelAsset.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net35\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="RageAssetManager, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\AssetManager\RageAssetManager\obj\Debug\RageAssetManager.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -41,6 +50,10 @@
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="TrackerAsset, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\Desktop\ClientSideTrackerAsset-master\bin\Debug\TrackerAsset.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Program.cs" />
@@ -51,14 +64,21 @@
       <Project>{4d1f98c7-6827-4f99-b676-f5c9af632609}</Project>
       <Name>CompetenceAssessmentAsset</Name>
     </ProjectReference>
-    <ProjectReference Include="..\CompetenceRecommendationAsset\CompetenceRecommendationAsset.csproj">
+    <ProjectReference Include="..\CompetenceBasedAdaptionAsset\CompetenceBasedAdaptionAsset.csproj">
       <Project>{978fe41e-25fd-46b4-ae67-f0a9a180d4d1}</Project>
-      <Name>CompetenceRecommendationAsset</Name>
+      <Name>CompetenceBasedAdaptionAsset</Name>
     </ProjectReference>
     <ProjectReference Include="..\DomainModelAsset\DomainModelAsset.csproj">
       <Project>{58125dd6-a403-4698-810b-5bfae5acafa9}</Project>
       <Name>DomainModelAsset</Name>
     </ProjectReference>
+    <ProjectReference Include="..\UnitTestCompetences\UnitTestCompetences.csproj">
+      <Project>{322fb04a-9ea8-4e22-b6f5-5e028eec472f}</Project>
+      <Name>UnitTestCompetences</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

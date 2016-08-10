@@ -7,7 +7,7 @@
     <ProjectGuid>{58125DD6-A403-4698-810B-5BFAE5ACAFA9}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>AssetPackage</RootNamespace>
+    <RootNamespace>DomainModelAssetNameSpace</RootNamespace>
     <AssemblyName>DomainModelAsset</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -30,8 +30,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="RageAssetManager">
-      <HintPath>..\..\AssetManager 8_2_2016\RageAssetManager\obj\Debug\RageAssetManager.dll</HintPath>
+    <Reference Include="RageAssetManager, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\AssetManager\RageAssetManager\bin\Debug\RageAssetManager.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

@@ -7,8 +7,8 @@
     <ProjectGuid>{A441FEE9-482A-418E-B046-795B2233B910}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>DomainModelAsset_Portable</RootNamespace>
-    <AssemblyName>MyFirstAsset_Portable_Portable</AssemblyName>
+    <RootNamespace>DomainModelAssetNameSpace</RootNamespace>
+    <AssemblyName>DomainModelAsset_Portable</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>Profile7</TargetFrameworkProfile>
     <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -35,27 +35,27 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="..\..\..\..\..\Documents\Visual Studio 2015\Projects\A_Competences\DomainModelAsset\DomainModelAsset.cs">
+    <Compile Include="..\DomainModelAsset\DomainModelAsset.cs">
       <Link>DomainModelAsset.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\..\..\Documents\Visual Studio 2015\Projects\A_Competences\DomainModelAsset\DomainModelAssetSettings.cs">
+    <Compile Include="..\DomainModelAsset\DomainModelAssetSettings.cs">
       <Link>DomainModelAssetSettings.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\..\..\Documents\Visual Studio 2015\Projects\A_Competences\DomainModelAsset\Properties\AssemblyInfo.cs">
+    <Compile Include="..\DomainModelAsset\Properties\AssemblyInfo.cs">
       <Link>Properties\AssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\..\..\Documents\Visual Studio 2015\Projects\A_Competences\DomainModelAsset\DomainModelAssetFunctionality.cs">
+    <Compile Include="..\DomainModelAsset\DomainModelAssetFunctionality.cs">
       <Link>DomainModelAssetFunctionality.cs</Link>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\..\..\..\..\Documents\Visual Studio 2015\Projects\A_Competences\DomainModelAsset\Resources\DomainModelAsset.VersionAndDependencies.xml">
+    <Content Include="..\DomainModelAsset\Resources\DomainModelAsset.VersionAndDependencies.xml">
       <Link>Resources\DomainModelAsset.VersionAndDependencies.xml</Link>
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="RageAssetManager_Portable">
-      <HintPath>..\..\AssetManager 8_2_2016\RageAssetManager_Portable\obj\Debug\RageAssetManager_Portable.dll</HintPath>
+    <Reference Include="RageAssetManager">
+      <HintPath>..\..\AssetManager\RageAssetManager_Portable\bin\Debug\RageAssetManager.dll</HintPath>
     </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />

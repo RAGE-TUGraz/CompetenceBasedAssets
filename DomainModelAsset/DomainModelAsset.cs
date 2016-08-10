@@ -24,8 +24,6 @@
   http://kti.tugraz.at/css/
 
   Created by: Matthias Maurer, TUGraz <mmaurer@tugraz.at>
-  Changed by: Matthias Maurer, TUGraz <mmaurer@tugraz.at>
-  Changed on: 2016-02-22
 */
 
 namespace DomainModelAssetNameSpace
@@ -48,6 +46,7 @@ namespace DomainModelAssetNameSpace
         /// Options for controlling the operation.
         /// </summary>
         private DomainModelAssetSettings settings = null;
+
 
         #endregion Fields
         #region Constructors
@@ -95,38 +94,13 @@ namespace DomainModelAssetNameSpace
             set
             {
                 settings = (value as DomainModelAssetSettings);
+                DomainModelHandler.Instance.setDomainModel(null);
             }
         }
 
         #endregion Properties
-        #region Methods
+        #region PublicMethods
 
-        // Your code goes here.
-        /*
-        public void test()
-        {
-            Console.WriteLine("DomainModel method called!");
-            DomainModelHandler.Instance.performAllTests();
-        }
-        */
-        /*
-        public String getDM()
-        {
-            String url = @"http://css-kmi.tugraz.at:8080/compod/rest/getdomainmodel?id=isr2013";
-            return DomainModelHandler.Instance.getDMFromWeb(url).toXmlString();
-        }
-        */
-        /*
-        /// <summary>
-        /// tmp. solution: sets the default loading location for a xml file. 
-        /// </summary>
-        /// 
-        /// <param name="filepath"> Path to the xml-file. If the value is "" an example domain model is created. </param>
-        public void setLocalFileAsDefaultDmSource(string filepath)
-        {
-            DomainModelHandler.Instance.setDmPath(filepath);
-        }
-        */
 
         /// <summary>
         /// Method returning domain model either from the run-time asset storage if available or from specified (default) source(File/Web).
@@ -135,19 +109,23 @@ namespace DomainModelAssetNameSpace
         /// <param name="playerId"> Id of the player for which the domain model is requested. </param>
         /// 
         /// <returns> The domein model associated with the player-id. </returns>
-        public DomainModel getDomainModel(String playerId)
+        public DomainModel getDomainModel()
         {
-            return DomainModelHandler.Instance.getDomainModel(playerId);
+            return DomainModelHandler.Instance.getDomainModel();
         }
+
+        #endregion PublicMethods
+        #region InternalMethods
 
         /// <summary>
-        /// Method for performing Assets-functionality tests.
+        /// Method returning the DomainModelAssetSetting for internal use.
         /// </summary>
-        public void performTests()
+        /// <returns> Settings of this Asset. </returns>
+        internal DomainModelAssetSettings getSettings()
         {
-            DomainModelHandler.Instance.performAllTests();
+            return (this.settings);
         }
 
-        #endregion Methods
+        #endregion InternalMethods
     }
 }

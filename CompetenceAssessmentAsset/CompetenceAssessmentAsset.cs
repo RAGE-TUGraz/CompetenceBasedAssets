@@ -24,8 +24,6 @@
   http://kti.tugraz.at/css/
 
   Created by: Matthias Maurer, TUGraz <mmaurer@tugraz.at>
-  Changed by: Matthias Maurer, TUGraz <mmaurer@tugraz.at>
-  Changed on: 2016-02-22
 */
 
 namespace CompetenceAssessmentAssetNameSpace
@@ -50,7 +48,6 @@ namespace CompetenceAssessmentAssetNameSpace
         private CompetenceAssessmentAssetSettings settings = null;
 
         #endregion Fields
-
         #region Constructors
 
         /// <summary>
@@ -76,10 +73,10 @@ namespace CompetenceAssessmentAssetNameSpace
                 this.Log(Severity.Error, "There needs to be an instance of the DomainModelAsset persistent before creating the CompetenceAssessmentAsset!");
                 throw new Exception("EXCEPTION: There needs to be an instance of the DomainModelAsset persistent before creating the CompetenceAssessmentAsset!");
             }
+            
         }
 
         #endregion Constructors
-
         #region Properties
 
         /// <summary>
@@ -104,48 +101,64 @@ namespace CompetenceAssessmentAssetNameSpace
             set
             {
                 settings = (value as CompetenceAssessmentAssetSettings);
+                CompetenceAssessmentHandler.Instance.transitionProbability = settings.TransitionProbability;
             }
         }
 
         #endregion Properties
-
         #region Methods
-
-        // Your code goes here.
-
-        /*
-        public void test()
-        {
-            Console.WriteLine("CompetenceAssessment methode called!");
-            //CompetenceAssessmentHandler.Instance.performAllTests();
-        }
-        */
-
+        
         /// <summary>
         /// Method for updating the competence state of a player.
         /// </summary>
         /// 
-        /// <param name="playerId"> Player Id for the update. </param>
-        /// <param name="evidence"> Id of a competence for which an evidence is observed. </param>
-        /// <param name="type"> If true the evidence indicates possession of the specified competence, otherwise a lack of this competence is indicated. </param>
-        public void updateCompetenceState(string playerId, List<string> evidences, List<Boolean> type)
+        /// <param name="competences"> Id of a competence for which an evidence is observed. </param>
+        /// <param name="evidences"> If true the evidence indicates possession of the specified competence, otherwise a lack of this competence is indicated. </param>
+        /// <param name="evidencePowers"> Contains the power of the evidence (Low,Medium,High) </param>
+        public void updateCompetenceState(List<string> competences, List<Boolean> evidences, List<EvidencePower> evidencePowers)
         {
-            if (CompetenceAssessmentHandler.Instance.getCompetenceState(playerId) == null)
-                CompetenceAssessmentHandler.Instance.registerNewPlayer(playerId, CompetenceAssessmentHandler.Instance.getDMA().getDomainModel(playerId));
-            CompetenceAssessmentHandler.Instance.updateCompetenceState(playerId, evidences, type);
+            if (CompetenceAssessmentHandler.Instance.getCompetenceState() == null || CompetenceAssessmentHandler.Instance.updateLevelStorage == null)
+                CompetenceAssessmentHandler.Instance.registerNewPlayer( CompetenceAssessmentHandler.Instance.getDMA().getDomainModel());
+            CompetenceAssessmentHandler.Instance.updateCompetenceState(competences, evidences, evidencePowers);
+        }
+
+        /// <summary>
+        /// Method for updating the competence based on observed in-game activities
+        /// </summary>
+        /// <param name="activity"> observed activity </param>
+        public void updateCompetenceStateAccordingToActivity(String activity)
+        {
+            if (CompetenceAssessmentHandler.Instance.getCompetenceState() == null || CompetenceAssessmentHandler.Instance.updateLevelStorage == null)
+                CompetenceAssessmentHandler.Instance.registerNewPlayer(CompetenceAssessmentHandler.Instance.getDMA().getDomainModel());
+            CompetenceAssessmentHandler.Instance.activityMapping.updateCompetenceAccordingToActivity(activity);
+        }
+
+        /// <summary>
+        /// Updates the competence state according to the current game situation and information about sucess/failure
+        /// </summary>
+        /// <param name="gamesituationId"> id of the gamesituation </param>
+        /// <param name="success"> true, if the gamesituation was mastered, false otherwise</param>
+        public void updateCompetenceStateAccordingToGamesituation(String gamesituationId, Boolean success)
+        {
+            if (CompetenceAssessmentHandler.Instance.getCompetenceState() == null || CompetenceAssessmentHandler.Instance.updateLevelStorage == null)
+                CompetenceAssessmentHandler.Instance.registerNewPlayer(CompetenceAssessmentHandler.Instance.getDMA().getDomainModel());
+            CompetenceAssessmentHandler.Instance.gameSituationMapping.updateCompetenceAccordingToGamesituation(gamesituationId,success);
         }
 
         /// <summary>
         /// Method returning the current competence state of a player.
         /// </summary>
         /// 
-        /// <param name="playerId"> Player identification </param>
-        /// <returns></returns>
-        public Dictionary<string, double> getCompetenceState(string playerId)
+        /// <returns> Competence state</returns>
+        public Dictionary<string, double> getCompetenceState()
         {
-            if (CompetenceAssessmentHandler.Instance.getCompetenceState(playerId) == null)
-                CompetenceAssessmentHandler.Instance.registerNewPlayer(playerId, CompetenceAssessmentHandler.Instance.getDMA().getDomainModel(playerId));
-            Dictionary<Competence, double> cs = CompetenceAssessmentHandler.Instance.getCompetenceState(playerId).getCurrentValues();
+            if (CompetenceAssessmentHandler.Instance.getCompetenceState() == null || CompetenceAssessmentHandler.Instance.updateLevelStorage == null)
+                CompetenceAssessmentHandler.Instance.registerNewPlayer(CompetenceAssessmentHandler.Instance.getDMA().getDomainModel());
+
+            if (CompetenceAssessmentHandler.Instance.gameStorage == null)
+                CompetenceAssessmentHandler.Instance.loadCompetenceStateFromGameStorage();
+
+            Dictionary<Competence, double> cs = CompetenceAssessmentHandler.Instance.getCompetenceState().getCurrentValues();
             Dictionary<string, double> csNew = new Dictionary<string, double>();
             foreach (KeyValuePair<Competence, double> pair in cs)
                 csNew[pair.Key.id] = pair.Value;
@@ -153,16 +166,27 @@ namespace CompetenceAssessmentAssetNameSpace
         }
 
         /// <summary>
-        /// Method for performing all neccessary operations to run update methods.
+        /// Method for resetting the current competence state to the starting competence state
         /// </summary>
-        /// 
-        /// <param name="playerId"> Player Id which is created. </param>
-        /// <param name="dm"> Specifies the domain model used for the following registration. </param>
-        public void registerNewPlayer(string playerId, DomainModel dm)
+        public void resetCompetenceState()
         {
-            CompetenceAssessmentHandler.Instance.registerNewPlayer(playerId, dm);
+            if (CompetenceAssessmentHandler.Instance.getCompetenceState() == null || CompetenceAssessmentHandler.Instance.updateLevelStorage == null)
+                CompetenceAssessmentHandler.Instance.registerNewPlayer(CompetenceAssessmentHandler.Instance.getDMA().getDomainModel());
+            CompetenceAssessmentHandler.Instance.resetCompetenceState();
         }
 
         #endregion Methods
+        #region InternalMethods
+
+        /// <summary>
+        /// Method returning the CompetenceAssessmentAssetSettings for internal use.
+        /// </summary>
+        /// <returns> Settings of this Asset. </returns>
+        internal CompetenceAssessmentAssetSettings getSettings()
+        {
+            return (this.settings);
+        }
+
+        #endregion InternalMethods
     }
 }

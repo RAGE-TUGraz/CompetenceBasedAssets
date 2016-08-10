@@ -16,3 +16,5 @@ C:\Users\mmaurer\Documents\Visual Studio 2015\Projects\A_Competences\UnitTestCom
 C:\Users\mmaurer\Documents\Visual Studio 2015\Projects\A_Competences\UnitTestCompetences\obj\Debug\UnitTestCompetences.csprojResolveAssemblyReference.cache
 C:\Users\mmaurer\Documents\Visual Studio 2015\Projects\A_Competences\UnitTestCompetences\obj\Debug\UnitTestCompetences.dll
 C:\Users\mmaurer\Documents\Visual Studio 2015\Projects\A_Competences\UnitTestCompetences\obj\Debug\UnitTestCompetences.pdb
+C:\Users\mmaurer\Documents\Visual Studio 2015\Projects\A_Competences\UnitTestCompetences\bin\Debug\TrackerAsset.dll
+C:\Users\mmaurer\Documents\Visual Studio 2015\Projects\A_Competences\UnitTestCompetences\bin\Debug\TrackerAsset.pdb

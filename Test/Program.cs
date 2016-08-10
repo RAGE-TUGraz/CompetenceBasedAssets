@@ -50,6 +50,7 @@ namespace TestCompetence
             //create Asset Manager and assign Bridge
             AssetManager am = AssetManager.Instance;
             am.Bridge = new Bridge();
+            
 
             //create Assets to be tested
             DomainModelAsset dma = new DomainModelAsset();

@@ -3,5 +3,6 @@ C:\Users\mmaurer\Documents\Visual Studio 2015\Projects\A_Competences\DomainModel
 C:\Users\mmaurer\Documents\Visual Studio 2015\Projects\A_Competences\DomainModelAsset\bin\Debug\RageAssetManager.dll
 C:\Users\mmaurer\Documents\Visual Studio 2015\Projects\A_Competences\DomainModelAsset\bin\Debug\RageAssetManager.pdb
 C:\Users\mmaurer\Documents\Visual Studio 2015\Projects\A_Competences\DomainModelAsset\bin\Debug\RageAssetManager.xml
+C:\Users\mmaurer\Documents\Visual Studio 2015\Projects\A_Competences\DomainModelAsset\obj\Debug\DomainModelAsset.csprojResolveAssemblyReference.cache
 C:\Users\mmaurer\Documents\Visual Studio 2015\Projects\A_Competences\DomainModelAsset\obj\Debug\DomainModelAsset.dll
 C:\Users\mmaurer\Documents\Visual Studio 2015\Projects\A_Competences\DomainModelAsset\obj\Debug\DomainModelAsset.pdb

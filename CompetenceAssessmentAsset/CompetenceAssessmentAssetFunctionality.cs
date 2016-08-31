@@ -246,6 +246,8 @@ namespace CompetenceAssessmentAssetNameSpace
 
             //reset gameStorage part2
             getGameStorageAsset();
+
+            loadCompetenceStateFromGameStorage();
         }
 
         /// <summary>
@@ -405,7 +407,7 @@ namespace CompetenceAssessmentAssetNameSpace
                 }
                 else
                 {
-                    /*
+                    ///*
                     loggingCA("No tracker implemented - creating new one");
                     tracker = TrackerAsset.Instance;
                     TrackerAssetSettings tas = new TrackerAssetSettings();
@@ -417,7 +419,7 @@ namespace CompetenceAssessmentAssetNameSpace
                     tas.StorageType = TrackerAsset.StorageTypes.net;
                     tas.TraceFormat = TrackerAsset.TraceFormats.json;
                     tracker.Settings = tas;
-                    */
+                    //*/
                     
                     
                     //no tracking
@@ -450,9 +452,14 @@ namespace CompetenceAssessmentAssetNameSpace
             {
                 tracker.Start();
                 Dictionary<Competence, Double> cs = getCompetenceState().getCurrentValues();
+                //Double mean = 0;
                 foreach(Competence competence in cs.Keys)
+                {
                     tracker.setVar(competence.id, cs[competence].ToString());
+                    //mean += cs[competence];
+                }
                 //tracker.Completable.Initialized("CompetenceAssessmentAsset");
+                //tracker.Completable.Progressed("CompetenceAssessmentAsset",(float) mean/cs.Count);
                 tracker.Completable.Completed("CompetenceAssessmentAsset");
                 //tracker.Accesible.Accessed("CompetenceAssessmentAsset");
                 tracker.Flush();

@@ -52,6 +52,7 @@ namespace CompetenceAssessmentAssetNameSpace
         {
             Username = "student";
             Password = "student";
+            PlayerId = "default";
             /// <summary>
             /// Limit: Probabilities equal or higher as this value are assumed to indicate mastery of a competence by a learner 
             /// </summary>
@@ -79,6 +80,13 @@ namespace CompetenceAssessmentAssetNameSpace
 
         [XmlElement()]
         public String Password
+        {
+            get;
+            set;
+        }
+
+        [XmlElement()]
+        public String PlayerId
         {
             get;
             set;

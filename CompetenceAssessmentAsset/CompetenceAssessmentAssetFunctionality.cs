@@ -405,7 +405,7 @@ namespace CompetenceAssessmentAssetNameSpace
                 }
                 else
                 {
-                    ///*
+                    /*
                     loggingCA("No tracker implemented - creating new one");
                     tracker = TrackerAsset.Instance;
                     TrackerAssetSettings tas = new TrackerAssetSettings();

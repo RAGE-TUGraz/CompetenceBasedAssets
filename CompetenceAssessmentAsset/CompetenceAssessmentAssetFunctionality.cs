@@ -33,6 +33,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 
 namespace CompetenceAssessmentAssetNameSpace
 {
@@ -440,9 +441,14 @@ namespace CompetenceAssessmentAssetNameSpace
             if (tracker.CheckHealth())
             {
                 loggingCA(tracker.Health);
-                if (tracker.Login("student", "student"))
+                CompetenceAssessmentAssetSettings caas = getCAA().getSettings();
+                if (tracker.Login(caas.TrackerName, caas.TrackerPassword))
                 {
                     loggingCA("logged in - tracker");
+                }
+                else
+                {
+                    loggingCA("Maybe you forgot to store name/password for the tracker to the Competence Assessment Asset Settings.");
                 }
             }
 
@@ -460,7 +466,15 @@ namespace CompetenceAssessmentAssetNameSpace
                 //tracker.Completable.Progressed("CompetenceAssessmentAsset",(float) mean/cs.Count);
                 tracker.Completable.Completed("CompetenceAssessmentAsset");
                 //tracker.Accesible.Accessed("CompetenceAssessmentAsset");
-                tracker.Flush();
+                
+                //TEST MULTITHREADING
+                new Thread(() =>
+                {
+                    //next line: thread is killed after all foreground threads are dead
+                    Thread.CurrentThread.IsBackground = true;
+                    //code goes here:
+                    tracker.Flush();
+                }).Start();
             }
             else
             {

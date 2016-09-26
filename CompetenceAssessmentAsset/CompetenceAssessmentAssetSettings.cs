@@ -50,8 +50,8 @@ namespace CompetenceAssessmentAssetNameSpace
         public CompetenceAssessmentAssetSettings()
             : base()
         {
-            Username = "student";
-            Password = "student";
+            TrackerName = "default";
+            TrackerPassword = "default";
             PlayerId = "default";
             /// <summary>
             /// Limit: Probabilities equal or higher as this value are assumed to indicate mastery of a competence by a learner 
@@ -72,21 +72,28 @@ namespace CompetenceAssessmentAssetNameSpace
         }
 
         [XmlElement()]
-        public String Username
-        {
-            get;
-            set;
-        }
-
-        [XmlElement()]
-        public String Password
-        {
-            get;
-            set;
-        }
-
-        [XmlElement()]
         public String PlayerId
+        {
+            get;
+            set;
+        }
+
+        /// <value>
+        /// name for registering the tracker to the infrastructure
+        /// </value>
+        [XmlElement()]
+        public String TrackerName
+        {
+            get;
+            set;
+        }
+
+
+        /// <value>
+        /// password for registering the tracker to the infrastructure
+        /// </value>
+        [XmlElement()]
+        public String TrackerPassword
         {
             get;
             set;

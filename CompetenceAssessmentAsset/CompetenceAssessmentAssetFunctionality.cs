@@ -410,20 +410,20 @@ namespace CompetenceAssessmentAssetNameSpace
                     tracker = TrackerAsset.Instance;
                     TrackerAssetSettings tas = new TrackerAssetSettings();
                     tas.BasePath = "/api/";
-                    tas.Host = "192.168.222.166";
+                    tas.Host = "192.168.222.167";
                     tas.TrackingCode = "5784a7c1e8c85f6e00fab465gdj3utijicin3ik9"; 
                     tas.Secure = false;
                     tas.Port = 3000;
                     tas.StorageType = TrackerAsset.StorageTypes.net;
-                    tas.TraceFormat = TrackerAsset.TraceFormats.json;
+                    tas.TraceFormat = TrackerAsset.TraceFormats.xapi;
                     tracker.Settings = tas;
                     //*/
                     
                     
-                    //no tracking
+                    //*no tracking
                     loggingCA("No tracker implemented - competence state is not send to the server");
                     return;
-                    
+                    //*/
                     
                     /*
                     //local tracking
@@ -433,7 +433,7 @@ namespace CompetenceAssessmentAssetNameSpace
                     tas.StorageType = TrackerAsset.StorageTypes.local;
                     tas.TraceFormat = TrackerAsset.TraceFormats.json;
                     ta.Settings = tas;
-                    */
+                    //*/
                 }
             }
 

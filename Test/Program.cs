@@ -55,6 +55,12 @@ namespace TestCompetence
             //create Assets to be tested
             DomainModelAsset dma = new DomainModelAsset();
             CompetenceAssessmentAsset caa = new CompetenceAssessmentAsset();
+            /*
+            CompetenceAssessmentAssetSettings caas = new CompetenceAssessmentAssetSettings();
+            caas.TrackerName = "student";
+            caas.TrackerPassword = "student";
+            caa.Settings = caas;
+            */
             CompetenceBasedAdaptionAsset cra = new CompetenceBasedAdaptionAsset();
 
             //test the Domain Model Assets

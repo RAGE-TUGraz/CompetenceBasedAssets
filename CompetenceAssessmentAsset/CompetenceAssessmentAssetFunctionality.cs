@@ -384,6 +384,7 @@ namespace CompetenceAssessmentAssetNameSpace
 
                     gameStorage.SaveStructure(model, storageLocation);
                     gameStorage.SaveData(model, storageLocation, SerializingFormat.Json);
+                    sendCompetenceStructureToTracker();
                 }
                 
 
@@ -392,17 +393,44 @@ namespace CompetenceAssessmentAssetNameSpace
         }
 
         /// <summary>
-        /// Method for sending the competence state to the tracker
+        /// Method for sending competence structure to the tracker for dashboard visualisation
         /// </summary>
-        internal void sendCompetenceValuesToTracker()
+        internal void sendCompetenceStructureToTracker()
+        {
+            sendToTracker(sendCompetenceStructure);
+        }
+
+        /// <summary>
+        /// Core-code for sending competence structure to the tracker for dashboard visualisation
+        /// </summary>
+        internal void sendCompetenceStructure()
+        {
+            loggingCA("Sending competence structure to the tracker.");
+            tracker.Start();
+            Dictionary<Competence, Double> cs = getCompetenceState().getCurrentValues();
+            foreach (Competence competence in cs.Keys)
+            {
+                foreach(Competence prerequisite in competence.prerequisites)
+                {
+                    tracker.setVar(competence.id+prerequisite.id, competence.id);
+                }
+            }
+            tracker.Completable.Completed("CompetenceAssessmentAssetStructure");
+        }
+
+        /// <summary>
+        /// Method for sending data to the tracker
+        /// </summary>
+        /// <param name="myMethod"> Method without parameters, returning void - performes individual trace sending</param>
+        internal void sendToTracker(Action myMethod)
         {
             //get the tracker
-            if(tracker == null)
+            if (tracker == null)
             {
                 if (AssetManager.Instance.findAssetsByClass("TrackerAsset").Count >= 1)
                 {
                     tracker = (TrackerAsset)AssetManager.Instance.findAssetsByClass("TrackerAsset")[0];
-                    loggingCA("Found tracker for tracking competence values!");
+                    loggingCA("Found tracker for tracking competences!");
                 }
                 else
                 {
@@ -419,13 +447,13 @@ namespace CompetenceAssessmentAssetNameSpace
                     tas.TraceFormat = TrackerAsset.TraceFormats.xapi;
                     tracker.Settings = tas;
                     //*/
-                    
-                    
+
+
                     //*no tracking
-                    loggingCA("No tracker implemented - competence state is not send to the server");
+                    loggingCA("No tracker implemented - competence entities not send to the server");
                     return;
                     //*/
-                    
+
                     /*
                     //local tracking
                     loggingCA("No tracker implemented - competence state is not send to the server - tracks are stored local!");
@@ -454,19 +482,8 @@ namespace CompetenceAssessmentAssetNameSpace
 
             if (tracker.Connected)
             {
-                tracker.Start();
-                Dictionary<Competence, Double> cs = getCompetenceState().getCurrentValues();
-                //Double mean = 0;
-                foreach(Competence competence in cs.Keys)
-                {
-                    tracker.setVar(competence.id, cs[competence].ToString());
-                    //mean += cs[competence];
-                }
-                //tracker.Completable.Initialized("CompetenceAssessmentAsset");
-                //tracker.Completable.Progressed("CompetenceAssessmentAsset",(float) mean/cs.Count);
-                tracker.Completable.Completed("CompetenceAssessmentAsset");
-                //tracker.Accesible.Accessed("CompetenceAssessmentAsset");
-                
+                myMethod.Invoke();
+
                 //TEST MULTITHREADING
                 new Thread(() =>
                 {
@@ -480,6 +497,29 @@ namespace CompetenceAssessmentAssetNameSpace
             {
                 loggingCA("Not connected to tracker.");
             }
+        }
+
+        /// <summary>
+        /// Core-code for sending competence values to the tracker
+        /// </summary>
+        internal void sendCompetenceValues()
+        {
+            loggingCA("Sending competence values to the tracker.");
+            tracker.Start();
+            Dictionary<Competence, Double> cs = getCompetenceState().getCurrentValues();
+            foreach (Competence competence in cs.Keys)
+            {
+                tracker.setVar(competence.id, cs[competence].ToString());
+            }
+            tracker.Completable.Completed("CompetenceAssessmentAssetValues");
+        }
+
+        /// <summary>
+        /// Method for sending the competence state to the tracker
+        /// </summary>
+        internal void sendCompetenceValuesToTracker()
+        {
+            sendToTracker(sendCompetenceValues);
         }
 
         /// <summary>

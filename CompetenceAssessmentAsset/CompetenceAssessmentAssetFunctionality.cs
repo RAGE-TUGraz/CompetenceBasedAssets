@@ -65,8 +65,6 @@ namespace CompetenceAssessmentAssetNameSpace
         public double transitionProbability = 0.7;
 
         #endregion AlgorithmParameters
-
-        //TODO: store/load competence state somewhere else
         #region Fields
 
         /// <summary>
@@ -485,6 +483,7 @@ namespace CompetenceAssessmentAssetNameSpace
                 myMethod.Invoke();
 
                 //TEST MULTITHREADING
+                /*
                 new Thread(() =>
                 {
                     //next line: thread is killed after all foreground threads are dead
@@ -492,6 +491,8 @@ namespace CompetenceAssessmentAssetNameSpace
                     //code goes here:
                     tracker.Flush();
                 }).Start();
+                */
+                tracker.Flush();
             }
             else
             {

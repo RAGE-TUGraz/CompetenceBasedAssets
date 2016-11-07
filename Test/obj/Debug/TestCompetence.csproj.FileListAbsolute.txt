@@ -6,7 +6,6 @@ C:\Users\mmaurer\Documents\Visual Studio 2015\Projects\A_Competences\Test\bin\De
 C:\Users\mmaurer\Documents\Visual Studio 2015\Projects\A_Competences\Test\bin\Debug\ModelAsset.dll
 C:\Users\mmaurer\Documents\Visual Studio 2015\Projects\A_Competences\Test\bin\Debug\Newtonsoft.Json.dll
 C:\Users\mmaurer\Documents\Visual Studio 2015\Projects\A_Competences\Test\bin\Debug\RageAssetManager.dll
-C:\Users\mmaurer\Documents\Visual Studio 2015\Projects\A_Competences\Test\bin\Debug\TrackerAsset.dll
 C:\Users\mmaurer\Documents\Visual Studio 2015\Projects\A_Competences\Test\bin\Debug\UnitTestCompetences.dll
 C:\Users\mmaurer\Documents\Visual Studio 2015\Projects\A_Competences\Test\bin\Debug\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll
 C:\Users\mmaurer\Documents\Visual Studio 2015\Projects\A_Competences\Test\bin\Debug\CompetenceAssessmentAsset.pdb
@@ -16,7 +15,6 @@ C:\Users\mmaurer\Documents\Visual Studio 2015\Projects\A_Competences\Test\bin\De
 C:\Users\mmaurer\Documents\Visual Studio 2015\Projects\A_Competences\Test\bin\Debug\ModelAsset.pdb
 C:\Users\mmaurer\Documents\Visual Studio 2015\Projects\A_Competences\Test\bin\Debug\Newtonsoft.Json.xml
 C:\Users\mmaurer\Documents\Visual Studio 2015\Projects\A_Competences\Test\bin\Debug\RageAssetManager.pdb
-C:\Users\mmaurer\Documents\Visual Studio 2015\Projects\A_Competences\Test\bin\Debug\TrackerAsset.pdb
 C:\Users\mmaurer\Documents\Visual Studio 2015\Projects\A_Competences\Test\obj\Debug\TestCompetence.csprojResolveAssemblyReference.cache
 C:\Users\mmaurer\Documents\Visual Studio 2015\Projects\A_Competences\Test\obj\Debug\TestCompetence.exe
 C:\Users\mmaurer\Documents\Visual Studio 2015\Projects\A_Competences\Test\obj\Debug\TestCompetence.pdb

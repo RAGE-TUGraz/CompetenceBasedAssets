@@ -176,17 +176,5 @@ namespace CompetenceAssessmentAssetNameSpace
         }
 
         #endregion Methods
-        #region InternalMethods
-
-        /// <summary>
-        /// Method returning the CompetenceAssessmentAssetSettings for internal use.
-        /// </summary>
-        /// <returns> Settings of this Asset. </returns>
-        internal CompetenceAssessmentAssetSettings getSettings()
-        {
-            return (this.settings);
-        }
-
-        #endregion InternalMethods
     }
 }

@@ -18,3 +18,5 @@ C:\Users\mmaurer\Documents\Visual Studio 2015\Projects\A_Competences\Test\bin\De
 C:\Users\mmaurer\Documents\Visual Studio 2015\Projects\A_Competences\Test\obj\Debug\TestCompetence.csprojResolveAssemblyReference.cache
 C:\Users\mmaurer\Documents\Visual Studio 2015\Projects\A_Competences\Test\obj\Debug\TestCompetence.exe
 C:\Users\mmaurer\Documents\Visual Studio 2015\Projects\A_Competences\Test\obj\Debug\TestCompetence.pdb
+C:\Users\mmaurer\Documents\Visual Studio 2015\Projects\A_Competences\Test\bin\Debug\GameStorageClientAsset.dll
+C:\Users\mmaurer\Documents\Visual Studio 2015\Projects\A_Competences\Test\bin\Debug\GameStorageClientAsset.pdb

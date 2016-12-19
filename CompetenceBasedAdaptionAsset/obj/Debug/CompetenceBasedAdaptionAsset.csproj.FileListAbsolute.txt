@@ -4,13 +4,13 @@ C:\Users\mmaurer\Documents\Visual Studio 2015\Projects\A_Competences\CompetenceB
 C:\Users\mmaurer\Documents\Visual Studio 2015\Projects\A_Competences\CompetenceBasedAdaptionAsset\bin\Debug\DomainModelAsset.dll
 C:\Users\mmaurer\Documents\Visual Studio 2015\Projects\A_Competences\CompetenceBasedAdaptionAsset\bin\Debug\RageAssetManager.dll
 C:\Users\mmaurer\Documents\Visual Studio 2015\Projects\A_Competences\CompetenceBasedAdaptionAsset\bin\Debug\TrackerAsset.dll
-C:\Users\mmaurer\Documents\Visual Studio 2015\Projects\A_Competences\CompetenceBasedAdaptionAsset\bin\Debug\ModelAsset.dll
 C:\Users\mmaurer\Documents\Visual Studio 2015\Projects\A_Competences\CompetenceBasedAdaptionAsset\bin\Debug\CompetenceAssessmentAsset.pdb
 C:\Users\mmaurer\Documents\Visual Studio 2015\Projects\A_Competences\CompetenceBasedAdaptionAsset\bin\Debug\DomainModelAsset.pdb
 C:\Users\mmaurer\Documents\Visual Studio 2015\Projects\A_Competences\CompetenceBasedAdaptionAsset\bin\Debug\RageAssetManager.pdb
 C:\Users\mmaurer\Documents\Visual Studio 2015\Projects\A_Competences\CompetenceBasedAdaptionAsset\bin\Debug\RageAssetManager.xml
 C:\Users\mmaurer\Documents\Visual Studio 2015\Projects\A_Competences\CompetenceBasedAdaptionAsset\bin\Debug\TrackerAsset.pdb
-C:\Users\mmaurer\Documents\Visual Studio 2015\Projects\A_Competences\CompetenceBasedAdaptionAsset\bin\Debug\ModelAsset.pdb
 C:\Users\mmaurer\Documents\Visual Studio 2015\Projects\A_Competences\CompetenceBasedAdaptionAsset\obj\Debug\CompetenceBasedAdaptionAsset.csprojResolveAssemblyReference.cache
 C:\Users\mmaurer\Documents\Visual Studio 2015\Projects\A_Competences\CompetenceBasedAdaptionAsset\obj\Debug\CompetenceRecommendationAsset.dll
 C:\Users\mmaurer\Documents\Visual Studio 2015\Projects\A_Competences\CompetenceBasedAdaptionAsset\obj\Debug\CompetenceRecommendationAsset.pdb
+C:\Users\mmaurer\Documents\Visual Studio 2015\Projects\A_Competences\CompetenceBasedAdaptionAsset\bin\Debug\GameStorageClientAsset.dll
+C:\Users\mmaurer\Documents\Visual Studio 2015\Projects\A_Competences\CompetenceBasedAdaptionAsset\bin\Debug\GameStorageClientAsset.pdb

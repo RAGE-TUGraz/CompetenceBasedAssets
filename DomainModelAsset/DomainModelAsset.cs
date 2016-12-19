@@ -115,17 +115,5 @@ namespace DomainModelAssetNameSpace
         }
 
         #endregion PublicMethods
-        #region InternalMethods
-
-        /// <summary>
-        /// Method returning the DomainModelAssetSetting for internal use.
-        /// </summary>
-        /// <returns> Settings of this Asset. </returns>
-        internal DomainModelAssetSettings getSettings()
-        {
-            return (this.settings);
-        }
-
-        #endregion InternalMethods
     }
 }

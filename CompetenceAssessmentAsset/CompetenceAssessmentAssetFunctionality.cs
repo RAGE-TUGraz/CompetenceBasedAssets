@@ -298,8 +298,8 @@ namespace CompetenceAssessmentAssetNameSpace
         /// </summary>
         internal void storeCompetenceStateToGameStorage()
         {
-            CompetenceAssessmentAssetSettings caas = getCAA().getSettings();
-            String model = "CompetenceAssessmentAsset_" + getCAA().getSettings().PlayerId + "_" + competenceStructure.domainModelId;
+            CompetenceAssessmentAssetSettings caas = (CompetenceAssessmentAssetSettings) getCAA().Settings;
+            String model = "CompetenceAssessmentAsset_" + caas.PlayerId + "_" + competenceStructure.domainModelId;
 
 
             CompetenceState cs =  getCompetenceState();
@@ -325,8 +325,8 @@ namespace CompetenceAssessmentAssetNameSpace
         {
             GameStorageClientAsset storage = getGameStorageAsset();
 
-            CompetenceAssessmentAssetSettings caas = getCAA().getSettings();
-            String model = "CompetenceAssessmentAsset_" + getCAA().getSettings().PlayerId + "_" + competenceStructure.domainModelId;
+            CompetenceAssessmentAssetSettings caas = (CompetenceAssessmentAssetSettings) getCAA().Settings;
+            String model = "CompetenceAssessmentAsset_" + caas.PlayerId + "_" + competenceStructure.domainModelId;
 
 
             storage.LoadData(model, StorageLocations.Local, SerializingFormat.Json);
@@ -364,10 +364,10 @@ namespace CompetenceAssessmentAssetNameSpace
                     getCAA().getCompetenceState();
 
                 //try to load model, if possible -> load competence state, else create model and store model + competence state
-                String model = "CompetenceAssessmentAsset_"+ getCAA().getSettings().PlayerId +"_"+ competenceStructure.domainModelId;
+                String model = "CompetenceAssessmentAsset_"+ ((CompetenceAssessmentAssetSettings) getCAA().Settings).PlayerId +"_"+ competenceStructure.domainModelId;
 
                 gameStorage.AddModel(model);
-                Boolean isStructureRestored = gameStorage.LoadStructure(model, storageLocation);
+                Boolean isStructureRestored = gameStorage.LoadStructure(model, storageLocation,SerializingFormat.Xml);
                 if (isStructureRestored)
                 {
                     loggingCA("Structure was restored from local file.");
@@ -380,7 +380,7 @@ namespace CompetenceAssessmentAssetNameSpace
                     foreach (Competence comp in cs.getCurrentValues().Keys)
                         gameStorage[model].AddChild(comp.id, storageLocation).Value = cs.getValue(comp);
 
-                    gameStorage.SaveStructure(model, storageLocation);
+                    gameStorage.SaveStructure(model, storageLocation, SerializingFormat.Xml);
                     gameStorage.SaveData(model, storageLocation, SerializingFormat.Json);
                     sendCompetenceStructureToTracker();
                 }
@@ -467,7 +467,7 @@ namespace CompetenceAssessmentAssetNameSpace
             if (tracker.CheckHealth())
             {
                 loggingCA(tracker.Health);
-                CompetenceAssessmentAssetSettings caas = getCAA().getSettings();
+                CompetenceAssessmentAssetSettings caas = (CompetenceAssessmentAssetSettings) getCAA().Settings;
                 if (tracker.Login(caas.TrackerName, caas.TrackerPassword))
                 {
                     loggingCA("logged in - tracker");
@@ -545,7 +545,7 @@ namespace CompetenceAssessmentAssetNameSpace
         public void resetCompetenceState()
         {
             //registerNewPlayer(getDMA().getDomainModel());
-            String model = "CompetenceAssessmentAsset_" + getCAA().getSettings().PlayerId + "_" + competenceStructure.domainModelId;
+            String model = "CompetenceAssessmentAsset_" + ((CompetenceAssessmentAssetSettings) getCAA().Settings).PlayerId + "_" + competenceStructure.domainModelId;
             //getCAA().getCompetenceState();
             CompetenceState cs = new CompetenceState(new CompetenceStructure(getDMA().getDomainModel()));
             foreach (Competence competence in cs.getCurrentValues().Keys)

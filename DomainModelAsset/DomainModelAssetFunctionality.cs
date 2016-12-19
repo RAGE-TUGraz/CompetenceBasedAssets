@@ -165,7 +165,7 @@ namespace DomainModelAssetNameSpace
         internal DomainModel loadDefaultDomainModel()
         {
             loggingDM("Loading default Domain model.");
-            DomainModelAssetSettings dmas = getDMA().getSettings();
+            DomainModelAssetSettings dmas = (DomainModelAssetSettings) getDMA().Settings;
 
             if (dmas.LocalSource)
             {

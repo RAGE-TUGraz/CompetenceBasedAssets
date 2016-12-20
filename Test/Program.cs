@@ -818,7 +818,7 @@ namespace TestCompetence
 
             if (gameStorage.Connected)
             {
-                gameStorage.SaveStructure(model, StorageLocations.Server);
+                gameStorage.SaveStructure(model, StorageLocations.Server,SerializingFormat.Xml);
                 gameStorage.SaveData(model, StorageLocations.Server, SerializingFormat.Json);
             }
 
@@ -836,7 +836,7 @@ namespace TestCompetence
             }
             if (gameStorage.Connected)
             {
-                gameStorage.LoadStructure(model, StorageLocations.Server);
+                gameStorage.LoadStructure(model, StorageLocations.Server, SerializingFormat.Xml);
 
                 gameStorage.LoadData(model, StorageLocations.Server, SerializingFormat.Json);
 

@@ -32,9 +32,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ModelAsset, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="GameStorageClientAsset, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\Downloads\ClientSideGameStorageAsset-master\GameStorageClientAsset\bin\Debug\ModelAsset.dll</HintPath>
+      <HintPath>..\..\ClientSideGameStorageAsset\GameStorageClientAsset\bin\Debug\GameStorageClientAsset.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net35\Newtonsoft.Json.dll</HintPath>

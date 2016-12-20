@@ -110,7 +110,6 @@ namespace DomainModelAssetNameSpace
         }
 
         #endregion Properties
-        //TODO: default domain model loading behaviour
         #region Methods 
 
         /// <summary>
@@ -146,7 +145,6 @@ namespace DomainModelAssetNameSpace
         {
             domainModel = dm;
         }
-
         
         /// <summary>
         /// Method for storing a domain model.
@@ -157,7 +155,6 @@ namespace DomainModelAssetNameSpace
             domainModel = dm;
         }
         
-
         /// <summary>
         /// Method loading domain model - location specified by settings.
         /// </summary>
@@ -258,7 +255,6 @@ namespace DomainModelAssetNameSpace
 
         }
         
-
         #endregion Methods
         #region TestMethods
 
@@ -277,18 +273,15 @@ namespace DomainModelAssetNameSpace
                 domainModelAsset.Log(severity, "[DMA]: " +msg);
             }
         }
-
-
+        
         #endregion TestMethods
 
     }
-
     
-
     /// <summary>
     /// Implementation of the WebServiceResponse-Interface for handling web requests.
     /// </summary>
-    public class WebServiceResponse //: IWebServiceResponse
+    public class WebServiceResponse 
     {
         /// <summary>
         /// Describes behaviour in case the web request failed.

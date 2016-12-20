@@ -56,7 +56,7 @@ namespace DomainModelAssetNameSpace
         /// <summary>
         /// Instance of the class DomainModelHandler - Singelton pattern
         /// </summary>
-        private static DomainModelHandler instance;
+        static readonly DomainModelHandler instance = new DomainModelHandler();
 
         /// <summary>
         /// If true logging is done, otherwise no logging is done.
@@ -86,10 +86,6 @@ namespace DomainModelAssetNameSpace
         {
             get
             {
-                if (instance == null)
-                {
-                    instance = new DomainModelHandler();
-                }
                 return instance;
             }
         }

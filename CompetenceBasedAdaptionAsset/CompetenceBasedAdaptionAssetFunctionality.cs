@@ -63,7 +63,7 @@ namespace CompetenceBasedAdaptionAssetNameSpace
         /// <summary>
         /// Instance of the CompetenceRecommendationHandler - Singelton pattern
         /// </summary>
-        private static CompetenceBasedAdaptionHandler instance;
+        static readonly CompetenceBasedAdaptionHandler instance = new CompetenceBasedAdaptionHandler();
 
         /// <summary>
         /// Dictionary storing all current game situation with player id as key.
@@ -105,10 +105,6 @@ namespace CompetenceBasedAdaptionAssetNameSpace
         {
             get
             {
-                if (instance == null)
-                {
-                    instance = new CompetenceBasedAdaptionHandler();
-                }
                 return instance;
             }
         }

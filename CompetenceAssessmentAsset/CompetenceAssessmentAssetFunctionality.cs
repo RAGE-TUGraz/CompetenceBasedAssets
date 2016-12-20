@@ -90,7 +90,7 @@ namespace CompetenceAssessmentAssetNameSpace
         /// <summary>
         /// Instance of the CompetenceAssessmentHandler - Singelton pattern
         /// </summary>
-        private static CompetenceAssessmentHandler instance;
+        static readonly CompetenceAssessmentHandler instance = new CompetenceAssessmentHandler();
 
         /// <summary>
         /// Dictionary containing all key/value pairs of playerId and competence structure.
@@ -140,10 +140,6 @@ namespace CompetenceAssessmentAssetNameSpace
         {
             get
             {
-                if (instance == null)
-                {
-                    instance = new CompetenceAssessmentHandler();
-                }
                 return instance;
             }
         }

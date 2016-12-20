@@ -55,8 +55,8 @@ namespace UnitTestCompetences
         /// <param name="msg"> Message to be logged </param>
         public void log(String msg, Severity severity = Severity.Information)
         {
-            ILog logger = (ILog)AssetManager.Instance.Bridge;
-            logger.Log(severity, "[Competence Test]: " + msg);
+#warning the ILog interface is expected on the AssetManager
+            AssetManager.Instance.Log(severity, "[Competence Test]: {0}", msg);
         }
 
         /// <summary>

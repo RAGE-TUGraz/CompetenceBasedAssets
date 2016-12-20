@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>CompetenceBasedAdaptionAssetNameSpace</RootNamespace>
-    <AssemblyName>CompetenceRecommendationAsset</AssemblyName>
+    <AssemblyName>CompetenceBasedAdaptionAsset</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

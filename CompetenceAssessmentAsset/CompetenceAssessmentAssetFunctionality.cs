@@ -32,6 +32,9 @@ using DomainModelAssetNameSpace;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+#if !PORTABLE
+using System.Threading;
+#endif
 
 namespace CompetenceAssessmentAssetNameSpace
 {
@@ -40,7 +43,7 @@ namespace CompetenceAssessmentAssetNameSpace
     /// </summary>
     internal class CompetenceAssessmentHandler
     {
-        #region AlgorithmParameters
+#region AlgorithmParameters
 
         /// <summary>
         /// Algorithm variable for upgrading probabilities.
@@ -62,8 +65,8 @@ namespace CompetenceAssessmentAssetNameSpace
         /// </summary>
         public double transitionProbability = 0.7;
 
-        #endregion AlgorithmParameters
-        #region Fields
+#endregion AlgorithmParameters
+#region Fields
 
         /// <summary>
         /// Instance of the DomainModelAsset
@@ -120,16 +123,16 @@ namespace CompetenceAssessmentAssetNameSpace
         /// </summary>
         private Boolean doLogging = true;
 
-        #endregion Fields
-        #region Constructors 
+#endregion Fields
+#region Constructors 
 
         /// <summary>
         /// Private ctor - Singelton pattern
         /// </summary>
         private CompetenceAssessmentHandler() {}
 
-        #endregion Constructors
-        #region Properties
+#endregion Constructors
+#region Properties
 
         /// <summary>
         /// Getter for Instance of the CompetenceAssessmentHandler - Singelton pattern
@@ -157,8 +160,8 @@ namespace CompetenceAssessmentAssetNameSpace
             }
         }
 
-        #endregion Properties
-        #region InternalMethods
+#endregion Properties
+#region InternalMethods
 
         /// <summary>
         /// Method returning an instance of the DomainModelAsset.
@@ -450,17 +453,18 @@ namespace CompetenceAssessmentAssetNameSpace
             {
                 myMethod.Invoke();
 
+                
                 //TEST MULTITHREADING
-                /*
+#if !PORTABLE
                 new Thread(() =>
                 {
                     //next line: thread is killed after all foreground threads are dead
                     Thread.CurrentThread.IsBackground = true;
-                    //code goes here:
                     tracker.Flush();
                 }).Start();
-                */
+#else
                 tracker.Flush();
+#endif
             }
             else
             {
@@ -527,8 +531,8 @@ namespace CompetenceAssessmentAssetNameSpace
 
         }
 
-        #endregion InternalMethods
-        #region TestMethods
+#endregion InternalMethods
+#region TestMethods
 
         /// <summary>
         /// Method for diagnostic logging.
@@ -545,7 +549,7 @@ namespace CompetenceAssessmentAssetNameSpace
             }
         }
 
-        #endregion TestMethods
+#endregion TestMethods
 
     }
 
@@ -554,7 +558,7 @@ namespace CompetenceAssessmentAssetNameSpace
     /// </summary>
     public class CompetenceStructure
     {
-        #region Fields 
+#region Fields 
 
         /// <summary>
         /// Domainmodel-ID, consistent of concatenation of all competences in lexicographic order
@@ -573,8 +577,8 @@ namespace CompetenceAssessmentAssetNameSpace
         private double xi1 = CompetenceAssessmentHandler.Instance.xi1;
         private double epsilon = CompetenceAssessmentHandler.Instance.epsilon;
 
-        #endregion Fields
-        #region Constructors
+#endregion Fields
+#region Constructors
 
         /// <summary>
         /// Constructor using a DomainModel.
@@ -610,8 +614,8 @@ namespace CompetenceAssessmentAssetNameSpace
                 domainModelId +="&"+id;
         }
 
-        #endregion Constructors
-        #region Methods
+#endregion Constructors
+#region Methods
 
         /// <summary>
         /// Method for getting Competence by ID from competence structure.
@@ -1018,7 +1022,7 @@ namespace CompetenceAssessmentAssetNameSpace
             }
         }
 
-        #endregion Methods
+#endregion Methods
 
     }
 
@@ -1028,7 +1032,7 @@ namespace CompetenceAssessmentAssetNameSpace
     /// </summary>
     public class Competence
     {
-        #region Fields 
+#region Fields 
 
         /// <summary>
         /// Unique id within a competence-structure
@@ -1055,8 +1059,8 @@ namespace CompetenceAssessmentAssetNameSpace
         /// </summary>
         public CompetenceStructure cst;
 
-        #endregion Fields
-        #region Constructors
+#endregion Fields
+#region Constructors
 
         /// <summary>
         /// Competence ctor
@@ -1072,8 +1076,8 @@ namespace CompetenceAssessmentAssetNameSpace
             cst = newCst;
         }
 
-        #endregion Constructors
-        #region Methods
+#endregion Constructors
+#region Methods
 
         /// <summary>
         /// Method for adding a prerequisite.
@@ -1304,7 +1308,7 @@ namespace CompetenceAssessmentAssetNameSpace
             }
         }
 
-        #endregion Methods
+#endregion Methods
 
     }
 
@@ -1313,7 +1317,7 @@ namespace CompetenceAssessmentAssetNameSpace
     /// </summary>
     public class CompetenceState
     {
-        #region Fields
+#region Fields
 
         /// <summary>
         /// Dictionary containing the key/value pairs of competences and probability of possession assosiated with the competence
@@ -1325,8 +1329,8 @@ namespace CompetenceAssessmentAssetNameSpace
         /// </summary>
         public double transitionProbability = CompetenceAssessmentHandler.Instance.transitionProbability;
 
-        #endregion Fields
-        #region Constructors
+#endregion Fields
+#region Constructors
 
         /// <summary>
         /// CompetenceState ctor
@@ -1338,8 +1342,8 @@ namespace CompetenceAssessmentAssetNameSpace
             setInitialCompetenceState(cst);
         }
 
-        #endregion Constructors
-        #region Methods
+#endregion Constructors
+#region Methods
 
         /// <summary>
         /// Method for accessing the current competence-state values.
@@ -1517,7 +1521,7 @@ namespace CompetenceAssessmentAssetNameSpace
             return masteredString;
         }
 
-        #endregion Methods
+#endregion Methods
 
     }
 
@@ -1536,13 +1540,13 @@ namespace CompetenceAssessmentAssetNameSpace
     /// </summary>
     internal class UpdateLevelStorage
     {
-        #region Fields
+#region Fields
 
         internal Dictionary<EvidencePower, ULevel> up = new Dictionary<EvidencePower, ULevel>();
         internal Dictionary<EvidencePower, ULevel> down = new Dictionary<EvidencePower, ULevel>();
 
-        #endregion Fields
-        #region Constructors
+#endregion Fields
+#region Constructors
 
         internal UpdateLevelStorage(DomainModel dm)
         {
@@ -1569,9 +1573,9 @@ namespace CompetenceAssessmentAssetNameSpace
             }
         }
 
-        #endregion Constructors
-        #region Methods
-        #endregion Methods
+#endregion Constructors
+#region Methods
+#endregion Methods
     }
 
     /// <summary>
@@ -1579,11 +1583,11 @@ namespace CompetenceAssessmentAssetNameSpace
     /// </summary>
     internal class ULevel
     {
-        #region Fields
+#region Fields
         public double xi;
         public Boolean minonecompetence;
         public Boolean maxonelevel;
-        #endregion Fields
+#endregion Fields
     }
 
     /// <summary>
@@ -1591,15 +1595,15 @@ namespace CompetenceAssessmentAssetNameSpace
     /// </summary>
     internal class ActivityMapping
     {
-        #region Fields
+#region Fields
 
         /// <summary>
         /// Stores activities as keys and Dictionary (Competences + Array(ULevel+up/down)) as Values 
         /// </summary>
         internal Dictionary<String, Dictionary<String, String[]>> mapping = new Dictionary<string, Dictionary<String, String[]>>();
 
-        #endregion Fields
-        #region Constructors
+#endregion Fields
+#region Constructors
 
         internal ActivityMapping(DomainModel dm)
         {
@@ -1615,8 +1619,8 @@ namespace CompetenceAssessmentAssetNameSpace
             }
         }
 
-        #endregion Constructors
-        #region Methods
+#endregion Constructors
+#region Methods
 
         /// <summary>
         /// This Methods updates the competence based on an observed activity
@@ -1662,7 +1666,7 @@ namespace CompetenceAssessmentAssetNameSpace
 
         }
 
-        #endregion Methods
+#endregion Methods
     }
 
     /// <summary>
@@ -1670,7 +1674,7 @@ namespace CompetenceAssessmentAssetNameSpace
     /// </summary>
     internal class GameSituationMapping
     {
-        #region Fields
+#region Fields
 
         /// <summary>
         /// Stores game situation as keys and Dictionary (Competences + ULevel) as Values 
@@ -1678,8 +1682,8 @@ namespace CompetenceAssessmentAssetNameSpace
         internal Dictionary<String, Dictionary<String, String>> mappingUp = new Dictionary<string, Dictionary<String, String>>();
         internal Dictionary<String, Dictionary<String, String>> mappingDown = new Dictionary<string, Dictionary<String, String>>();
 
-        #endregion Fields
-        #region Constructors
+#endregion Fields
+#region Constructors
 
         internal GameSituationMapping(DomainModel dm)
         {
@@ -1700,8 +1704,8 @@ namespace CompetenceAssessmentAssetNameSpace
             }
         }
 
-        #endregion Constructors
-        #region Methods
+#endregion Constructors
+#region Methods
 
         /// <summary>
         /// This Methods updates the competence based on a gamesituation and information about success/failure
@@ -1743,6 +1747,6 @@ namespace CompetenceAssessmentAssetNameSpace
             CompetenceAssessmentHandler.Instance.getCAA().updateCompetenceState(competences, evidences, evidencePowers);
         }
 
-        #endregion Methods
+#endregion Methods
     }
 }

@@ -33,6 +33,7 @@ namespace CompetenceAssessmentAssetNameSpace
 
     using AssetManagerPackage;
     using AssetPackage;
+
     /// <summary>
     /// An asset.
     /// </summary>

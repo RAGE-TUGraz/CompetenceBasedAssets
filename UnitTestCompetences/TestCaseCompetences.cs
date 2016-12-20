@@ -28,21 +28,16 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using DomainModelAssetNameSpace;
 using CompetenceAssessmentAssetNameSpace;
 using CompetenceBasedAdaptionAssetNameSpace;
 using AssetManagerPackage;
 using AssetPackage;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.IO;
-using System.Net;
-using Newtonsoft.Json;
 
 namespace UnitTestCompetences
 {
-    
+
     [TestClass]
     public class TestCaseCompetences
     {

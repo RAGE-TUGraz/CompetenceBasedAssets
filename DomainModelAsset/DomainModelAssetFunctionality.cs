@@ -101,13 +101,24 @@ namespace DomainModelAssetNameSpace
             }
         }
 
+        /// <summary>
+        /// DomainModel Property
+        /// </summary>
+        internal DomainModel DomainModel
+        {
+            get
+            {
+                return getDomainModel();
+            }
+        }
+
         #endregion Properties
         #region Methods 
 
         /// <summary>
-        /// Method returning an instance of the DomainModelAsset.
-        /// </summary>
-        /// <returns> Instance of the DomainModelAsset </returns>
+            /// Method returning an instance of the DomainModelAsset.
+            /// </summary>
+            /// <returns> Instance of the DomainModelAsset </returns>
         internal DomainModelAsset getDMA()
         {
             if (domainModelAsset == null)
@@ -120,7 +131,7 @@ namespace DomainModelAssetNameSpace
         /// </summary>
         /// 
         /// <returns> The domein model. </returns>
-        internal DomainModel getDomainModel()
+        private DomainModel getDomainModel()
         {
             if (domainModel != null)
                 return domainModel;

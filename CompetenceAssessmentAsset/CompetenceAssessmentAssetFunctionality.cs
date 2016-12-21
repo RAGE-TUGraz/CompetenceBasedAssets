@@ -473,7 +473,7 @@ namespace CompetenceAssessmentAssetNameSpace
         }
 
         /// <summary>
-        /// Core-code for sending competence values to the tracker
+        /// Core-code for sending competence values to the tracker  
         /// </summary>
         internal void sendCompetenceValues()
         {

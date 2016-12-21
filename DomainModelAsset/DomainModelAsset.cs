@@ -96,6 +96,17 @@ namespace DomainModelAssetNameSpace
             }
         }
 
+        /// <summary>
+        /// DomainModel Property
+        /// </summary>
+        public DomainModel DomainModel
+        {
+            get
+            {
+                return DomainModelHandler.Instance.DomainModel;
+            }
+        }
+
         #endregion Properties
         #region PublicMethods
 
@@ -109,7 +120,7 @@ namespace DomainModelAssetNameSpace
         /// <returns> The domein model associated with the player-id. </returns>
         public DomainModel getDomainModel()
         {
-            return DomainModelHandler.Instance.getDomainModel();
+            return DomainModelHandler.Instance.DomainModel;
         }
 
         #endregion PublicMethods

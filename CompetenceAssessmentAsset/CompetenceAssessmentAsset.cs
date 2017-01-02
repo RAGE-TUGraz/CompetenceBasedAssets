@@ -72,7 +72,8 @@ namespace CompetenceAssessmentAssetNameSpace
                 this.Log(Severity.Error, "There needs to be an instance of the DomainModelAsset persistent before creating the CompetenceAssessmentAsset!");
                 throw new Exception("EXCEPTION: There needs to be an instance of the DomainModelAsset persistent before creating the CompetenceAssessmentAsset!");
             }
-            
+
+            CompetenceAssessmentHandler.Instance.competenceAssessmentAsset = this;
         }
 
         #endregion Constructors

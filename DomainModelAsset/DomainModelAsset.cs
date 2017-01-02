@@ -65,6 +65,8 @@ namespace DomainModelAssetNameSpace
                 this.Log(Severity.Error, "There is only one instance of the DomainModelAsset permitted!");
                 throw new Exception("EXCEPTION: There is only one instance of the DomainModelAsset permitted!");
             }
+
+            DomainModelHandler.Instance.domainModelAsset = this;
         }
 
         #endregion Constructors

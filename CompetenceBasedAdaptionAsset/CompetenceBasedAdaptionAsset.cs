@@ -77,6 +77,8 @@ namespace CompetenceBasedAdaptionAssetNameSpace
                 this.Log(Severity.Error, "There needs to be an instance of the CompetenceAssessmentAsset persistent before creating the CompetenceRecommendationAsset!");
                 throw new Exception("EXCEPTION: There needs to be an instance of the CompetenceAssessmentAsset persistent before creating the CompetenceRecommendationAsset!");
             }
+
+            CompetenceBasedAdaptionHandler.Instance.competenceBasedAdaptionAsset = this;
         }
 
 

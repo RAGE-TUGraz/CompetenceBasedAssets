@@ -47,7 +47,7 @@ namespace DomainModelAssetNameSpace
         /// <summary>
         /// Instance of the DomainModelAsset
         /// </summary>
-        private DomainModelAsset domainModelAsset = null;
+        internal DomainModelAsset domainModelAsset = null;
 
         /// <summary>
         /// Instance of the class DomainModelHandler - Singelton pattern
@@ -121,8 +121,6 @@ namespace DomainModelAssetNameSpace
             /// <returns> Instance of the DomainModelAsset </returns>
         internal DomainModelAsset getDMA()
         {
-            if (domainModelAsset == null)
-                domainModelAsset = (DomainModelAsset)AssetManager.Instance.findAssetByClass("DomainModelAsset");
             return (domainModelAsset);
         }
 

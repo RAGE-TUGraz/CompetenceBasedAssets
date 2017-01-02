@@ -56,7 +56,7 @@ namespace CompetenceBasedAdaptionAssetNameSpace
         /// <summary>
         /// Instance of the CompetenceBasedAdaptionHandler
         /// </summary>
-        private CompetenceBasedAdaptionAsset competenceBasedAdaptionAsset = null;
+        internal CompetenceBasedAdaptionAsset competenceBasedAdaptionAsset = null;
 
         /// <summary>
         /// Instance of the CompetenceRecommendationHandler - Singelton pattern
@@ -313,8 +313,6 @@ namespace CompetenceBasedAdaptionAssetNameSpace
         {
             if (DoLogging)
             {
-                if (competenceBasedAdaptionAsset == null)
-                    competenceBasedAdaptionAsset = (CompetenceBasedAdaptionAsset)AssetManager.Instance.findAssetByClass("CompetenceBasedAdaptionAsset");
                 competenceBasedAdaptionAsset.Log(severity, "[CBAA]: " + msg);
             }
         }

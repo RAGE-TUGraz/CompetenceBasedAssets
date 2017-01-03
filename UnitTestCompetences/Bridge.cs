@@ -35,7 +35,7 @@ using System.Text;
 
 namespace UnitTestCompetences
 {
-    public class Bridge : IBridge, /*IVirtualProperties,*/ ILog, IDataStorage, IWebServiceRequest, ISerializer
+    public class Bridge : IBridge, ILog, IDataStorage, IWebServiceRequest, ISerializer
     {
         string IDataStoragePath = "./";
 

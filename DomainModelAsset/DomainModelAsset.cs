@@ -29,7 +29,6 @@
 namespace DomainModelAssetNameSpace
 {
     using System;
-
     using AssetManagerPackage;
     using AssetPackage;
 
@@ -126,5 +125,18 @@ namespace DomainModelAssetNameSpace
         }
 
         #endregion PublicMethods
+        #region internal Methods
+
+        /// <summary>
+        /// Wrapper method for getting the getInterface method of the base Asset
+        /// </summary>
+        /// <typeparam name="T">Generic type parameter.</typeparam>
+        /// <returns>Corresponding Interface</returns>
+        internal T getInterfaceFromAsset<T>()
+        {
+            return this.getInterface<T>();
+        }
+
+        #endregion internal Methods
     }
 }

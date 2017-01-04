@@ -29,8 +29,6 @@
 namespace CompetenceBasedAdaptionAssetNameSpace
 {
     using System;
-
-    using AssetManagerPackage;
     using AssetPackage;
     /// <summary>
     /// An asset.

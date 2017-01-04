@@ -26,7 +26,6 @@
   Created by: Matthias Maurer, TUGraz <mmaurer@tugraz.at>
 */
 
-using AssetManagerPackage;
 using AssetPackage;
 using System;
 using System.Collections.Generic;
@@ -147,7 +146,7 @@ namespace DomainModelAssetNameSpace
 
             if (dmas.LocalSource)
             {
-                IDataStorage ids = (IDataStorage)AssetManager.Instance.Bridge;
+                IDataStorage ids = DomainModelAsset.Instance.getInterfaceFromAsset<IDataStorage>();
                 if (ids != null )
                 {
                     if (!ids.Exists(dmas.Source))
@@ -167,7 +166,7 @@ namespace DomainModelAssetNameSpace
             }
             else
             {
-                IWebServiceRequest iwr = (IWebServiceRequest)AssetManager.Instance.Bridge;
+                IWebServiceRequest iwr = DomainModelAsset.Instance.getInterfaceFromAsset<IWebServiceRequest>();
                 if (iwr != null)
                 {
                     loggingDM("Loading web DomainModel.");
@@ -215,25 +214,6 @@ namespace DomainModelAssetNameSpace
                 DomainModel result = (DomainModel)serializer.Deserialize(reader);
                 return (result);
             }
-        }
-
-        /// <summary>
-        /// Method for storing a DomainModel as XML in a File.
-        /// </summary>
-        /// 
-        /// <param name="dm"> Domainmodel to store. </param>
-        /// <param name="fileId"> String containing the file identification. </param>
-        internal void writeDMToFile(DomainModel dm, String fileId)
-        {
-            IDataStorage ids = (IDataStorage)AssetManager.Instance.Bridge;
-            if (ids != null)
-            {
-                loggingDM("Storing DomainModel to File.");
-                ids.Save(fileId, dm.toXmlString());
-            }
-            else
-                loggingDM("No IDataStorage - Bridge implemented!",Severity.Warning);
-
         }
         
         #endregion Methods

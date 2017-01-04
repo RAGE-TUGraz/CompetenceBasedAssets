@@ -44,44 +44,31 @@ namespace CompetenceBasedAdaptionAssetNameSpace
         /// </summary>
         private CompetenceBasedAdaptionAssetSettings settings = null;
 
+
+        /// <summary>
+        /// Instance of the CompetenceBasedAdaptionAsset - Singelton pattern
+        /// </summary>
+        static readonly CompetenceBasedAdaptionAsset instance = new CompetenceBasedAdaptionAsset();
+
+
+        /// <summary>
+        /// Instance of the CompetenceRecommendationHandler 
+        /// </summary>
+        static internal CompetenceBasedAdaptionHandler competenceBasedAdaptionHandler = new CompetenceBasedAdaptionHandler();
+
         #endregion Fields
         #region Constructors
 
         /// <summary>
         /// Initializes a new instance of the CompetenceRecommendationAsset.Asset class.
         /// </summary>
-        public CompetenceBasedAdaptionAsset()
+        private CompetenceBasedAdaptionAsset()
             : base()
         {
             //! Create Settings and let it's BaseSettings class assign Defaultvalues where it can.
-            // 
             settings = new CompetenceBasedAdaptionAssetSettings();
-
-            //preventing multiple asset creation
-            if (AssetManager.Instance.findAssetsByClass(this.Class).Count > 1)
-            {
-                this.Log(Severity.Error, "There is only one instance of the CompetenceRecommendationAsset permitted!");
-                throw new Exception("EXCEPTION: There is only one instance of the CompetenceRecommendationAsset permitted!");
-            }
-
-            //control if an instance of the DomainModelAsset exists
-            if (AssetManager.Instance.findAssetsByClass("DomainModelAsset").Count == 0)
-            {
-                this.Log(Severity.Error, "There needs to be an instance of the DomainModelAsset persistent before creating the CompetenceAssessmentAsset!");
-                throw new Exception("EXCEPTION: There needs to be an instance of the DomainModelAsset persistent before creating the CompetenceAssessmentAsset!");
-            }
-
-            //control if an instance of the CompetenceAssessmentAsset exists
-            if (AssetManager.Instance.findAssetsByClass("CompetenceAssessmentAsset").Count == 0)
-            {
-                this.Log(Severity.Error, "There needs to be an instance of the CompetenceAssessmentAsset persistent before creating the CompetenceRecommendationAsset!");
-                throw new Exception("EXCEPTION: There needs to be an instance of the CompetenceAssessmentAsset persistent before creating the CompetenceRecommendationAsset!");
-            }
-
-            CompetenceBasedAdaptionHandler.Instance.competenceBasedAdaptionAsset = this;
         }
-
-
+        
         #endregion Constructors
         #region Properties
 
@@ -107,10 +94,32 @@ namespace CompetenceBasedAdaptionAssetNameSpace
             set
             {
                 settings = (value as CompetenceBasedAdaptionAssetSettings);
-                CompetenceBasedAdaptionHandler.Instance.resetAsset();
+                CompetenceBasedAdaptionAsset.Handler.resetAsset();
             }
         }
 
+        /// <summary>
+        /// Getter for Instance of the CompetenceBasedAdaptionAsset - Singelton pattern
+        /// </summary>
+        public static CompetenceBasedAdaptionAsset Instance
+        {
+            get
+            {
+                return instance;
+            }
+        }
+
+        /// <summary>
+        /// Getter for Instance of the CompetenceBasedAdaptionHandler
+        /// </summary>
+        internal static CompetenceBasedAdaptionHandler Handler
+        {
+            get
+            {
+                return competenceBasedAdaptionHandler;
+            }
+        }
+        
         #endregion Properties
         #region Methods
 
@@ -121,12 +130,12 @@ namespace CompetenceBasedAdaptionAssetNameSpace
         /// <returns> The game situation id for the player. </returns>
         public string getNextGameSituationId()
         {
-            if (CompetenceBasedAdaptionHandler.Instance.getCurrentGameSituationId() == null)
+            if (Handler.getCurrentGameSituationId() == null)
             {
-                CompetenceBasedAdaptionHandler.Instance.registerNewPlayer( CompetenceBasedAdaptionHandler.Instance.getDMA().getDomainModel());
-                return CompetenceBasedAdaptionHandler.Instance.getNextGameSituationId();
+                Handler.registerNewPlayer(Handler.getDMA().getDomainModel());
+                return Handler.getNextGameSituationId();
             }
-            return CompetenceBasedAdaptionHandler.Instance.getNextGameSituationId();
+            return Handler.getNextGameSituationId();
         }
 
         /// <summary>
@@ -136,9 +145,9 @@ namespace CompetenceBasedAdaptionAssetNameSpace
         /// <returns> The game situation id for the player. </returns>
         public string getCurrentGameSituationId()
         {
-            if (CompetenceBasedAdaptionHandler.Instance.getCurrentGameSituationId() == null)
-                CompetenceBasedAdaptionHandler.Instance.registerNewPlayer( CompetenceBasedAdaptionHandler.Instance.getDMA().getDomainModel());
-            return CompetenceBasedAdaptionHandler.Instance.getCurrentGameSituationId();
+            if (Handler.getCurrentGameSituationId() == null)
+                Handler.registerNewPlayer(Handler.getDMA().getDomainModel());
+            return Handler.getCurrentGameSituationId();
         }
         
         /// <summary>
@@ -148,10 +157,10 @@ namespace CompetenceBasedAdaptionAssetNameSpace
         /// <param name="evidence"> If true, the player successfully played the curren game situation, otherwise not. </param>
         public void setGameSituationUpdate( Boolean evidence)
         {
-            if (CompetenceBasedAdaptionHandler.Instance.getCurrentGameSituationId() == null)
-                CompetenceBasedAdaptionHandler.Instance.registerNewPlayer( CompetenceBasedAdaptionHandler.Instance.getDMA().getDomainModel());
+            if (Handler.getCurrentGameSituationId() == null)
+                Handler.registerNewPlayer(Handler.getDMA().getDomainModel());
 
-            CompetenceBasedAdaptionHandler.Instance.setGameSituationUpdate(evidence);
+            Handler.setGameSituationUpdate(evidence);
         }
 
         #endregion Methods

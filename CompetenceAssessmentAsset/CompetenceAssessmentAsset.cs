@@ -46,34 +46,27 @@ namespace CompetenceAssessmentAssetNameSpace
         /// </summary>
         private CompetenceAssessmentAssetSettings settings = null;
 
+        /// <summary>
+        /// Instance of the CompetenceAssessmentAsset - Singelton pattern
+        /// </summary>
+        static readonly CompetenceAssessmentAsset instance = new CompetenceAssessmentAsset();
+
+        /// <summary>
+        /// Instance of the CompetenceAssessmentHandler 
+        /// </summary>
+        static internal CompetenceAssessmentHandler competenceAssessmentHandler = new CompetenceAssessmentHandler();
+
         #endregion Fields
         #region Constructors
 
         /// <summary>
         /// Initializes a new instance of the CompetenceAssessmentAsset.Asset class.
         /// </summary>
-        public CompetenceAssessmentAsset()
+        private CompetenceAssessmentAsset()
             : base()
         {
             //! Create Settings and let it's BaseSettings class assign Defaultvalues where it can.
-            // 
             settings = new CompetenceAssessmentAssetSettings();
-
-            //preventing multiple asset creation
-            if (AssetManager.Instance.findAssetsByClass(this.Class).Count > 1)
-            {
-                this.Log(Severity.Error, "There is only one instance of the CompetenceAssessmentAsset permitted!");
-                throw new Exception("EXCEPTION: There is only one instance of the CompetenceAssessmentAsset permitted!");
-            }
-
-            //control if an instance of the DomainModelAsset exists
-            if (AssetManager.Instance.findAssetsByClass("DomainModelAsset").Count == 0)
-            {
-                this.Log(Severity.Error, "There needs to be an instance of the DomainModelAsset persistent before creating the CompetenceAssessmentAsset!");
-                throw new Exception("EXCEPTION: There needs to be an instance of the DomainModelAsset persistent before creating the CompetenceAssessmentAsset!");
-            }
-
-            CompetenceAssessmentHandler.Instance.competenceAssessmentAsset = this;
         }
 
         #endregion Constructors
@@ -101,13 +94,35 @@ namespace CompetenceAssessmentAssetNameSpace
             set
             {
                 settings = (value as CompetenceAssessmentAssetSettings);
-                CompetenceAssessmentHandler.Instance.transitionProbability = settings.TransitionProbability;
+                Handler.transitionProbability = settings.TransitionProbability;
             }
         }
 
+        /// <summary>
+        /// Getter for Instance of the CompetenceAssessmentAsset - Singelton pattern
+        /// </summary>
+        public static CompetenceAssessmentAsset Instance
+        {
+            get
+            {
+                return instance;
+            }
+        }
+
+        /// <summary>
+        /// Getter for Instance of the CompetenceAssessmentHandler 
+        /// </summary>
+        internal static CompetenceAssessmentHandler Handler
+        {
+            get
+            {
+                return competenceAssessmentHandler;
+            }
+        }
+        
         #endregion Properties
         #region Methods
-        
+
         /// <summary>
         /// Method for updating the competence state of a player.
         /// </summary>
@@ -117,9 +132,9 @@ namespace CompetenceAssessmentAssetNameSpace
         /// <param name="evidencePowers"> Contains the power of the evidence (Low,Medium,High) </param>
         public void updateCompetenceState(List<string> competences, List<Boolean> evidences, List<EvidencePower> evidencePowers)
         {
-            if (CompetenceAssessmentHandler.Instance.getCompetenceState() == null || CompetenceAssessmentHandler.Instance.updateLevelStorage == null)
-                CompetenceAssessmentHandler.Instance.registerNewPlayer( CompetenceAssessmentHandler.Instance.getDMA().getDomainModel());
-            CompetenceAssessmentHandler.Instance.updateCompetenceState(competences, evidences, evidencePowers);
+            if (Handler.getCompetenceState() == null || Handler.updateLevelStorage == null)
+                Handler.registerNewPlayer( Handler.getDMA().getDomainModel());
+            Handler.updateCompetenceState(competences, evidences, evidencePowers);
         }
 
         /// <summary>
@@ -128,9 +143,9 @@ namespace CompetenceAssessmentAssetNameSpace
         /// <param name="activity"> observed activity </param>
         public void updateCompetenceStateAccordingToActivity(String activity)
         {
-            if (CompetenceAssessmentHandler.Instance.getCompetenceState() == null || CompetenceAssessmentHandler.Instance.updateLevelStorage == null)
-                CompetenceAssessmentHandler.Instance.registerNewPlayer(CompetenceAssessmentHandler.Instance.getDMA().getDomainModel());
-            CompetenceAssessmentHandler.Instance.activityMapping.updateCompetenceAccordingToActivity(activity);
+            if (Handler.getCompetenceState() == null || Handler.updateLevelStorage == null)
+                Handler.registerNewPlayer(Handler.getDMA().getDomainModel());
+            Handler.activityMapping.updateCompetenceAccordingToActivity(activity);
         }
 
         /// <summary>
@@ -140,9 +155,9 @@ namespace CompetenceAssessmentAssetNameSpace
         /// <param name="success"> true, if the gamesituation was mastered, false otherwise</param>
         public void updateCompetenceStateAccordingToGamesituation(String gamesituationId, Boolean success)
         {
-            if (CompetenceAssessmentHandler.Instance.getCompetenceState() == null || CompetenceAssessmentHandler.Instance.updateLevelStorage == null)
-                CompetenceAssessmentHandler.Instance.registerNewPlayer(CompetenceAssessmentHandler.Instance.getDMA().getDomainModel());
-            CompetenceAssessmentHandler.Instance.gameSituationMapping.updateCompetenceAccordingToGamesituation(gamesituationId,success);
+            if (Handler.getCompetenceState() == null || Handler.updateLevelStorage == null)
+                Handler.registerNewPlayer(Handler.getDMA().getDomainModel());
+            Handler.gameSituationMapping.updateCompetenceAccordingToGamesituation(gamesituationId,success);
         }
 
         /// <summary>
@@ -152,13 +167,13 @@ namespace CompetenceAssessmentAssetNameSpace
         /// <returns> Competence state</returns>
         public Dictionary<string, double> getCompetenceState()
         {
-            if (CompetenceAssessmentHandler.Instance.getCompetenceState() == null || CompetenceAssessmentHandler.Instance.updateLevelStorage == null)
-                CompetenceAssessmentHandler.Instance.registerNewPlayer(CompetenceAssessmentHandler.Instance.getDMA().getDomainModel());
+            if (Handler.getCompetenceState() == null || Handler.updateLevelStorage == null)
+                Handler.registerNewPlayer(Handler.getDMA().getDomainModel());
 
-            if (CompetenceAssessmentHandler.Instance.gameStorage == null)
-                CompetenceAssessmentHandler.Instance.loadCompetenceStateFromGameStorage();
+            if (Handler.gameStorage == null)
+                Handler.loadCompetenceStateFromGameStorage();
 
-            Dictionary<Competence, double> cs = CompetenceAssessmentHandler.Instance.getCompetenceState().getCurrentValues();
+            Dictionary<Competence, double> cs = Handler.getCompetenceState().getCurrentValues();
             Dictionary<string, double> csNew = new Dictionary<string, double>();
             foreach (KeyValuePair<Competence, double> pair in cs)
                 csNew[pair.Key.id] = pair.Value;
@@ -170,9 +185,9 @@ namespace CompetenceAssessmentAssetNameSpace
         /// </summary>
         public void resetCompetenceState()
         {
-            if (CompetenceAssessmentHandler.Instance.getCompetenceState() == null || CompetenceAssessmentHandler.Instance.updateLevelStorage == null)
-                CompetenceAssessmentHandler.Instance.registerNewPlayer(CompetenceAssessmentHandler.Instance.getDMA().getDomainModel());
-            CompetenceAssessmentHandler.Instance.resetCompetenceState();
+            if (Handler.getCompetenceState() == null || Handler.updateLevelStorage == null)
+                Handler.registerNewPlayer(Handler.getDMA().getDomainModel());
+            Handler.resetCompetenceState();
         }
 
         #endregion Methods

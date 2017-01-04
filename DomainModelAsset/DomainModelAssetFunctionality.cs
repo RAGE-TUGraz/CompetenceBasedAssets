@@ -45,16 +45,6 @@ namespace DomainModelAssetNameSpace
         #region Fields
 
         /// <summary>
-        /// Instance of the DomainModelAsset
-        /// </summary>
-        internal DomainModelAsset domainModelAsset = null;
-
-        /// <summary>
-        /// Instance of the class DomainModelHandler - Singelton pattern
-        /// </summary>
-        static readonly DomainModelHandler instance = new DomainModelHandler();
-
-        /// <summary>
         /// If true logging is done, otherwise no logging is done.
         /// </summary>
         private Boolean doLogging = true;
@@ -70,21 +60,11 @@ namespace DomainModelAssetNameSpace
         /// <summary>
         /// private DomainModelHandler-ctor for Singelton-pattern 
         /// </summary>
-        private DomainModelHandler() { }
+        internal DomainModelHandler() { }
 
         #endregion Constructors
         #region Properties
 
-        /// <summary>
-        /// Getter for Instance of the DomainModelHandler - Singelton pattern
-        /// </summary>
-        public static DomainModelHandler Instance
-        {
-            get
-            {
-                return instance;
-            }
-        }
 
         /// <summary>
         /// If set to true - logging is done, otherwise no logging is done.
@@ -121,7 +101,7 @@ namespace DomainModelAssetNameSpace
             /// <returns> Instance of the DomainModelAsset </returns>
         internal DomainModelAsset getDMA()
         {
-            return (domainModelAsset);
+            return DomainModelAsset.Instance;
         }
 
         /// <summary>
@@ -268,11 +248,7 @@ namespace DomainModelAssetNameSpace
         internal void loggingDM(String msg, Severity severity = Severity.Information)
         {
             if (DoLogging)
-            {
-                if(domainModelAsset==null)
-                    domainModelAsset = (DomainModelAsset) AssetManager.Instance.findAssetByClass("DomainModelAsset");
-                domainModelAsset.Log(severity, "[DMA]: " +msg);
-            }
+                DomainModelAsset.Instance.Log(severity, "[DMA]: " +msg);
         }
         
         #endregion TestMethods
@@ -291,7 +267,7 @@ namespace DomainModelAssetNameSpace
         /// <param name="msg"></param>
         public void Error(string url, string msg)
         {
-            DomainModelHandler.Instance.loggingDM("Web Request for retriving Domain model from "+url+" failed! " + msg, Severity.Error);
+            DomainModelAsset.Handler.loggingDM("Web Request for retriving Domain model from "+url+" failed! " + msg, Severity.Error);
             throw new Exception("EXCEPTION: Web Request for retriving Domain model from " + url + " failed! " + msg);
         }
 
@@ -304,8 +280,8 @@ namespace DomainModelAssetNameSpace
         /// <param name="body"></param>
         public void Success(string url, int code, Dictionary<string, string> headers, string body)
         {
-            DomainModelHandler.Instance.loggingDM("WebClient request successful!");
-            DomainModelHandler.Instance.storeDomainModel(DomainModelHandler.Instance.getDMFromXmlString(body));
+            DomainModelAsset.Handler.loggingDM("WebClient request successful!");
+            DomainModelAsset.Handler.storeDomainModel(DomainModelAsset.Handler.getDMFromXmlString(body));
         }
     }
 
@@ -335,7 +311,7 @@ namespace DomainModelAssetNameSpace
         /// </summary>
         public void print()
         {
-            DomainModelHandler.Instance.loggingDM("Printing out DM:");
+            DomainModelAsset.Handler.loggingDM("Printing out DM:");
             elements.print();
             relations.print();
             if(updateLevels != null)
@@ -379,7 +355,7 @@ namespace DomainModelAssetNameSpace
 
         public void print()
         {
-             DomainModelHandler.Instance.loggingDM("-Printing out updateLevels:");
+            DomainModelAsset.Handler.loggingDM("-Printing out updateLevels:");
              foreach(UpdateLevel ul in updateLevelList)
                 ul.print();
         }
@@ -414,12 +390,12 @@ namespace DomainModelAssetNameSpace
 
         public void print()
         {
-            DomainModelHandler.Instance.loggingDM("-----");
-            DomainModelHandler.Instance.loggingDM("--direction:" +direction);
-            DomainModelHandler.Instance.loggingDM("--power:" + power);
-            DomainModelHandler.Instance.loggingDM("--xi:" + xi);
-            DomainModelHandler.Instance.loggingDM("--minonecompetence:" + minonecompetence);
-            DomainModelHandler.Instance.loggingDM("--maxonelevel:" + maxonelevel);
+            DomainModelAsset.Handler.loggingDM("-----");
+            DomainModelAsset.Handler.loggingDM("--direction:" +direction);
+            DomainModelAsset.Handler.loggingDM("--power:" + power);
+            DomainModelAsset.Handler.loggingDM("--xi:" + xi);
+            DomainModelAsset.Handler.loggingDM("--minonecompetence:" + minonecompetence);
+            DomainModelAsset.Handler.loggingDM("--maxonelevel:" + maxonelevel);
 
         }
 
@@ -445,7 +421,7 @@ namespace DomainModelAssetNameSpace
         /// </summary>
         public void print()
         {
-            DomainModelHandler.Instance.loggingDM("-Printing out elements:");
+            DomainModelAsset.Handler.loggingDM("-Printing out elements:");
             if (competences != null)
                 competences.print();
             if (situations != null)
@@ -469,7 +445,7 @@ namespace DomainModelAssetNameSpace
         /// </summary>
         public void print()
         {
-            DomainModelHandler.Instance.loggingDM("--Printing out Activities:");
+            DomainModelAsset.Handler.loggingDM("--Printing out Activities:");
             foreach (Activity ac in activityList)
             {
                 ac.print();
@@ -501,7 +477,7 @@ namespace DomainModelAssetNameSpace
         /// </summary>
         public void print()
         {
-            DomainModelHandler.Instance.loggingDM("---id:" + id);
+            DomainModelAsset.Handler.loggingDM("---id:" + id);
         }
         #endregion Methods
     }
@@ -520,7 +496,7 @@ namespace DomainModelAssetNameSpace
         /// </summary>
         public void print()
         {
-            DomainModelHandler.Instance.loggingDM("--Printing out Situations:");
+            DomainModelAsset.Handler.loggingDM("--Printing out Situations:");
             foreach (Situation si in situationList)
             {
                 si.print();
@@ -563,10 +539,10 @@ namespace DomainModelAssetNameSpace
         /// </summary>
         public void print()
         {
-            DomainModelHandler.Instance.loggingDM("---");
-            DomainModelHandler.Instance.loggingDM("---id:" + id);
-            DomainModelHandler.Instance.loggingDM("---title:" + title);
-            DomainModelHandler.Instance.loggingDM("---uri:" + uri);
+            DomainModelAsset.Handler.loggingDM("---");
+            DomainModelAsset.Handler.loggingDM("---id:" + id);
+            DomainModelAsset.Handler.loggingDM("---title:" + title);
+            DomainModelAsset.Handler.loggingDM("---uri:" + uri);
         }
     }
 
@@ -584,7 +560,7 @@ namespace DomainModelAssetNameSpace
         /// </summary>
         public void print()
         {
-            DomainModelHandler.Instance.loggingDM("--Printing out Competences:");
+            DomainModelAsset.Handler.loggingDM("--Printing out Competences:");
             foreach (CompetenceDesc comp in competenceList)
                 comp.print();
         }
@@ -629,11 +605,11 @@ namespace DomainModelAssetNameSpace
         /// </summary>
         public void print()
         {
-            DomainModelHandler.Instance.loggingDM("---");
-            DomainModelHandler.Instance.loggingDM("---description:" + description);
-            DomainModelHandler.Instance.loggingDM("---id:" + id);
-            DomainModelHandler.Instance.loggingDM("---title:" + title);
-            DomainModelHandler.Instance.loggingDM("---uri:" + uri);
+            DomainModelAsset.Handler.loggingDM("---");
+            DomainModelAsset.Handler.loggingDM("---description:" + description);
+            DomainModelAsset.Handler.loggingDM("---id:" + id);
+            DomainModelAsset.Handler.loggingDM("---title:" + title);
+            DomainModelAsset.Handler.loggingDM("---uri:" + uri);
         }
     }
 
@@ -656,7 +632,7 @@ namespace DomainModelAssetNameSpace
         /// </summary>
         public void print()
         {
-            DomainModelHandler.Instance.loggingDM("-Printing out relations:");
+            DomainModelAsset.Handler.loggingDM("-Printing out relations:");
             if (competenceprerequisites != null)
                 competenceprerequisites.print();
             if (situations != null)
@@ -680,7 +656,7 @@ namespace DomainModelAssetNameSpace
         /// </summary>
         public void print()
         {
-            DomainModelHandler.Instance.loggingDM("--Printing out situation-Relation:");
+            DomainModelAsset.Handler.loggingDM("--Printing out situation-Relation:");
             foreach (SituationRelation sr in situations)
             {
                 sr.print();
@@ -745,8 +721,8 @@ namespace DomainModelAssetNameSpace
         /// </summary>
         public void print()
         {
-            DomainModelHandler.Instance.loggingDM("---------------");
-            DomainModelHandler.Instance.loggingDM("---id pr.:" + id);
+            DomainModelAsset.Handler.loggingDM("---------------");
+            DomainModelAsset.Handler.loggingDM("---id pr.:" + id);
             foreach(CompetenceSituation cs in this.competences)
                 cs.print();
         }
@@ -774,9 +750,9 @@ namespace DomainModelAssetNameSpace
         /// </summary>
         public void print()
         {
-            DomainModelHandler.Instance.loggingDM("---id comp.:" + id);
-            DomainModelHandler.Instance.loggingDM("---up comp.:" + up);
-            DomainModelHandler.Instance.loggingDM("---down comp.:" + down);
+            DomainModelAsset.Handler.loggingDM("---id comp.:" + id);
+            DomainModelAsset.Handler.loggingDM("---up comp.:" + up);
+            DomainModelAsset.Handler.loggingDM("---down comp.:" + down);
         }
     }
 
@@ -794,7 +770,7 @@ namespace DomainModelAssetNameSpace
         /// </summary>
         public void print()
         {
-            DomainModelHandler.Instance.loggingDM("--Printing out activities-Relation:");
+            DomainModelAsset.Handler.loggingDM("--Printing out activities-Relation:");
             foreach (ActivitiesRelation ar in activities)
             {
                 ar.print();
@@ -865,7 +841,7 @@ namespace DomainModelAssetNameSpace
         /// </summary>
         public void print()
         {
-            DomainModelHandler.Instance.loggingDM("---id lo.:" + id);
+            DomainModelAsset.Handler.loggingDM("---id lo.:" + id);
             foreach(CompetenceActivity ca in this.competences)
                 ca.print();
         }
@@ -904,9 +880,9 @@ namespace DomainModelAssetNameSpace
         /// </summary>
         public void print()
         {
-            DomainModelHandler.Instance.loggingDM("---id comp.:" + id);
-            DomainModelHandler.Instance.loggingDM("---power comp.:" + power);
-            DomainModelHandler.Instance.loggingDM("---direction comp.:" + direction);
+            DomainModelAsset.Handler.loggingDM("---id comp.:" + id);
+            DomainModelAsset.Handler.loggingDM("---power comp.:" + power);
+            DomainModelAsset.Handler.loggingDM("---direction comp.:" + direction);
         }
         #endregion Methods
     }
@@ -925,7 +901,7 @@ namespace DomainModelAssetNameSpace
         /// </summary>
         public void print()
         {
-            DomainModelHandler.Instance.loggingDM("--Printing out Competenceprerequisites");
+            DomainModelAsset.Handler.loggingDM("--Printing out Competenceprerequisites");
             foreach (CompetenceP cp in competences)
             {
                 cp.print();
@@ -996,7 +972,7 @@ namespace DomainModelAssetNameSpace
         /// </summary>
         public void print()
         {
-            DomainModelHandler.Instance.loggingDM("---id: " + id);
+            DomainModelAsset.Handler.loggingDM("---id: " + id);
             foreach(Prereqcompetence pc in prereqcompetences)
                 pc.print();
         }
@@ -1016,7 +992,7 @@ namespace DomainModelAssetNameSpace
         /// </summary>
         public void print()
         {
-            DomainModelHandler.Instance.loggingDM("---id prereq.:" + id);
+            DomainModelAsset.Handler.loggingDM("---id prereq.:" + id);
         }
     }
 

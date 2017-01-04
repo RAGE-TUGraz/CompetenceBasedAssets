@@ -28,8 +28,6 @@
 
 namespace DomainModelAssetNameSpace
 {
-    using System;
-    using AssetManagerPackage;
     using AssetPackage;
 
     /// <summary>
@@ -45,27 +43,27 @@ namespace DomainModelAssetNameSpace
         private DomainModelAssetSettings settings = null;
 
 
+        /// <summary>
+        /// Instance of the class DomainModelHandler - Singelton pattern
+        /// </summary>
+        static readonly DomainModelAsset instance = new DomainModelAsset();
+
+        /// <summary>
+        /// Instance of the class DomainModelHandler - Singelton pattern
+        /// </summary>
+        static internal DomainModelHandler domainModelHandler = new DomainModelHandler();
+
         #endregion Fields
         #region Constructors
 
         /// <summary>
         /// Initializes a new instance of the DomainModelAsset.Asset class.
         /// </summary>
-        public DomainModelAsset()
+        private DomainModelAsset()
             : base()
         {
             //! Create Settings and let it's BaseSettings class assign Defaultvalues where it can.
-            // 
             settings = new DomainModelAssetSettings();
-
-            //preventing multiple asset creation
-            if (AssetManager.Instance.findAssetsByClass(this.Class).Count > 1)
-            {
-                this.Log(Severity.Error, "There is only one instance of the DomainModelAsset permitted!");
-                throw new Exception("EXCEPTION: There is only one instance of the DomainModelAsset permitted!");
-            }
-
-            DomainModelHandler.Instance.domainModelAsset = this;
         }
 
         #endregion Constructors
@@ -93,7 +91,7 @@ namespace DomainModelAssetNameSpace
             set
             {
                 settings = (value as DomainModelAssetSettings);
-                DomainModelHandler.Instance.setDomainModel(null);
+                Handler.setDomainModel(null);
             }
         }
 
@@ -104,14 +102,35 @@ namespace DomainModelAssetNameSpace
         {
             get
             {
-                return DomainModelHandler.Instance.DomainModel;
+                return Handler.DomainModel;
+            }
+        }
+        
+        /// <summary>
+        /// Getter for Instance of the DomainModelAsset - Singelton pattern
+        /// </summary>
+        public static DomainModelAsset Instance
+        {
+            get
+            {
+                return instance;
+            }
+        }
+
+        /// <summary>
+        /// Getter for Instance of the DomainModelHandler
+        /// </summary>
+        internal static DomainModelHandler Handler
+        {
+            get
+            {
+                return domainModelHandler;
             }
         }
 
         #endregion Properties
         #region PublicMethods
-
-
+        
         /// <summary>
         /// Method returning domain model either from the run-time asset storage if available or from specified (default) source(File/Web).
         /// </summary>
@@ -121,7 +140,7 @@ namespace DomainModelAssetNameSpace
         /// <returns> The domein model associated with the player-id. </returns>
         public DomainModel getDomainModel()
         {
-            return DomainModelHandler.Instance.DomainModel;
+            return Handler.DomainModel;
         }
 
         #endregion PublicMethods

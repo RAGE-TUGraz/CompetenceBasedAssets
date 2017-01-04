@@ -69,11 +69,6 @@ namespace CompetenceAssessmentAssetNameSpace
         #region Fields
 
         /// <summary>
-        /// Instance of the DomainModelAsset
-        /// </summary>
-        private DomainModelAsset domainModelAsset = null;
-
-        /// <summary>
         /// Instance of the tracker asset
         /// </summary>
         private TrackerAsset tracker = null;
@@ -82,16 +77,6 @@ namespace CompetenceAssessmentAssetNameSpace
         /// Instance of the game storage asset
         /// </summary>
         internal GameStorageClientAsset gameStorage = null;
-
-        /// <summary>
-        /// Instance of the CompetenceAssessmentAsset
-        /// </summary>
-        internal CompetenceAssessmentAsset competenceAssessmentAsset = null;
-
-        /// <summary>
-        /// Instance of the CompetenceAssessmentHandler - Singelton pattern
-        /// </summary>
-        static readonly CompetenceAssessmentHandler instance = new CompetenceAssessmentHandler();
 
         /// <summary>
         /// Dictionary containing all key/value pairs of playerId and competence structure.
@@ -129,22 +114,11 @@ namespace CompetenceAssessmentAssetNameSpace
         /// <summary>
         /// Private ctor - Singelton pattern
         /// </summary>
-        private CompetenceAssessmentHandler() {}
+        public CompetenceAssessmentHandler() {}
 
         #endregion Constructors
         #region Properties
-
-        /// <summary>
-        /// Getter for Instance of the CompetenceAssessmentHandler - Singelton pattern
-        /// </summary>
-        public static CompetenceAssessmentHandler Instance
-        {
-            get
-            {
-                return instance;
-            }
-        }
-
+        
         /// <summary>
         /// If set to true - logging is done, otherwise no logging is done.
         /// </summary>
@@ -169,9 +143,7 @@ namespace CompetenceAssessmentAssetNameSpace
         /// <returns> Instance of the DomainModelAsset </returns>
         internal DomainModelAsset getDMA()
         {
-            if (domainModelAsset == null)
-                domainModelAsset = (DomainModelAsset)AssetManager.Instance.findAssetByClass("DomainModelAsset");
-            return (domainModelAsset);
+            return DomainModelAsset.Instance;
         }
 
         /// <summary>
@@ -180,7 +152,7 @@ namespace CompetenceAssessmentAssetNameSpace
         /// <returns> Instance of the CompetenceAssessmentAsset </returns>
         internal CompetenceAssessmentAsset getCAA()
         {
-            return (competenceAssessmentAsset);
+            return CompetenceAssessmentAsset.Instance;
         }
 
         /// <summary>
@@ -541,9 +513,7 @@ namespace CompetenceAssessmentAssetNameSpace
         {
             if (DoLogging)
             {
-                if(competenceAssessmentAsset==null)
-                    competenceAssessmentAsset = (CompetenceAssessmentAsset)AssetManager.Instance.findAssetByClass("CompetenceAssessmentAsset");
-                competenceAssessmentAsset.Log(severity, "[CAA]: " + msg);
+                CompetenceAssessmentAsset.Instance.Log(severity, "[CAA]: " + msg);
             }
         }
 
@@ -571,9 +541,9 @@ namespace CompetenceAssessmentAssetNameSpace
         /// <summary>
         /// Algorithm-parameters for updating a competence state áccording to this competence-structure.
         /// </summary>
-        private double xi0 = CompetenceAssessmentHandler.Instance.xi0;
-        private double xi1 = CompetenceAssessmentHandler.Instance.xi1;
-        private double epsilon = CompetenceAssessmentHandler.Instance.epsilon;
+        private double xi0 = CompetenceAssessmentAsset.Handler.xi0;
+        private double xi1 = CompetenceAssessmentAsset.Handler.xi1;
+        private double epsilon = CompetenceAssessmentAsset.Handler.epsilon;
 
         #endregion Fields
         #region Constructors
@@ -641,8 +611,8 @@ namespace CompetenceAssessmentAssetNameSpace
         /// </summary>
         public void print()
         {
-            CompetenceAssessmentHandler.Instance.loggingCA("Printing competence-structure:");
-            CompetenceAssessmentHandler.Instance.loggingCA("==============================");
+            CompetenceAssessmentAsset.Handler.loggingCA("Printing competence-structure:");
+            CompetenceAssessmentAsset.Handler.loggingCA("==============================");
 
             foreach (Competence com in competences)
             {
@@ -684,7 +654,7 @@ namespace CompetenceAssessmentAssetNameSpace
                 cs.setCompetenceValue(comp, sum[comp.id] / compList.Count);
             }
 
-            CompetenceAssessmentHandler.Instance.storeCompetenceStateToGameStorage();
+            CompetenceAssessmentAsset.Handler.storeCompetenceStateToGameStorage();
 
         }
 
@@ -726,8 +696,8 @@ namespace CompetenceAssessmentAssetNameSpace
         /// </returns>
         internal Dictionary<string, double> updateCompetenceStateWithOneEvidence(CompetenceState cs, Competence com, Boolean evidence, EvidencePower evidencePower)
         {
-            CompetenceAssessmentHandler cah = CompetenceAssessmentHandler.Instance;
-            ULevel ulevel = evidence ? CompetenceAssessmentHandler.Instance.updateLevelStorage.up[evidencePower] : CompetenceAssessmentHandler.Instance.updateLevelStorage.down[evidencePower];
+            CompetenceAssessmentHandler cah = CompetenceAssessmentAsset.Handler;
+            ULevel ulevel = evidence ? CompetenceAssessmentAsset.Handler.updateLevelStorage.up[evidencePower] : CompetenceAssessmentAsset.Handler.updateLevelStorage.down[evidencePower];
 
 
             Dictionary<string, double> pairs = new Dictionary<string, double>();
@@ -958,13 +928,13 @@ namespace CompetenceAssessmentAssetNameSpace
             //logging
             if (evidence && (xi0 != newXi0))
             {
-                CompetenceAssessmentHandler.Instance.loggingCA("xi0 changed from " + xi0 + " to " + newXi0 + " due to additional information.");
+                CompetenceAssessmentAsset.Handler.loggingCA("xi0 changed from " + xi0 + " to " + newXi0 + " due to additional information.");
                 if (newXi0 < 1)
                     throw new Exception("Internal error Competence Assessment Asset: Value not allowed!");
             }
             else if ((!evidence) && (xi1 != newXi1))
             {
-                CompetenceAssessmentHandler.Instance.loggingCA("xi1 changed from " + xi1 + " to " + newXi1 + " due to additional information.");
+                CompetenceAssessmentAsset.Handler.loggingCA("xi1 changed from " + xi1 + " to " + newXi1 + " due to additional information.");
                 if (newXi1 < 1)
                     throw new Exception("Internal error Competence Assessment Asset: Value not allowed!");
             }
@@ -1005,8 +975,7 @@ namespace CompetenceAssessmentAssetNameSpace
         #endregion Methods
 
     }
-
-
+    
     /// <summary>
     /// Class representing a Competence in the Competence-Tree of the Domainmodel.
     /// </summary>
@@ -1084,24 +1053,24 @@ namespace CompetenceAssessmentAssetNameSpace
         /// </summary>
         public void print()
         {
-            CompetenceAssessmentHandler.Instance.loggingCA("Competence: " + id);
+            CompetenceAssessmentAsset.Handler.loggingCA("Competence: " + id);
 
             if (prerequisites.Count > 0)
             {
-                CompetenceAssessmentHandler.Instance.loggingCA("Prerequisites: ");
+                CompetenceAssessmentAsset.Handler.loggingCA("Prerequisites: ");
             }
             foreach (Competence com in prerequisites)
             {
-                CompetenceAssessmentHandler.Instance.loggingCA("       - " + com.id);
+                CompetenceAssessmentAsset.Handler.loggingCA("       - " + com.id);
             }
 
             if (successors.Count > 0)
             {
-                CompetenceAssessmentHandler.Instance.loggingCA("Successors: ");
+                CompetenceAssessmentAsset.Handler.loggingCA("Successors: ");
             }
             foreach (Competence com in successors)
             {
-                CompetenceAssessmentHandler.Instance.loggingCA("       - " + com.id);
+                CompetenceAssessmentAsset.Handler.loggingCA("       - " + com.id);
             }
         }
 
@@ -1192,7 +1161,7 @@ namespace CompetenceAssessmentAssetNameSpace
             Boolean allPrerequisitesMet = true;
             foreach (Competence com in this.prerequisites)
             {
-                if (cs[com.id] < CompetenceAssessmentHandler.Instance.transitionProbability)
+                if (cs[com.id] < CompetenceAssessmentAsset.Handler.transitionProbability)
                 {
                     allPrerequisitesMet = false;
                     break;
@@ -1305,9 +1274,9 @@ namespace CompetenceAssessmentAssetNameSpace
         Dictionary<Competence, double> pairs = new Dictionary<Competence, double>();
 
         /// <summary>
-        /// Limit: Values of CompetenceAssessmentHandler.Instance.transitionProbability and above are assumed to indicate mastery of a competence by a learner 
+        /// Limit: Values of CompetenceAssessmentAsset.Handler.transitionProbability and above are assumed to indicate mastery of a competence by a learner 
         /// </summary>
-        public double transitionProbability = CompetenceAssessmentHandler.Instance.transitionProbability;
+        public double transitionProbability = CompetenceAssessmentAsset.Handler.transitionProbability;
 
         #endregion Fields
         #region Constructors
@@ -1413,15 +1382,15 @@ namespace CompetenceAssessmentAssetNameSpace
         /// </summary>
         public void print()
         {
-            CompetenceAssessmentHandler.Instance.loggingCA("Competence State:");
-            //CompetenceAssessmentHandler.Instance.loggingCA("=================");
+            CompetenceAssessmentAsset.Handler.loggingCA("Competence State:");
+            //CompetenceAssessmentAsset.Handler.loggingCA("=================");
             String str = "";
             foreach (var pair in pairs)
             {
                 str += "(" + pair.Key.id + ":" + Math.Round(pair.Value, 2) + ")";
-                //CompetenceAssessmentHandler.Instance.loggingCA("Key: " + pair.Key.id + " Value: " + Math.Round(pair.Value,2));
+                //CompetenceAssessmentAsset.Handler.loggingCA("Key: " + pair.Key.id + " Value: " + Math.Round(pair.Value,2));
             }
-            CompetenceAssessmentHandler.Instance.loggingCA(str);
+            CompetenceAssessmentAsset.Handler.loggingCA(str);
 
         }
 
@@ -1430,15 +1399,15 @@ namespace CompetenceAssessmentAssetNameSpace
         /// </summary>
         public void printMasteredCompetences()
         {
-            CompetenceAssessmentHandler.Instance.loggingCA("Competences mastered:");
-            //CompetenceAssessmentHandler.Instance.loggingCA("=================");
+            CompetenceAssessmentAsset.Handler.loggingCA("Competences mastered:");
+            //CompetenceAssessmentAsset.Handler.loggingCA("=================");
             String str = "";
             foreach (var pair in this.getMasteredCompetences())
             {
                 str += "(" + pair.id + ":" + Math.Round(this.getValue(pair.id), 2) + ")";
-                //CompetenceAssessmentHandler.Instance.loggingCA("Key: " + pair.Key.id + " Value: " + Math.Round(pair.Value,2));
+                //CompetenceAssessmentAsset.Handler.loggingCA("Key: " + pair.Key.id + " Value: " + Math.Round(pair.Value,2));
             }
-            CompetenceAssessmentHandler.Instance.loggingCA(str);
+            CompetenceAssessmentAsset.Handler.loggingCA(str);
         }
 
         /// <summary>
@@ -1548,7 +1517,7 @@ namespace CompetenceAssessmentAssetNameSpace
             }
             else
             {
-                CompetenceAssessmentHandler.Instance.loggingCA("No update-levels specified for the competence assessment!");
+                CompetenceAssessmentAsset.Handler.loggingCA("No update-levels specified for the competence assessment!");
                 throw new Exception("No update-levels specified for the competence assessment!");
             }
         }
@@ -1612,12 +1581,12 @@ namespace CompetenceAssessmentAssetNameSpace
             Dictionary<String, String[]> competencesToUpdate;
             if (!mapping.ContainsKey(activity))
             {
-                CompetenceAssessmentHandler.Instance.loggingCA("The received activity " + activity + " is unknown.");
+                CompetenceAssessmentAsset.Handler.loggingCA("The received activity " + activity + " is unknown.");
                 return;
             }
 
             competencesToUpdate = mapping[activity];
-            UpdateLevelStorage uls =  CompetenceAssessmentHandler.Instance.updateLevelStorage;
+            UpdateLevelStorage uls =  CompetenceAssessmentAsset.Handler.updateLevelStorage;
 
             List<String> competences = new List<string>();
             List<Boolean> evidences = new List<bool>();
@@ -1641,8 +1610,8 @@ namespace CompetenceAssessmentAssetNameSpace
                 }
             }
 
-            CompetenceAssessmentHandler.Instance.loggingCA("Performing update based on activity '"+activity+"'.");
-            CompetenceAssessmentHandler.Instance.getCAA().updateCompetenceState(competences, evidences, evidencePowers);
+            CompetenceAssessmentAsset.Handler.loggingCA("Performing update based on activity '"+activity+"'.");
+            CompetenceAssessmentAsset.Handler.getCAA().updateCompetenceState(competences, evidences, evidencePowers);
 
         }
 
@@ -1699,12 +1668,12 @@ namespace CompetenceAssessmentAssetNameSpace
             Dictionary<String, Dictionary<String, String>> mapping = success ? mappingUp : mappingDown;
             if (!mapping.ContainsKey(gamesituationId))
             {
-                CompetenceAssessmentHandler.Instance.loggingCA("The received game situation "+gamesituationId+" is unknown.");
+                CompetenceAssessmentAsset.Handler.loggingCA("The received game situation "+gamesituationId+" is unknown.");
                 return;
             }
 
             competencesToUpdate = mapping[gamesituationId];
-            UpdateLevelStorage uls = CompetenceAssessmentHandler.Instance.updateLevelStorage;
+            UpdateLevelStorage uls = CompetenceAssessmentAsset.Handler.updateLevelStorage;
 
             List<String> competences = new List<string>();
             List<Boolean> evidences = new List<bool>();
@@ -1723,8 +1692,8 @@ namespace CompetenceAssessmentAssetNameSpace
                 evidences.Add(success);
             }
 
-            CompetenceAssessmentHandler.Instance.loggingCA("Performing update based on game situation.");
-            CompetenceAssessmentHandler.Instance.getCAA().updateCompetenceState(competences, evidences, evidencePowers);
+            CompetenceAssessmentAsset.Handler.loggingCA("Performing update based on game situation.");
+            CompetenceAssessmentAsset.Handler.getCAA().updateCompetenceState(competences, evidences, evidencePowers);
         }
 
         #endregion Methods

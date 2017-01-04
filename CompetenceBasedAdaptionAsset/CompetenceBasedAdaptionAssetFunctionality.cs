@@ -44,26 +44,6 @@ namespace CompetenceBasedAdaptionAssetNameSpace
         #region Fields
 
         /// <summary>
-        /// Instance of the DomainModelAsset
-        /// </summary>
-        private DomainModelAsset domainModelAsset = null;
-
-        /// <summary>
-        /// Instance of the CompetenceAssessmentAsset
-        /// </summary>
-        private CompetenceAssessmentAsset competenceAssessmentAsset = null;
-
-        /// <summary>
-        /// Instance of the CompetenceBasedAdaptionHandler
-        /// </summary>
-        internal CompetenceBasedAdaptionAsset competenceBasedAdaptionAsset = null;
-
-        /// <summary>
-        /// Instance of the CompetenceRecommendationHandler - Singelton pattern
-        /// </summary>
-        static readonly CompetenceBasedAdaptionHandler instance = new CompetenceBasedAdaptionHandler();
-
-        /// <summary>
         /// Dictionary storing all current game situation with player id as key.
         /// </summary>
         private GameSituation currentGameSituation = null;
@@ -91,21 +71,10 @@ namespace CompetenceBasedAdaptionAssetNameSpace
         /// <summary>
         /// Private ctor - Singelton pattern
         /// </summary>
-        private CompetenceBasedAdaptionHandler() { }
+        public CompetenceBasedAdaptionHandler() { }
 
         #endregion Constructors
         #region Properties
-
-        /// <summary>
-        /// Getter for Instance of the CompetenceBasedAdaptionHandler - Singelton pattern
-        /// </summary>
-        public static CompetenceBasedAdaptionHandler Instance
-        {
-            get
-            {
-                return instance;
-            }
-        }
 
         /// <summary>
         /// If set to true - logging is done, otherwise no logging is done.
@@ -139,9 +108,7 @@ namespace CompetenceBasedAdaptionAssetNameSpace
         /// <returns> Instance of the DomainModelAsset </returns>
         internal DomainModelAsset getDMA()
         {
-            if (domainModelAsset == null)
-                domainModelAsset = (DomainModelAsset)AssetManager.Instance.findAssetByClass("DomainModelAsset");
-            return (domainModelAsset);
+            return DomainModelAsset.Instance;
         }
 
         /// <summary>
@@ -150,9 +117,7 @@ namespace CompetenceBasedAdaptionAssetNameSpace
         /// <returns> Instance of the CompetenceAssessmentAsset </returns>
         internal CompetenceAssessmentAsset getCAA()
         {
-            if (competenceAssessmentAsset == null)
-                competenceAssessmentAsset = (CompetenceAssessmentAsset)AssetManager.Instance.findAssetByClass("CompetenceAssessmentAsset");
-            return (competenceAssessmentAsset);
+            return CompetenceAssessmentAsset.Instance;
         }
         
         /// <summary>
@@ -313,7 +278,7 @@ namespace CompetenceBasedAdaptionAssetNameSpace
         {
             if (DoLogging)
             {
-                competenceBasedAdaptionAsset.Log(severity, "[CBAA]: " + msg);
+                CompetenceBasedAdaptionAsset.Instance.Log(severity, "[CBAA]: " + msg);
             }
         }
 
@@ -428,13 +393,13 @@ namespace CompetenceBasedAdaptionAssetNameSpace
         /// </summary>
         internal void diagnosticPrint()
         {
-            CompetenceBasedAdaptionHandler.Instance.loggingPRA(id + "          " + " competences: " + string.Join(",", competences.ToArray()));
+            CompetenceBasedAdaptionAsset.Handler.loggingPRA(id + "          " + " competences: " + string.Join(",", competences.ToArray()));
             String successorsString = "";
             foreach (GameSituation gs in successors)
                 successorsString += gs.Id + ",";
             if (successorsString.Length > 0)
                 successorsString = successorsString.Remove(successorsString.Length - 1);
-            CompetenceBasedAdaptionHandler.Instance.loggingPRA("             " + " successors:  " + successorsString);
+            CompetenceBasedAdaptionAsset.Handler.loggingPRA("             " + " successors:  " + successorsString);
         }
 
         #endregion Methods
@@ -536,7 +501,7 @@ namespace CompetenceBasedAdaptionAssetNameSpace
                 if (gs.Id.Equals(id))
                     return gs;
 
-            CompetenceBasedAdaptionHandler.Instance.loggingPRA("ERROR: No game situation with id " + id + " in the game situation structure found!");
+            CompetenceBasedAdaptionAsset.Handler.loggingPRA("ERROR: No game situation with id " + id + " in the game situation structure found!");
             return null;
         }
 
@@ -549,18 +514,18 @@ namespace CompetenceBasedAdaptionAssetNameSpace
         /// <returns> The next game situation for the specified player. </returns>
         internal GameSituation determineNextGameSituation( )
         {
-            CompetenceBasedAdaptionHandler.Instance.loggingPRA("determining next game situation for player " );
-            GameSituation currentGS = CompetenceBasedAdaptionHandler.Instance.getCurrentGameSituation();
+            CompetenceBasedAdaptionAsset.Handler.loggingPRA("determining next game situation for player " );
+            GameSituation currentGS = CompetenceBasedAdaptionAsset.Handler.getCurrentGameSituation();
             ///tmp line
             //OLD:
             //CompetenceState cs = CompetenceAssessmentHandler.Instance.getCompetenceState(playerId);
             //List<String> mastered = cs.getMasteredCompetencesString();
             //NEW:
-            Dictionary<String, double> cs = CompetenceBasedAdaptionHandler.Instance.getCAA().getCompetenceState();
+            Dictionary<String, double> cs = CompetenceBasedAdaptionAsset.Handler.getCAA().getCompetenceState();
             List<String> mastered = new List<string>();
             foreach(KeyValuePair<String,double> pair in cs)
             {
-                double transitionProbability = ((CompetenceAssessmentAssetSettings) CompetenceBasedAdaptionHandler.Instance.getCAA().Settings).TransitionProbability;
+                double transitionProbability = ((CompetenceAssessmentAssetSettings) CompetenceBasedAdaptionAsset.Handler.getCAA().Settings).TransitionProbability;
                 if (pair.Value >= transitionProbability)
                     mastered.Add(pair.Key);
             }
@@ -581,7 +546,7 @@ namespace CompetenceBasedAdaptionAssetNameSpace
             }
 
             //Remove GS with not mastered competences, for which not all prerequisites are mastered!
-            CompetenceStructure compStruct = new CompetenceStructure(CompetenceBasedAdaptionHandler.Instance.getDMA().getDomainModel());
+            CompetenceStructure compStruct = new CompetenceStructure(CompetenceBasedAdaptionAsset.Handler.getDMA().getDomainModel());
             Dictionary<GameSituation, int> gameSituationEvaluation = new Dictionary<GameSituation, int>();
             Boolean allPrerequisitesMet = true;
             foreach (GameSituation gs in gameSituationEvaluation0.Keys)
@@ -591,7 +556,7 @@ namespace CompetenceBasedAdaptionAssetNameSpace
                 {
                     if (!mastered.Contains(com))
                     {
-                        if (!compStruct.getCompetenceById(com).allPrerequisitesMet(CompetenceBasedAdaptionHandler.Instance.getCAA().getCompetenceState()))
+                        if (!compStruct.getCompetenceById(com).allPrerequisitesMet(CompetenceBasedAdaptionAsset.Handler.getCAA().getCompetenceState()))
                         {
                             allPrerequisitesMet = false;
                         }
@@ -605,7 +570,7 @@ namespace CompetenceBasedAdaptionAssetNameSpace
                 throw new Exception("No suitable GS found (minimal number of new competences, all of which have their prerequisites met)");
 
             //Determining the GS with the smallest distance which was played least often
-            Dictionary<GameSituation, int> gameSituationHistory = CompetenceBasedAdaptionHandler.Instance.getGameSituationHistory();
+            Dictionary<GameSituation, int> gameSituationHistory = CompetenceBasedAdaptionAsset.Handler.getGameSituationHistory();
             List<GameSituation> minDistanceGS = new List<GameSituation>();
             GameSituation minPlayedGS = null;
 
@@ -620,7 +585,7 @@ namespace CompetenceBasedAdaptionAssetNameSpace
                 }
             }
 
-            CompetenceBasedAdaptionHandler.Instance.setCurrentGameSituation(minPlayedGS);
+            CompetenceBasedAdaptionAsset.Handler.setCurrentGameSituation(minPlayedGS);
 
             return minPlayedGS;
         }
@@ -630,14 +595,14 @@ namespace CompetenceBasedAdaptionAssetNameSpace
         /// </summary>
         public void diagnosticPrint()
         {
-            CompetenceBasedAdaptionHandler.Instance.loggingPRA("******************************************************************************");
-            CompetenceBasedAdaptionHandler.Instance.loggingPRA("       GAME SITUATION STRUCTURE:       ");
-            CompetenceBasedAdaptionHandler.Instance.loggingPRA("initial  GS: ");
-            CompetenceBasedAdaptionHandler.Instance.loggingPRA("             " + initialGameSituation.Id);
-            CompetenceBasedAdaptionHandler.Instance.loggingPRA("contains GS: ");
+            CompetenceBasedAdaptionAsset.Handler.loggingPRA("******************************************************************************");
+            CompetenceBasedAdaptionAsset.Handler.loggingPRA("       GAME SITUATION STRUCTURE:       ");
+            CompetenceBasedAdaptionAsset.Handler.loggingPRA("initial  GS: ");
+            CompetenceBasedAdaptionAsset.Handler.loggingPRA("             " + initialGameSituation.Id);
+            CompetenceBasedAdaptionAsset.Handler.loggingPRA("contains GS: ");
             foreach (GameSituation gs in gameSituations)
                 gs.diagnosticPrint();
-            CompetenceBasedAdaptionHandler.Instance.loggingPRA("******************************************************************************");
+            CompetenceBasedAdaptionAsset.Handler.loggingPRA("******************************************************************************");
         }
 
         #endregion Methods

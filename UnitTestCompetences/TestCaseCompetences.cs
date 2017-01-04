@@ -387,9 +387,9 @@ namespace UnitTestCompetences
                 AssetManager.Instance.Bridge = new Bridge();
 
                 //creating the asset
-                DomainModelAsset dma = new DomainModelAsset();
-                CompetenceAssessmentAsset caa = new CompetenceAssessmentAsset();
-                CompetenceBasedAdaptionAsset cbaa = new CompetenceBasedAdaptionAsset();
+                DomainModelAsset dma = DomainModelAsset.Instance;
+                CompetenceAssessmentAsset caa = CompetenceAssessmentAsset.Instance;
+                CompetenceBasedAdaptionAsset cbaa = CompetenceBasedAdaptionAsset.Instance;
                 
             }
         }

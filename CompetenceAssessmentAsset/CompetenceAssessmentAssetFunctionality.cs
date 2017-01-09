@@ -278,7 +278,7 @@ namespace CompetenceAssessmentAssetNameSpace
                 storage[model][competence.id].Value =  competenceValues[competence];
 
             //storing the updated data
-            storage.SaveData(model, StorageLocations.Local, SerializingFormat.Json);
+            storage.SaveData(model, StorageLocations.Local, SerializingFormat.Xml);
             loggingCA("Competencestate stored locally.");
 
             //send data to the tracker
@@ -296,7 +296,7 @@ namespace CompetenceAssessmentAssetNameSpace
             String model = "CompetenceAssessmentAsset_" + caas.PlayerId + "_" + competenceStructure.domainModelId;
 
 
-            storage.LoadData(model, StorageLocations.Local, SerializingFormat.Json);
+            storage.LoadData(model, StorageLocations.Local, SerializingFormat.Xml);
 
             //storing data in data structure
             CompetenceState cs = getCompetenceState();
@@ -348,7 +348,7 @@ namespace CompetenceAssessmentAssetNameSpace
                         gameStorage[model].AddChild(comp.id, storageLocation).Value = cs.getValue(comp);
 
                     gameStorage.SaveStructure(model, storageLocation, SerializingFormat.Xml);
-                    gameStorage.SaveData(model, storageLocation, SerializingFormat.Json);
+                    gameStorage.SaveData(model, storageLocation, SerializingFormat.Xml);
                     sendCompetenceStructureToTracker();
                 }
                 
@@ -494,7 +494,7 @@ namespace CompetenceAssessmentAssetNameSpace
                 gameStorage[model][competence.id].Value = cs.getCurrentValues()[competence];
 
             //storing the updated data
-            gameStorage.SaveData(model, StorageLocations.Local, SerializingFormat.Json);
+            gameStorage.SaveData(model, StorageLocations.Local, SerializingFormat.Xml);
             loadCompetenceStateFromGameStorage();
             loggingCA("Competencestate reset.");
             //registerNewPlayer(getDMA().getDomainModel());

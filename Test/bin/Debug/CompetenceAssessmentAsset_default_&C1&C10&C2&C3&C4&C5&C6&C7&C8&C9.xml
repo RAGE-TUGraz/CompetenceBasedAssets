@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Model>
+<Nodes>
+<Node>
+  <Value>&lt;double&gt;0.83380509027325633&lt;/double&gt;</Value>
+  <Path>C1</Path>
+  <ValueType>System.Double</ValueType>
+</Node>
+<Node>
+  <Value>&lt;double&gt;0.8348341831181344&lt;/double&gt;</Value>
+  <Path>C2</Path>
+  <ValueType>System.Double</ValueType>
+</Node>
+<Node>
+  <Value>&lt;double&gt;0.77777777777777779&lt;/double&gt;</Value>
+  <Path>C3</Path>
+  <ValueType>System.Double</ValueType>
+</Node>
+<Node>
+  <Value>&lt;double&gt;0.90871379941680153&lt;/double&gt;</Value>
+  <Path>C4</Path>
+  <ValueType>System.Double</ValueType>
+</Node>
+<Node>
+  <Value>&lt;double&gt;0.80861842441086118&lt;/double&gt;</Value>
+  <Path>C5</Path>
+  <ValueType>System.Double</ValueType>
+</Node>
+<Node>
+  <Value>&lt;double&gt;0.69526238136385476&lt;/double&gt;</Value>
+  <Path>C6</Path>
+  <ValueType>System.Double</ValueType>
+</Node>
+<Node>
+  <Value>&lt;double&gt;0.7095729156689492&lt;/double&gt;</Value>
+  <Path>C7</Path>
+  <ValueType>System.Double</ValueType>
+</Node>
+<Node>
+  <Value>&lt;double&gt;0.65366548675234193&lt;/double&gt;</Value>
+  <Path>C8</Path>
+  <ValueType>System.Double</ValueType>
+</Node>
+<Node>
+  <Value>&lt;double&gt;0.52856595598943734&lt;/double&gt;</Value>
+  <Path>C9</Path>
+  <ValueType>System.Double</ValueType>
+</Node>
+<Node>
+  <Value>&lt;double&gt;0.23913968877425867&lt;/double&gt;</Value>
+  <Path>C10</Path>
+  <ValueType>System.Double</ValueType>
+</Node>
+</Nodes>
+</Model>

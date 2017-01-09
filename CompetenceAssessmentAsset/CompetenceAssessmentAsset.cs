@@ -30,8 +30,6 @@ namespace CompetenceAssessmentAssetNameSpace
 {
     using System;
     using System.Collections.Generic;
-
-    using AssetManagerPackage;
     using AssetPackage;
 
     /// <summary>

@@ -377,10 +377,10 @@ namespace CompetenceAssessmentAssetNameSpace
             {
                 foreach(Competence prerequisite in competence.prerequisites)
                 {
-                    tracker.setVar(competence.id+prerequisite.id, competence.id);
+                    //tracker.setVar(competence.id+prerequisite.id, competence.id);
                 }
             }
-            tracker.Completable.Completed("CompetenceAssessmentAssetStructure");
+            //tracker.Completable.Completed("CompetenceAssessmentAssetStructure");
         }
 
         /// <summary>
@@ -452,9 +452,9 @@ namespace CompetenceAssessmentAssetNameSpace
             Dictionary<Competence, Double> cs = getCompetenceState().getCurrentValues();
             foreach (Competence competence in cs.Keys)
             {
-                tracker.setVar(competence.id, cs[competence].ToString());
+                //tracker.setVar(competence.id, cs[competence].ToString());
             }
-            tracker.Completable.Completed("CompetenceAssessmentAssetValues");
+            //tracker.Completable.Completed("CompetenceAssessmentAssetValues");
         }
 
         /// <summary>
@@ -486,6 +486,7 @@ namespace CompetenceAssessmentAssetNameSpace
         /// </summary>
         public void resetCompetenceState()
         {
+            //*
             //registerNewPlayer(getDMA().getDomainModel());
             String model = "CompetenceAssessmentAsset_" + ((CompetenceAssessmentAssetSettings) getCAA().Settings).PlayerId + "_" + competenceStructure.domainModelId;
             //getCAA().getCompetenceState();
@@ -497,8 +498,32 @@ namespace CompetenceAssessmentAssetNameSpace
             gameStorage.SaveData(model, StorageLocations.Local, SerializingFormat.Xml);
             loadCompetenceStateFromGameStorage();
             loggingCA("Competencestate reset.");
-            //registerNewPlayer(getDMA().getDomainModel());
+            registerNewPlayer(getDMA().getDomainModel());
+            //*/
 
+
+            /*
+            IDataStorage ids = CompetenceAssessmentAsset.Instance.getInterfaceFromAsset<IDataStorage>();
+            if (ids != null)
+            {
+                String model = "CompetenceAssessmentAsset_" + ((CompetenceAssessmentAssetSettings)getCAA().Settings).PlayerId + "_" + competenceStructure.domainModelId+".xml";
+                String structure = "CompetenceAssessmentAsset_" + ((CompetenceAssessmentAssetSettings)getCAA().Settings).PlayerId + "_" + competenceStructure.domainModelId + "_structure.xml";
+                if (!ids.Exists(model))
+                {
+                    loggingCA("File " + model + " not found for deleting competence state.", Severity.Error);
+                    throw new Exception("EXCEPTION: File " + model + " not found for deleting competence state.");
+                }
+
+                loggingCA("Deleting competence state file.");
+                competenceState = null;
+                return ids.Delete(model) && ids.Delete(structure);
+            }
+            else
+            {
+                loggingCA("IDataStorage bridge absent for deleting competence state.", Severity.Error);
+                throw new Exception("EXCEPTION: IDataStorage bridge absent for deleting competence state.");
+            }
+            //*/
         }
 
         #endregion InternalMethods

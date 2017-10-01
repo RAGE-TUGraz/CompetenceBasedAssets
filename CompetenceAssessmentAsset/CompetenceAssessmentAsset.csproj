@@ -40,8 +40,9 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml" />
-    <Reference Include="TrackerAsset">
-      <HintPath>..\..\ClientSideTrackerAsset\TrackerAsset\bin\Debug\TrackerAsset.dll</HintPath>
+    <Reference Include="TrackerAsset, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Desktop\RAGE\DLLs base Assets\TrackerAsset.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

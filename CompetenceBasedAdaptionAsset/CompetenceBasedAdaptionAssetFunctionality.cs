@@ -57,7 +57,7 @@ namespace CompetenceBasedAdaptionAssetNameSpace
         /// <summary>
         /// Storage of player id and game situation counter - how often has player played the game situations
         /// </summary>
-        private Dictionary<GameSituation, int> gameSituationHistory = new Dictionary<GameSituation, int>();
+        private Dictionary<string, int> gameSituationHistory = new Dictionary<string, int>();
 
         /// <summary>
         /// If true logging is done, otherwise no logging is done.
@@ -175,17 +175,17 @@ namespace CompetenceBasedAdaptionAssetNameSpace
         /// Returns the game situation history of the player.
         /// </summary>
         /// 
-        /// <returns> A dictionary containing the game situations as keys and the number of times they where player by the player as values. </returns>
-        internal Dictionary<GameSituation, int> getGameSituationHistory()
+        /// <returns> A dictionary containing the game situation ids as keys and the number of times they where player by the player as values. </returns>
+        internal Dictionary<string, int> getGameSituationHistory()
         {
             if (gameSituationHistory == null)
-                gameSituationHistory = new Dictionary<GameSituation, int>();
+                gameSituationHistory = new Dictionary<string, int>();
 
             if(gameSituationHistory.Count != this.gameSituationStructure.GameSituations.Count)
             {
-                gameSituationHistory = new Dictionary<GameSituation, int>();
+                gameSituationHistory = new Dictionary<string, int>();
                 foreach (GameSituation gs in gameSituationStructure.GameSituations)
-                    gameSituationHistory.Add(gs,0);
+                    gameSituationHistory.Add(gs.Id,0);
             }
 
             return gameSituationHistory;
@@ -198,7 +198,7 @@ namespace CompetenceBasedAdaptionAssetNameSpace
         /// <param name="gs"> Game situation played. </param>
         internal void updateGameSituationHistory(GameSituation gs)
         {
-            gameSituationHistory[gs]++;
+            gameSituationHistory[gs.Id]++;
         }
 
         #endregion InternalMethods
@@ -569,7 +569,7 @@ namespace CompetenceBasedAdaptionAssetNameSpace
                 throw new Exception("No suitable GS found (minimal number of new competences, all of which have their prerequisites met)");
 
             //Determining the GS with the smallest distance which was played least often
-            Dictionary<GameSituation, int> gameSituationHistory = CompetenceBasedAdaptionAsset.Handler.getGameSituationHistory();
+            Dictionary<string, int> gameSituationHistory = CompetenceBasedAdaptionAsset.Handler.getGameSituationHistory();
             List<GameSituation> minDistanceGS = new List<GameSituation>();
             GameSituation minPlayedGS = null;
 
@@ -578,7 +578,7 @@ namespace CompetenceBasedAdaptionAssetNameSpace
                 if (entry.Value == minDistanceCompetences)
                 {
                     minDistanceGS.Add(entry.Key);
-                    if (minPlayedGS == null || gameSituationHistory[minPlayedGS] > gameSituationHistory[entry.Key])
+                    if (minPlayedGS == null || gameSituationHistory[minPlayedGS.Id] > gameSituationHistory[entry.Key.Id])
                         minPlayedGS = entry.Key;
 
                 }

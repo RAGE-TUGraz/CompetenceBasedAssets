@@ -12,3 +12,6 @@ C:\Users\mmaurer\Documents\Visual Studio 2015\Projects\A_Competences\CompetenceA
 C:\Users\mmaurer\Documents\Visual Studio 2015\Projects\A_Competences\CompetenceAssessmentAsset_Portable\obj\Debug\CompetenceAssessmentAsset_Portable.csprojResolveAssemblyReference.cache
 C:\Users\mmaurer\Documents\Visual Studio 2015\Projects\A_Competences\CompetenceAssessmentAsset_Portable\obj\Debug\CompetenceAssessmentAsset_Portable.dll
 C:\Users\mmaurer\Documents\Visual Studio 2015\Projects\A_Competences\CompetenceAssessmentAsset_Portable\obj\Debug\CompetenceAssessmentAsset_Portable.pdb
+C:\Users\mojaW\git\CompetenceBasedAssets\CompetenceAssessmentAsset_Portable\obj\Debug\CompetenceAssessmentAsset_Portable.csprojResolveAssemblyReference.cache
+C:\Users\mojaW\git\CompetenceBasedAssets\CompetenceAssessmentAsset_Portable\obj\Debug\CompetenceAssessmentAsset_Portable.dll
+C:\Users\mojaW\git\CompetenceBasedAssets\CompetenceAssessmentAsset_Portable\obj\Debug\CompetenceAssessmentAsset_Portable.pdb

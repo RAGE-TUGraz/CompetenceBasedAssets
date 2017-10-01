@@ -61,13 +61,13 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="GameStorageClientAsset_Portable">
-      <HintPath>..\..\ClientSideGameStorageAsset\GameStorageClientAsset_Portable\bin\Debug\GameStorageClientAsset_Portable.dll</HintPath>
+      <HintPath>..\..\..\Desktop\RAGE\DLLs base Assets\GameStorageClientAsset_Portable.dll</HintPath>
     </Reference>
-    <Reference Include="RageAssetManager">
-      <HintPath>..\..\AssetManager\RageAssetManager_Portable\bin\Debug\RageAssetManager.dll</HintPath>
+    <Reference Include="RageAssetManager_Portable">
+      <HintPath>..\..\..\Desktop\RAGE\DLLs base Assets\RageAssetManager_Portable.dll</HintPath>
     </Reference>
-    <Reference Include="TrackerAsset">
-      <HintPath>..\..\ClientSideTrackerAsset\TrackerAsset_Portable\bin\Debug\TrackerAsset.dll</HintPath>
+    <Reference Include="TrackerAsset_Portable">
+      <HintPath>..\..\..\Desktop\RAGE\DLLs base Assets\TrackerAsset_Portable.dll</HintPath>
     </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />

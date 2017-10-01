@@ -37,7 +37,7 @@ namespace UnitTestCompetences
 {
     public class Bridge : IBridge, ILog, IDataStorage, IWebServiceRequest, ISerializer
     {
-        string IDataStoragePath = "./";
+        string IDataStoragePath = @"C:\Users\mojaW\git\CompetenceBasedAssets\Test\bin\";//"./";
 
         #region IDataStorage
 

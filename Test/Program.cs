@@ -48,13 +48,19 @@ namespace TestCompetence
 
             //create Assets to be tested
             DomainModelAsset dma = DomainModelAsset.Instance;
+            DomainModelAssetSettings dmas = new DomainModelAssetSettings();
+            dmas.Source = "DebugDomainModelTestId.xml";
+            dma.Settings = dmas;
+
             CompetenceAssessmentAsset caa = CompetenceAssessmentAsset.Instance;
+            CompetenceBasedAdaptionAsset cra = CompetenceBasedAdaptionAsset.Instance;
             /*
             CompetenceAssessmentAssetSettings caas = new CompetenceAssessmentAssetSettings();
             caas.TrackerName = "student";
             caas.TrackerPassword = "student";
             caa.Settings = caas;
             */
+            /*
             CompetenceBasedAdaptionAsset cra = CompetenceBasedAdaptionAsset.Instance;
 
             //test the Domain Model Assets
@@ -68,7 +74,18 @@ namespace TestCompetence
             //test the Competence based Adaptation Asset
             TestCompetenceBasedAdaptationAsset taba = new TestCompetenceBasedAdaptationAsset();
             taba.performAllTests();
-            
+            */
+
+            //Console.WriteLine(dma.getDomainModel().toXmlString());
+
+            while (cra.getNextGameSituationId()!=null)
+                cra.setGameSituationUpdate(true);
+            CompetenceAssessmentAsset.Instance.resetCompetenceState();
+            cra.getNextGameSituationId();
+            cra.setGameSituationUpdate(true);
+
+
+
             Console.WriteLine("Press enter to exit....");
             Console.ReadLine();
         }

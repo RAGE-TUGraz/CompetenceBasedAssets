@@ -14,3 +14,6 @@ C:\Users\mmaurer\Documents\Visual Studio 2015\Projects\A_Competences\CompetenceB
 C:\Users\mmaurer\Documents\Visual Studio 2015\Projects\A_Competences\CompetenceBasedAdaptionAsset_Portable\obj\Debug\CompetenceBasedAdaptionAsset_Portable.csprojResolveAssemblyReference.cache
 C:\Users\mmaurer\Documents\Visual Studio 2015\Projects\A_Competences\CompetenceBasedAdaptionAsset_Portable\obj\Debug\CompetenceBasedAdaptionAsset_Portable.dll
 C:\Users\mmaurer\Documents\Visual Studio 2015\Projects\A_Competences\CompetenceBasedAdaptionAsset_Portable\obj\Debug\CompetenceBasedAdaptionAsset_Portable.pdb
+C:\Users\mojaW\git\CompetenceBasedAssets\CompetenceBasedAdaptionAsset_Portable\obj\Debug\CompetenceBasedAdaptionAsset_Portable.csprojResolveAssemblyReference.cache
+C:\Users\mojaW\git\CompetenceBasedAssets\CompetenceBasedAdaptionAsset_Portable\obj\Debug\CompetenceBasedAdaptionAsset_Portable.dll
+C:\Users\mojaW\git\CompetenceBasedAssets\CompetenceBasedAdaptionAsset_Portable\obj\Debug\CompetenceBasedAdaptionAsset_Portable.pdb

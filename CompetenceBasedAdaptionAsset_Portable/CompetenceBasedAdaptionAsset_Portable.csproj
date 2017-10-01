@@ -64,8 +64,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="RageAssetManager">
-      <HintPath>..\..\AssetManager\RageAssetManager_Portable\bin\Debug\RageAssetManager.dll</HintPath>
+    <Reference Include="RageAssetManager_Portable">
+      <HintPath>..\..\..\Desktop\RAGE\DLLs base Assets\RageAssetManager_Portable.dll</HintPath>
     </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />

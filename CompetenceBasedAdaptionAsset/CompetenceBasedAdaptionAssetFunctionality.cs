@@ -201,6 +201,11 @@ namespace CompetenceBasedAdaptionAssetNameSpace
             gameSituationHistory[gs.Id]++;
         }
 
+        internal void resetDataSource()
+        {
+            registerNewPlayer(getDMA().getDomainModel());
+        }
+
         #endregion InternalMethods
         #region PublicMethods
 
@@ -259,6 +264,10 @@ namespace CompetenceBasedAdaptionAssetNameSpace
         /// <param name="dm"> Specifies the domain model used for the following registration. </param>
         public void registerNewPlayer( DomainModel dm)
         {
+            gameSituationStructure = null;
+            currentGameSituation = null;
+            gameSituationHistory = new Dictionary<string, int>();
+
             GameSituationStructure gss = new GameSituationStructure(dm);
             setGameSituationStructure( gss);
             setCurrentGameSituation( gss.InitialGameSituation);

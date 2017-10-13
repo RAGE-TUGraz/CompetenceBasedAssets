@@ -12,6 +12,13 @@ C:\Users\mmaurer\Documents\Visual Studio 2015\Projects\A_Competences\CompetenceA
 C:\Users\mmaurer\Documents\Visual Studio 2015\Projects\A_Competences\CompetenceAssessmentAsset_Portable\obj\Debug\CompetenceAssessmentAsset_Portable.csprojResolveAssemblyReference.cache
 C:\Users\mmaurer\Documents\Visual Studio 2015\Projects\A_Competences\CompetenceAssessmentAsset_Portable\obj\Debug\CompetenceAssessmentAsset_Portable.dll
 C:\Users\mmaurer\Documents\Visual Studio 2015\Projects\A_Competences\CompetenceAssessmentAsset_Portable\obj\Debug\CompetenceAssessmentAsset_Portable.pdb
+C:\Users\mojaW\git\CompetenceBasedAssets\CompetenceAssessmentAsset_Portable\bin\Debug\CompetenceAssessmentAsset_Portable.dll
+C:\Users\mojaW\git\CompetenceBasedAssets\CompetenceAssessmentAsset_Portable\bin\Debug\CompetenceAssessmentAsset_Portable.pdb
+C:\Users\mojaW\git\CompetenceBasedAssets\CompetenceAssessmentAsset_Portable\bin\Debug\DomainModelAsset_Portable.dll
+C:\Users\mojaW\git\CompetenceBasedAssets\CompetenceAssessmentAsset_Portable\bin\Debug\GameStorageClientAsset_Portable.dll
+C:\Users\mojaW\git\CompetenceBasedAssets\CompetenceAssessmentAsset_Portable\bin\Debug\RageAssetManager_Portable.dll
+C:\Users\mojaW\git\CompetenceBasedAssets\CompetenceAssessmentAsset_Portable\bin\Debug\TrackerAsset_Portable.dll
+C:\Users\mojaW\git\CompetenceBasedAssets\CompetenceAssessmentAsset_Portable\bin\Debug\DomainModelAsset_Portable.pdb
 C:\Users\mojaW\git\CompetenceBasedAssets\CompetenceAssessmentAsset_Portable\obj\Debug\CompetenceAssessmentAsset_Portable.csprojResolveAssemblyReference.cache
 C:\Users\mojaW\git\CompetenceBasedAssets\CompetenceAssessmentAsset_Portable\obj\Debug\CompetenceAssessmentAsset_Portable.dll
 C:\Users\mojaW\git\CompetenceBasedAssets\CompetenceAssessmentAsset_Portable\obj\Debug\CompetenceAssessmentAsset_Portable.pdb

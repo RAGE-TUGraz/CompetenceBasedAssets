@@ -131,7 +131,6 @@ namespace CompetenceBasedAdaptionAssetNameSpace
             if (Handler.getCurrentGameSituationId() == null)
             {
                 Handler.registerNewPlayer(Handler.getDMA().getDomainModel());
-                return Handler.getNextGameSituationId();
             }
             return Handler.getNextGameSituationId();
         }
@@ -159,6 +158,15 @@ namespace CompetenceBasedAdaptionAssetNameSpace
                 Handler.registerNewPlayer(Handler.getDMA().getDomainModel());
 
             Handler.setGameSituationUpdate(evidence);
+        }
+
+        /// <summary>
+        /// Method for resetting the asset for using another domain model as source
+        /// </summary>
+        public void resetDataSource()
+        {
+            CompetenceAssessmentAssetNameSpace.CompetenceAssessmentAsset.Instance.resetDataSource();
+            Handler.resetDataSource();
         }
 
         #endregion Methods

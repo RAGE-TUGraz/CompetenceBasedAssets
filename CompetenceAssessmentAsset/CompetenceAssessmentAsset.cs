@@ -188,6 +188,14 @@ namespace CompetenceAssessmentAssetNameSpace
             Handler.resetCompetenceState();
         }
 
+        /// <summary>
+        /// Method for resetting the asset for using another domain model as source
+        /// </summary>
+        public void resetDataSource()
+        {
+            Handler.resetDataSource();
+        }
+
         #endregion Methods
         #region internal Methods
 

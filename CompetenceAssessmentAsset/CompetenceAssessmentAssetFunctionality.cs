@@ -526,6 +526,11 @@ namespace CompetenceAssessmentAssetNameSpace
             //*/
         }
 
+        internal void resetDataSource()
+        {
+            registerNewPlayer(getDMA().getDomainModel());
+        }
+
         #endregion InternalMethods
         #region TestMethods
 

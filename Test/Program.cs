@@ -863,6 +863,7 @@ namespace TestCompetence
             log("End Test 7");
         }
 
+        /*
         /// <summary>
         /// Test tracker functionality
         /// </summary>
@@ -908,6 +909,7 @@ namespace TestCompetence
 
             log("End Test 8");
         }
+        */
 
         /// <summary>
         /// Testing reset method

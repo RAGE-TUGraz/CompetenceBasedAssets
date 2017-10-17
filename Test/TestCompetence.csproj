@@ -46,9 +46,8 @@
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="TrackerAsset, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\Desktop\ClientSideTrackerAsset-master\bin\Debug\TrackerAsset.dll</HintPath>
+    <Reference Include="TrackerAsset">
+      <HintPath>..\..\..\Desktop\RAGE\DLLs base Assets\TrackerAsset.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

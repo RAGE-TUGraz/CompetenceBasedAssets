@@ -1,1 +1,6 @@
 /.project
+
+# ignore all folders in any path in the project:
+bin/
+obj/
+.vs/

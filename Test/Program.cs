@@ -54,14 +54,10 @@ namespace TestCompetence
 
             CompetenceAssessmentAsset caa = CompetenceAssessmentAsset.Instance;
             CompetenceBasedAdaptionAsset cra = CompetenceBasedAdaptionAsset.Instance;
-            /*
             CompetenceAssessmentAssetSettings caas = new CompetenceAssessmentAssetSettings();
             caas.TrackerName = "student";
             caas.TrackerPassword = "student";
             caa.Settings = caas;
-            */
-            /*
-            CompetenceBasedAdaptionAsset cra = CompetenceBasedAdaptionAsset.Instance;
 
             //test the Domain Model Assets
             TestDomainModelAsset tdm = new TestDomainModelAsset();
@@ -74,7 +70,6 @@ namespace TestCompetence
             //test the Competence based Adaptation Asset
             TestCompetenceBasedAdaptationAsset taba = new TestCompetenceBasedAdaptationAsset();
             taba.performAllTests();
-            */
 
             //Console.WriteLine(dma.getDomainModel().toXmlString());
 

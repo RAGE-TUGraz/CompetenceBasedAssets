@@ -575,7 +575,11 @@ namespace CompetenceBasedAdaptionAssetNameSpace
             }
 
             if (gameSituationEvaluation.Count == 0)
-                throw new Exception("No suitable GS found (minimal number of new competences, all of which have their prerequisites met)");
+            {
+                CompetenceBasedAdaptionAsset.Handler.loggingPRA("No suitable GS found (minimal number of new competences, all of which have their prerequisites met)");
+                //throw new Exception("No suitable GS found (minimal number of new competences, all of which have their prerequisites met)");
+                return null;
+            }
 
             //Determining the GS with the smallest distance which was played least often
             Dictionary<string, int> gameSituationHistory = CompetenceBasedAdaptionAsset.Handler.getGameSituationHistory();

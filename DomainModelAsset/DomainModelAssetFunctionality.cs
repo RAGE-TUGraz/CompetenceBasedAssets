@@ -152,7 +152,8 @@ namespace DomainModelAssetNameSpace
                     if (!ids.Exists(dmas.Source))
                     {
                         loggingDM("File "+ dmas.Source + " not found for loading Domain model.", Severity.Error);
-                        throw new Exception("EXCEPTION: File "+ dmas.Source + " not found for loading Domain model.") ;
+                        //throw new Exception("EXCEPTION: File "+ dmas.Source + " not found for loading Domain model.") ;
+                        return null;
                     }
 
                     loggingDM("Loading DomainModel from File.");
@@ -161,7 +162,8 @@ namespace DomainModelAssetNameSpace
                 else
                 {
                     loggingDM("IDataStorage bridge absent for requested local loading method of the Domain model.", Severity.Error);
-                    throw new Exception("EXCEPTION: IDataStorage bridge absent for requested local loading method of the Domain model.");
+                    //throw new Exception("EXCEPTION: IDataStorage bridge absent for requested local loading method of the Domain model.");
+                    return null;
                 }
             }
             else
@@ -191,7 +193,8 @@ namespace DomainModelAssetNameSpace
                 else
                 {
                     loggingDM("IWebServiceRequest bridge absent for requested web loading method of the Domain model.", Severity.Error);
-                    throw new Exception("EXCEPTION: IWebServiceRequest bridge absent for requested web loading method of the Domain model.");
+                    // new Exception("EXCEPTION: IWebServiceRequest bridge absent for requested web loading method of the Domain model.");
+                    return null;
                 }
             }
 
@@ -248,7 +251,7 @@ namespace DomainModelAssetNameSpace
         public void Error(string url, string msg)
         {
             DomainModelAsset.Handler.loggingDM("Web Request for retriving Domain model from "+url+" failed! " + msg, Severity.Error);
-            throw new Exception("EXCEPTION: Web Request for retriving Domain model from " + url + " failed! " + msg);
+            //throw new Exception("EXCEPTION: Web Request for retriving Domain model from " + url + " failed! " + msg);
         }
 
         /// <summary>
@@ -316,7 +319,9 @@ namespace DomainModelAssetNameSpace
             }
             catch (Exception ex)
             {
-                throw new Exception("An error occurred", ex);
+                //throw new Exception("An error occurred", ex);
+                DomainModelAsset.Handler.loggingDM("An error occured.");
+                return null;
             }
         }
 

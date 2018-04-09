@@ -960,13 +960,21 @@ namespace CompetenceAssessmentAssetNameSpace
             {
                 CompetenceAssessmentAsset.Handler.loggingCA("xi0 changed from " + xi0 + " to " + newXi0 + " due to additional information.");
                 if (newXi0 < 1)
-                    throw new Exception("Internal error Competence Assessment Asset: Value not allowed!");
+                {
+                   CompetenceAssessmentAsset.Handler.loggingCA("Internal error Competence Assessment Asset: Value not allowed!");
+                    //throw new Exception("Internal error Competence Assessment Asset: Value not allowed!");
+                    return null;
+                }
             }
             else if ((!evidence) && (xi1 != newXi1))
             {
                 CompetenceAssessmentAsset.Handler.loggingCA("xi1 changed from " + xi1 + " to " + newXi1 + " due to additional information.");
                 if (newXi1 < 1)
-                    throw new Exception("Internal error Competence Assessment Asset: Value not allowed!");
+                {
+                   CompetenceAssessmentAsset.Handler.loggingCA("Internal error Competence Assessment Asset: Value not allowed!");
+                    //throw new Exception("Internal error Competence Assessment Asset: Value not allowed!");
+                    return null;
+                }
             }
 
             double[] updateValues = { newXi0,newXi1};
@@ -1270,7 +1278,11 @@ namespace CompetenceAssessmentAssetNameSpace
                     return ((limitToBeReached-cs.getValue(updatedCompetence)*limitToBeReached-cs.getValue(this.id)+cs.getValue(updatedCompetence.id))/(cs.getValue(updatedCompetence.id)*(1-limitToBeReached)));
                 }
                 else
-                    throw new Exception("This line should not be reached!");
+                {
+                    CompetenceAssessmentAsset.Handler.loggingCA("This line should not be reached!");
+                    //throw new Exception("This line should not be reached!");
+                    return -1.0;
+                }
             }
             else
             {
@@ -1283,7 +1295,11 @@ namespace CompetenceAssessmentAssetNameSpace
                     return ((cs.getValue(updatedCompetence.id)*(limitToBeReached-1))/(-limitToBeReached*(1-cs.getValue(updatedCompetence.id))+(cs.getValue(this.id)-cs.getValue(updatedCompetence.id))));
                 }
                 else
-                    throw new Exception("This line should not be reached!");
+                {
+                    CompetenceAssessmentAsset.Handler.loggingCA("This line should not be reached!");
+                    //throw new Exception("This line should not be reached!");
+                    return -1.0;
+                }
             }
         }
 
@@ -1548,7 +1564,7 @@ namespace CompetenceAssessmentAssetNameSpace
             else
             {
                 CompetenceAssessmentAsset.Handler.loggingCA("No update-levels specified for the competence assessment!");
-                throw new Exception("No update-levels specified for the competence assessment!");
+                //throw new Exception("No update-levels specified for the competence assessment!");
             }
         }
 
@@ -1630,13 +1646,23 @@ namespace CompetenceAssessmentAssetNameSpace
                     case "low":  evidencePowers.Add(EvidencePower.Low); break; 
                     case "medium":  evidencePowers.Add(EvidencePower.Medium); break; 
                     case "high":  evidencePowers.Add(EvidencePower.High); break; 
-                    default: throw new Exception("UpdateLevel unknown!");
+                    default:
+                        {
+                            CompetenceAssessmentAsset.Handler.loggingCA("UpdateLevel unknown!");
+                            //throw new Exception("UpdateLevel unknown!");
+                            return;
+                        }
                 }
                 switch (ULevelDirection[1])
                 {
                     case "up": evidences.Add(true); break;
                     case "down": evidences.Add(false); break;
-                    default: throw new Exception("Updatedirection unknown!");
+                    default:
+                        {
+                            CompetenceAssessmentAsset.Handler.loggingCA("Updatedirection unknown!");
+                            //throw new Exception("Updatedirection unknown!");
+                            return;
+                        }
                 }
             }
 
@@ -1717,7 +1743,12 @@ namespace CompetenceAssessmentAssetNameSpace
                     case "low": evidencePowers.Add(EvidencePower.Low); break;
                     case "medium": evidencePowers.Add(EvidencePower.Medium); break;
                     case "high": evidencePowers.Add(EvidencePower.High); break;
-                    default: throw new Exception("UpdateLevel unknown!");
+                    default:
+                        {
+                            CompetenceAssessmentAsset.Handler.loggingCA("UpdateLevel unknown!");
+                            //throw new Exception("UpdateLevel unknown!");
+                            return;
+                        }
                 }
                 evidences.Add(success);
             }
